@@ -40,8 +40,8 @@
  * there is little to none overhead in comparasion with 8 boolean array
  *
  * NOTE: avoid usage of "[ ]" or "( )" operator for bit access,
- * should not be used if not necessary, can cause insufficient code
- * and overhead. Use b0...b7...b15...b31 members instead
+ * can cause insufficient code and overhead.
+ * Use b0...b7...b15...b31 members instead.
  *
  ***********************************************************************/
 
@@ -376,7 +376,7 @@ struct BOOL8{
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return (((*(unsigned char*)this)>>index)&0x01);\
+                return (((*(unsigned short*)this)>>index)&0x01);\
             }\
     \
             inline void operator = (const unsigned short bState){(*(unsigned short*)this)=bState;}\
@@ -493,7 +493,7 @@ struct BOOL8{
                 return (((*(unsigned short*)this)>>index)&0x01);\
             }\
     \
-            inline void operator = (const unsigned char bState){(*(unsigned short*)this)=bState;}\
+            inline void operator = (const unsigned short bState){(*(unsigned short*)this)=bState;}\
             inline unsigned short getValue() const{return *(unsigned short*)this;}\
             inline const unsigned char size() const{return 16;}\
             \
