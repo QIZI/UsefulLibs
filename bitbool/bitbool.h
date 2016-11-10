@@ -1,7 +1,7 @@
 #ifndef BITBOOL_H
 #define BITBOOL_H
 /******************************  <Zlib>  **************************************
- * Copyright (c) 2016 Martin Baláž
+ * Copyright (c) 2016 Martin Baláž 
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -45,6 +45,23 @@
  *
  ***********************************************************************/
 
+
+/******************************************************
+ * Force conversion between incompatibile types			  *
+ ******************************************************/
+ 
+#define FORCE_CAST(TYPE, VAR) (*(TYPE*)(&VAR))
+#define FORCE_CAST_PTR(type, var) (*(type*)(var))
+
+template <typename type, typename var> 
+type force_cast(var& t) {
+ 	return *(type*)&t; 
+}
+
+template <typename type, typename var> 
+type force_cast(var* t) {
+ 	return *(type*)t; 
+}
 
 
 
@@ -96,7 +113,7 @@
 #define __BOOL8_REDEF1(b0) __BOOL8_REDEF8(b0,1,2,3,4,5,6,7)
 #define __BOOL8_REDEF2(b0,b1) __BOOL8_REDEF8(b0,b1,2,3,4,5,6,7)
 #define __BOOL8_REDEF3(b0,b1,b2) __BOOL8_REDEF8(b0,b1,b2,3,4,5,6,7)
-#   define __BOOL8_REDEF4(b0,b1,b2,b3) __BOOL8_REDEF8(b0,b1,b2,b3,4,5,6,7)
+#define __BOOL8_REDEF4(b0,b1,b2,b3) __BOOL8_REDEF8(b0,b1,b2,b3,4,5,6,7)
 #define __BOOL8_REDEF5(b0,b1,b2,b3,b4) __BOOL8_REDEF8(b0,b1,b2,b3,b4,5,6,7)
 #define __BOOL8_REDEF6(b0,b1,b2,b3,b4,b5) __BOOL8_REDEF8(b0,b1,b2,b3,b4,b5,6,7)
 #define __BOOL8_REDEF7(b0,b1,b2,b3,b4,b5,b6) __BOOL8_REDEF8(b0,b1,b2,b3,b4,b5,b6,7)
@@ -126,7 +143,7 @@
             }\
     \
             inline void operator = (const unsigned char bState){(*(unsigned char*)this)=bState;}\
-            inline unsigned char getValue() const{return *(unsigned char*)this;}\
+            inline unsigned char getValue() const{return force_cast<unsigned char>(this);}\
             inline const unsigned char size() const{return 8;}\
             \
             \
@@ -380,7 +397,7 @@ struct BOOL8{
             }\
     \
             inline void operator = (const unsigned short bState){(*(unsigned short*)this)=bState;}\
-            inline unsigned short getValue() const{return *(unsigned char*)this;}\
+            inline unsigned short getValue() const{return *(unsigned short*)this;}\
             inline const unsigned char size() const{return 16;}\
             \
             \
