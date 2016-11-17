@@ -53,16 +53,15 @@
 #define FORCE_CAST(TYPE, VAR) (*(TYPE*)(&VAR))
 #define FORCE_CAST_PTR(type, var) (*(type*)(var))
 
-template <typename type, typename var> 
-type force_cast(var& t) {
- 	return *(type*)&t; 
+template <typename TYPE, typename VAR> 
+TYPE& force_cast(VAR& var) {
+ 	return *(TYPE*)&var; 
 }
 
-template <typename type, typename var> 
-type force_cast(var* t) {
- 	return *(type*)t; 
+template <typename TYPE, typename VAR> 
+TYPE& force_cast(VAR* var) {
+ 	return *(TYPE*)var; 
 }
-
 
 
 /******************************************************
@@ -77,8 +76,8 @@ type force_cast(var* t) {
 /********************************************************
  * Argument counter for BOOL[8|16|32] macro overloading *
  ********************************************************/
-#define _ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20,_21,_22,_23,_24,_25,_26,_27,_28,_29,_30,_31,_32, ...) _32
-#define __NARGS(...) _ARGS(__VA_ARGS__, 32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2, 1, 0)
+#define _ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20,_21,_22,_23,_24,_25,_26,_27,_28,_29,_30,_31,_32,_33, ...) _33
+#define __NARGS(...) _ARGS(__VA_ARGS__, 33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2, 1, 0)
 
 
 
@@ -130,7 +129,7 @@ type force_cast(var* t) {
             unsigned char b##b7 :1;\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
-                (*(unsigned char*)this)=((*(unsigned char*)this)&(~(0x01<<index)))|(state<<index);\
+                force_cast<unsigned char>(this) = (force_cast<unsigned char>(this) & ( ~(0x01 << index))) | (state << index);\
             }\
     \
             /**Dynamic Read*/\
@@ -139,10 +138,10 @@ type force_cast(var* t) {
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return (((*(unsigned char*)this)>>index)&0x01);\
+                return ( (force_cast<bool>(this) >> index) & 0x01 );\
             }\
     \
-            inline void operator = (const unsigned char bState){(*(unsigned char*)this)=bState;}\
+            inline void operator = (const unsigned char bState){force_cast<unsigned char>(this) = bState;}\
             inline unsigned char getValue() const{return force_cast<unsigned char>(this);}\
             inline const unsigned char size() const{return 8;}\
             \
@@ -218,7 +217,7 @@ type force_cast(var* t) {
             unsigned char _prefix##b7 :1;\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
-                (*(unsigned char*)this)=((*(unsigned char*)this)&(~(0x01<<index)))|(state<<index);\
+                force_cast<unsigned char>(this) = (force_cast<unsigned char>(this) & ( ~(0x01 << index ))) | (state << index);\
             }\
     \
             /**Dynamic Read*/\
@@ -227,11 +226,11 @@ type force_cast(var* t) {
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return (((*(unsigned char*)this)>>index)&0x01);\
+                return ((force_cast<bool>(this) >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned char bState){(*(unsigned char*)this)=bState;}\
-            inline unsigned char getValue() const{return *(unsigned char*)this;}\
+            inline void operator = (const unsigned char bState){force_cast<unsigned char>(this) = bState;}\
+            inline unsigned char getValue() const{return force_cast<unsigned char>(this);}\
             inline const unsigned char size() const{return 8;}\
             \
             \
@@ -292,14 +291,14 @@ struct BOOL8{
     unsigned char b7 :1;
 
     BOOL8()=default;
-    BOOL8(const unsigned char bState){(*(unsigned char*)this)=bState;}
+    BOOL8(const unsigned char bState){force_cast<unsigned char>(this) = bState;}
     BOOL8(const bool b0, const bool b1, const bool b2, const bool b3, const bool b4,
      const bool b5, const bool b6, const bool b7)
      : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7){}
 
     /**Dynamic Write*/
     void operator ()(const unsigned char index, const bool state){
-        (*(unsigned char*)this)=((*(unsigned char*)this)&(~(0x01<<index)))|(state<<index);
+        force_cast<unsigned char>(this) = (force_cast<unsigned char>(this) & ( ~(0x01 << index))) | (state << index);
     }
 
     /**Dynamic Read*/
@@ -308,12 +307,12 @@ struct BOOL8{
     }
     /**Dynamic Read*/
     bool operator [] (const unsigned char index) const{
-        return (((*(unsigned char*)this)>>index)&0x01);
+        return ((force_cast<bool>(this) >> index) & 0x01);
     }
 
-    inline void operator = (const unsigned char bState){(*(unsigned char*)this)=bState;}
+    inline void operator = (const unsigned char bState){force_cast<unsigned char>(this) = bState;}
 
-    inline unsigned char getValue() const{return *(unsigned char*)this;}
+    inline unsigned char getValue() const{return force_cast<unsigned char>(this);}
     inline const unsigned char size() const{return 8;}
 
 };
@@ -384,7 +383,7 @@ struct BOOL8{
             unsigned char b##b15 :1;\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
-                (*(unsigned short*)this)=((*(unsigned short*)this)&(~(0x01<<index)))|(state<<index);\
+                force_cast<unsigned short>(this) = (force_cast<unsigned short>(this) & ( ~(0x01 << index))) | (state << index);\
             }\
     \
             /**Dynamic Read*/\
@@ -393,11 +392,11 @@ struct BOOL8{
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return (((*(unsigned short*)this)>>index)&0x01);\
+                return ((force_cast<unsigned short>(this) >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned short bState){(*(unsigned short*)this)=bState;}\
-            inline unsigned short getValue() const{return *(unsigned short*)this;}\
+            inline void operator = (const unsigned short bState){force_cast<unsigned short>(this) = bState;}\
+            inline unsigned short getValue() const{return force_cast<unsigned short>(this);}\
             inline const unsigned char size() const{return 16;}\
             \
             \
@@ -416,7 +415,7 @@ struct BOOL8{
 #define __SELECTION16_8(b0, b1, b2, b3, b4, b5, b6, b7) __BOOL16_REDEF8(b0, b1, b2, b3, b4, b5, b6, b7)
 #define __SELECTION16_9(b0, b1, b2, b3, b4, b5, b6, b7, b8) __BOOL16_REDEF9(b0, b1, b2, b3, b4, b5, b6, b7, b8)
 #define __SELECTION16_10(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9) __BOOL16_REDEF10(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9)
-#define __SELECTION16_11(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10) __BOOL16_REDEF11(b0, b1, b2, b3, b4, b5, b6, b7, b7, b8, b9, b10)
+#define __SELECTION16_11(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10) __BOOL16_REDEF11(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10)
 #define __SELECTION16_12(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11) __BOOL16_REDEF12(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11)
 #define __SELECTION16_13(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12) __BOOL16_REDEF13(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12)
 #define __SELECTION16_14(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13) __BOOL16_REDEF14(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13)
@@ -498,7 +497,7 @@ struct BOOL8{
             unsigned char _prefix##b15 :1;\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
-                (*(unsigned short*)this)=((*(unsigned short*)this)&(~(0x01<<index)))|(state<<index);\
+                force_cast<unsigned short>(this) = (force_cast<unsigned short>(this) & ( ~(0x01 << index))) | (state << index);\
             }\
     \
             /**Dynamic Read*/\
@@ -507,11 +506,11 @@ struct BOOL8{
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return (((*(unsigned short*)this)>>index)&0x01);\
+                return ((force_cast<unsigned short>(this) >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned short bState){(*(unsigned short*)this)=bState;}\
-            inline unsigned short getValue() const{return *(unsigned short*)this;}\
+            inline void operator = (const unsigned short bState){force_cast<unsigned short>(this) = bState;}\
+            inline unsigned short getValue() const{return force_cast<unsigned short>(this);}\
             inline const unsigned char size() const{return 16;}\
             \
             \
@@ -543,7 +542,7 @@ struct BOOL8{
 #define SELECT_PREF16(N, ...) __SELECTION_PREF16(N, __VA_ARGS__)
 
 #define BOOL16_REDEF_PREFIX(...) SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__)
-
+#define BOOL16_REDEF_PREF(...) SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__) 
 
 
 
@@ -603,7 +602,7 @@ struct BOOL16{
 
     /**Dynamic Write*/
     void operator ()(const unsigned char index, const bool state){
-        (*(unsigned short*)this)=((*(unsigned short*)this)&(~(0x01<<index)))|(state<<index);
+        force_cast<unsigned short>(this) = (force_cast<unsigned short>(this) & ( ~(0x01 << index))) |(state << index);
     }
 
     /**Dynamic Read*/
@@ -612,12 +611,12 @@ struct BOOL16{
     }
     /**Dynamic Read*/
     bool operator [] (const unsigned char index) const{
-        return (((*(unsigned short*)this)>>index)&0x01);
+        return ((force_cast<unsigned short>(this) >> index) & 0x01);
     }
 
-    inline void operator = (const unsigned short bState){(*(unsigned short*)this)=bState;}
+    inline void operator = (const unsigned short bState){force_cast<unsigned short>(this) = bState;}
 
-    inline unsigned short getValue() const{return *(unsigned short*)this;}
+    inline unsigned short getValue() const{return force_cast<unsigned short>(this);}
     inline const unsigned char size() const{return 16;}
 
 };
@@ -724,7 +723,7 @@ struct BOOL16{
             unsigned char b##b31 :1;\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
-                (*(unsigned long*)this)=((*(unsigned long*)this)&(~(0x01<<index)))|(state<<index);\
+                force_cast<unsigned long>(this) = (force_cast<unsigned long>(this) & ( ~(0x01 << index))) | (state << index);\
             }\
     \
             /**Dynamic Read*/\
@@ -733,11 +732,11 @@ struct BOOL16{
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return (((*(unsigned long*)this)>>index)&0x01);\
+                return ((force_cast<unsigned long>(this) >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned long bState){(*(unsigned long*)this)=bState;}\
-            inline unsigned long getValue() const{return *(unsigned long*)this;}\
+            inline void operator = (const unsigned long bState){force_cast<unsigned long>(this) = bState;}\
+            inline unsigned long getValue() const{return force_cast<unsigned long>(this);}\
             inline const unsigned char size() const{return 32;}\
             \
             \
@@ -884,7 +883,7 @@ struct BOOL16{
             unsigned char _prefix##b31 :1;\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
-                (*(unsigned long*)this)=((*(unsigned long*)this)&(~(0x01<<index)))|(state<<index);\
+                force_cast<unsigned long>(this) = (force_cast<unsigned long>(this) & ( ~(0x01 << index))) | (state << index);\
             }\
     \
             /**Dynamic Read*/\
@@ -893,11 +892,11 @@ struct BOOL16{
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return (((*(unsigned long*)this)>>index)&0x01);\
+                return ((force_cast<unsigned long>(this) >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned long bState){(*(unsigned long*)this)=bState;}\
-            inline unsigned long getValue() const{return *(unsigned long*)this;}\
+            inline void operator = (const unsigned long bState){force_cast<unsigned long>(this) = bState;}\
+            inline unsigned long getValue() const{return force_cast<unsigned long>(this);}\
             inline const unsigned char size() const{return 32;}\
             \
             \
@@ -1023,7 +1022,7 @@ struct BOOL32{
 
     /**Dynamic Write*/
     void operator ()(const unsigned char index, const bool state){
-        (*(unsigned long*)this)=((*(unsigned long*)this)&(~(0x01<<index)))|(state<<index);
+        force_cast<unsigned long>(this) = (force_cast<unsigned long>(this) & ( ~(0x01 << index))) | (state << index);
     }
 
     /**Dynamic Read*/
@@ -1032,12 +1031,12 @@ struct BOOL32{
     }
     /**Dynamic Read*/
     bool operator [] (const unsigned char index) const{
-        return (((*(unsigned long*)this)>>index)&0x01);
+        return ((force_cast<unsigned long>(this) >> index) & 0x01);
     }
 
-    inline void operator = (const unsigned long bState){(*(unsigned long*)this)=bState;}
+    inline void operator = (const unsigned long bState){force_cast<unsigned long>(this) = bState;}
 
-    inline unsigned long getValue() const{return *(unsigned long*)this;}
+    inline unsigned long getValue() const{return force_cast<unsigned long>(this);}
     inline const unsigned char size() const{return 32;}
 
 };
