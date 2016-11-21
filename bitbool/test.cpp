@@ -66,10 +66,12 @@ int main(){
 	B8R.bSEVEN = true;	
 	B8R.bEIGHT = true;
 
-	
+	printf("\n%X\n",B8R.getValue());
 	printf("Static assighment is %s tested\n", B8R.getValue() == 0xFE ? "Succesfuly" : "Unsuccesfuly");
 	
-
+	
+	B8R=BOOL8(0xFF);
+	
 	B8R = 0xCC;
 	
 	printf("operator = and/or getValue() are %s tested\n", B8R.getValue() == 0xCC ? "Succesfuly" : "Unsuccesfuly");	

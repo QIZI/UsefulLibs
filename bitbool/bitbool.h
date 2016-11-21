@@ -119,6 +119,8 @@ TYPE& force_cast(VAR* var) {
 
 #define __BOOL8_REDEF8(b0,b1,b2,b3,b4,b5,b6,b7) \
     struct{\
+    		union {\
+					struct {\
             unsigned char b##b0 :1;\
             unsigned char b##b1 :1;\
             unsigned char b##b2 :1;\
@@ -127,6 +129,9 @@ TYPE& force_cast(VAR* var) {
             unsigned char b##b5 :1;\
             unsigned char b##b6 :1;\
             unsigned char b##b7 :1;\
+          };\
+          unsigned char data;\
+        };\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
                 force_cast<unsigned char>(this) = (force_cast<unsigned char>(this) & ( ~(0x01 << index))) | (state << index);\
@@ -138,10 +143,11 @@ TYPE& force_cast(VAR* var) {
             }\
             /**Dynamic Read*/\
             bool operator [] (const unsigned char index) const{\
-                return ( (force_cast<bool>(this) >> index) & 0x01 );\
+                return ( (data >> index) & 0x01 );\
             }\
     \
             inline void operator = (const unsigned char bState){force_cast<unsigned char>(this) = bState;}\
+            inline void operator = (const BOOL8 bState){force_cast<BOOL8>(this) = bState;}\
             inline unsigned char getValue() const{return force_cast<unsigned char>(this);}\
             inline const unsigned char size() const{return 8;}\
             \
@@ -207,14 +213,19 @@ TYPE& force_cast(VAR* var) {
 
 #define __BOOL8_REDEF_PREF8(_prefix,b0,b1,b2,b3,b4,b5,b6,b7) \
     struct{\
-            unsigned char _prefix##b0 :1;\
-            unsigned char _prefix##b1 :1;\
-            unsigned char _prefix##b2 :1;\
-            unsigned char _prefix##b3 :1;\
-            unsigned char _prefix##b4 :1;\
-            unsigned char _prefix##b5 :1;\
-            unsigned char _prefix##b6 :1;\
-            unsigned char _prefix##b7 :1;\
+    				union {\
+							struct {\
+				        unsigned char _prefix##b0 :1;\
+				        unsigned char _prefix##b1 :1;\
+				        unsigned char _prefix##b2 :1;\
+				        unsigned char _prefix##b3 :1;\
+				        unsigned char _prefix##b4 :1;\
+				        unsigned char _prefix##b5 :1;\
+				        unsigned char _prefix##b6 :1;\
+				        unsigned char _prefix##b7 :1;\
+            	};\
+            	unsigned char data;\
+            };\
             /**Dynamic Write*/\
             void operator ()(const unsigned char index, const bool state){\
                 force_cast<unsigned char>(this) = (force_cast<unsigned char>(this) & ( ~(0x01 << index ))) | (state << index);\
@@ -281,19 +292,24 @@ TYPE& force_cast(VAR* var) {
  **********************************************************************/
 
 struct BOOL8{
-    unsigned char b0 :1;
-    unsigned char b1 :1;
-    unsigned char b2 :1;
-    unsigned char b3 :1;
-    unsigned char b4 :1;
-    unsigned char b5 :1;
-    unsigned char b6 :1;
-    unsigned char b7 :1;
 
+		union {
+			struct {
+				unsigned char b0 :1;
+				unsigned char b1 :1;
+				unsigned char b2 :1;
+				unsigned char b3 :1;
+				unsigned char b4 :1;
+				unsigned char b5 :1;
+				unsigned char b6 :1;
+				unsigned char b7 :1;
+			};
+			unsigned char data;
+		};
     BOOL8()=default;
-    BOOL8(const unsigned char bState){force_cast<unsigned char>(this) = bState;}
-    BOOL8(const bool b0, const bool b1, const bool b2, const bool b3, const bool b4,
-     const bool b5, const bool b6, const bool b7)
+    BOOL8(const unsigned char bState){data = bState;}
+    BOOL8(const bool b0, const bool b1, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
+     const bool b5 = 0, const bool b6 = 0, const bool b7 = 0)
      : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7){}
 
     /**Dynamic Write*/
@@ -396,6 +412,7 @@ struct BOOL8{
             }\
     \
             inline void operator = (const unsigned short bState){force_cast<unsigned short>(this) = bState;}\
+            inline void operator = (const BOOL16 bState){force_cast<BOOL16>(this) = bState;}\
             inline unsigned short getValue() const{return force_cast<unsigned short>(this);}\
             inline const unsigned char size() const{return 16;}\
             \
@@ -510,6 +527,7 @@ struct BOOL8{
             }\
     \
             inline void operator = (const unsigned short bState){force_cast<unsigned short>(this) = bState;}\
+            inline void operator = (const BOOL16 bState){force_cast<BOOL16>(this) = bState;}\
             inline unsigned short getValue() const{return force_cast<unsigned short>(this);}\
             inline const unsigned char size() const{return 16;}\
             \
@@ -593,10 +611,11 @@ struct BOOL16{
     unsigned char b15 :1;
 
     BOOL16()=default;
-    BOOL16(const bool b0, const bool b1, const bool b2, const bool b3, const bool b4,
-        const bool b5, const bool b6, const bool b7,
-        const bool b8, const bool b9, const bool b10, const bool b11, const bool b12,
-        const bool b13, const bool b14, const bool b15)
+		BOOL16(const unsigned short bState){force_cast<unsigned short>(this) = bState;}
+    BOOL16(const bool b0, const bool b1, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
+        const bool b5 = 0, const bool b6 = 0, const bool b7 = 0,
+        const bool b8 = 0, const bool b9 = 0, const bool b10 = 0, const bool b11 = 0, const bool b12 = 0,
+        const bool b13 = 0, const bool b14 = 0, const bool b15 = 0)
         : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7)
         , b8(b8) ,b9(b9), b10(b10), b11(b11), b12(b12), b13(b13), b14(b14), b15(b15){}
 
@@ -736,6 +755,7 @@ struct BOOL16{
             }\
     \
             inline void operator = (const unsigned long bState){force_cast<unsigned long>(this) = bState;}\
+            inline void operator = (const BOOL32 bState){force_cast<BOOL32>(this) = bState;}\
             inline unsigned long getValue() const{return force_cast<unsigned long>(this);}\
             inline const unsigned char size() const{return 32;}\
             \
@@ -896,6 +916,7 @@ struct BOOL16{
             }\
     \
             inline void operator = (const unsigned long bState){force_cast<unsigned long>(this) = bState;}\
+            inline void operator = (const BOOL32 bState){force_cast<BOOL32>(this) = bState;}\
             inline unsigned long getValue() const{return force_cast<unsigned long>(this);}\
             inline const unsigned char size() const{return 32;}\
             \
@@ -952,7 +973,7 @@ struct BOOL16{
  *
  *  BOOL32(...)
  *  Description:
- *  Rename b0...b31 with prefix of your choice
+ *  
  *
  *  Usage:
  *  BOOL32 [varName]
@@ -1007,14 +1028,15 @@ struct BOOL32{
     unsigned char b31 :1;
 
     BOOL32()=default;
-    BOOL32(const bool b0, const bool b1, const bool b2, const bool b3, const bool b4,
-        const bool b5, const bool b6, const bool b7,
-        const bool b8, const bool b9, const bool b10, const bool b11, const bool b12,
-        const bool b13, const bool b14, const bool b15,
-        const bool b16, const bool b17, const bool b18, const bool b19, const bool b20,
-        const bool b21, const bool b22, const bool b23,
-        const bool b24, const bool b25, const bool b26, const bool b27, const bool b28,
-        const bool b29, const bool b30, const bool b31)
+    BOOL32(const unsigned long bState){force_cast<unsigned long>(this) = bState;}
+    BOOL32(const bool b0, const bool b1, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
+        const bool b5 = 0, const bool b6 = 0, const bool b7 = 0,
+        const bool b8 = 0, const bool b9 = 0, const bool b10 = 0, const bool b11 = 0, const bool b12 = 0,
+        const bool b13 = 0, const bool b14 = 0, const bool b15 = 0,
+        const bool b16 = 0, const bool b17 = 0, const bool b18 = 0, const bool b19 = 0, const bool b20 = 0,
+        const bool b21 = 0, const bool b22 = 0, const bool b23 = 0,
+        const bool b24 = 0, const bool b25 = 0, const bool b26 = 0, const bool b27 = 0, const bool b28 = 0,
+        const bool b29 = 0, const bool b30 = 0, const bool b31 = 0)
         : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7)
         , b8(b8) ,b9(b9), b10(b10), b11(b11), b12(b12), b13(b13), b14(b14), b15(b15)
         , b16(b16) ,b17(b17), b18(b18), b19(b19), b20(b20), b21(b21), b22(b22), b23(b23)
@@ -1035,7 +1057,7 @@ struct BOOL32{
     }
 
     inline void operator = (const unsigned long bState){force_cast<unsigned long>(this) = bState;}
-
+		
     inline unsigned long getValue() const{return force_cast<unsigned long>(this);}
     inline const unsigned char size() const{return 32;}
 
