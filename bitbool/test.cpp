@@ -21,18 +21,18 @@ int main(){
 	B8.b7 = true;
 
 	
-	printf("Static assighment is %s tested\n", B8.getValue() == 0xFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B8.value == 0xFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B8 = 0xCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B8.getValue() == 0xCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B8.value == 0xCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B8.size();i++)
 		B8(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B8.getValue() == 0xFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B8.value == 0xFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest8=0x00;
 	for(char i=0; i<B8.size()-1;i++)
@@ -66,21 +66,21 @@ int main(){
 	B8R.bSEVEN = true;	
 	B8R.bEIGHT = true;
 
-	printf("\n%X\n",B8R.getValue());
-	printf("Static assighment is %s tested\n", B8R.getValue() == 0xFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("\n%X\n",B8R.value);
+	printf("Static assighment is %s tested\n", B8R.value == 0xFE ? "Succesfuly" : "Unsuccesfuly");
 	
 	
 	B8R=BOOL8(0xFF);
 	
 	B8R = 0xCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B8R.getValue() == 0xCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B8R.value == 0xCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B8R.size();i++)
 		B8R(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B8R.getValue() == 0xFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B8R.value == 0xFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest8=0x00;
 	for(char i=0; i<B8R.size()-1;i++)
@@ -120,18 +120,18 @@ int main(){
 	B8RP.NUM_EIGHT = true;
 
 	
-	printf("Static assighment is %s tested\n", B8RP.getValue() == 0xFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B8RP.value == 0xFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B8RP = 0xCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B8RP.getValue() == 0xCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B8RP.value == 0xCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B8RP.size();i++)
 		B8RP(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B8RP.getValue() == 0xFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B8RP.value == 0xFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest8=0x00;
 	for(char i=0; i<B8RP.size()-1;i++)
@@ -171,18 +171,18 @@ int main(){
 	B16.b14 = true;	
 	B16.b15 = true;
 
-	printf("Static assighment is %s tested\n", B16.getValue() == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B16.value == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B16 = 0xCCCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B16.getValue() == 0xCCCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B16.value == 0xCCCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B16.size();i++)
 		B16(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B16.getValue() == 0xFFFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B16.value == 0xFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest16=0x0000;
 	for(char i=0; i<B16.size()-1;i++)
@@ -233,18 +233,18 @@ int main(){
 	B16R.bFIFTEEN = true;	
 	B16R.bSIXTEEN = true;
 
-	printf("Static assighment is %s tested\n", B16R.getValue() == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B16R.value == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B16R = 0xCCCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B16R.getValue() == 0xCCCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B16R.value == 0xCCCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B16R.size();i++)
 		B16R(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B16R.getValue() == 0xFFFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B16R.value == 0xFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest16=0x0000;
 	for(char i=0; i<B16R.size()-1;i++)
@@ -296,18 +296,18 @@ int main(){
 	B16RP.PREFIX_FIFTEEN = true;	
 	B16RP.PREFIX_SIXTEEN = true;
 
-	printf("Static assighment is %s tested\n", B16RP.getValue() == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B16RP.value == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B16RP = 0xCCCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B16RP.getValue() == 0xCCCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B16RP.value == 0xCCCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B16RP.size();i++)
 		B16RP(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B16RP.getValue() == 0xFFFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B16RP.value == 0xFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest16=0x0000;
 	for(char i=0; i<B16RP.size()-1;i++)
@@ -358,18 +358,18 @@ int main(){
 	B32.b30 = true;
 	B32.b31 = true;
 
-	printf("Static assighment is %s tested\n", B32.getValue() == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B32.value == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B32 = 0xCCCCCCCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B32.getValue() == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B32.value == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B32.size();i++)
 		B32(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B32.getValue() == 0xFFFFFFFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B32.value == 0xFFFFFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest32=0x00000000;
 	for(char i=0; i<B32.size()-1;i++)
@@ -466,18 +466,18 @@ SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,TWENTYONE,TWENTYTWO,TWENTYTHREE,TWENTYFOUR,TW
 	B32R.bTHIRTYTWO	 = true;
 
 
-	printf("Static assighment is %s tested\n", B32R.getValue() == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B32R.value == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B32R = 0xCCCCCCCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B32R.getValue() == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B32R.value == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B32R.size();i++)
 		B32R(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B32R.getValue() == 0xFFFFFFFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B32R.value == 0xFFFFFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest32=0x00000000;
 	for(char i=0; i<B32R.size()-1;i++)
@@ -574,18 +574,18 @@ SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,TWENTYONE,TWENTYTWO,TWENTYTHREE,TWENTYFOUR,TW
 	B32RP.PREFIX_THIRTYTWO	 = true;
 
 
-	printf("Static assighment is %s tested\n", B32RP.getValue() == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assighment is %s tested\n", B32RP.value == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
 	B32RP = 0xCCCCCCCC;
 	
-	printf("operator = and/or getValue() are %s tested\n", B32RP.getValue() == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
+	printf("operator = and/or .value are %s tested\n", B32RP.value == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
 	
 	for(char i=0; i<B32RP.size();i++)
 		B32RP(i,true);
 	 
 
-	printf("operator (index, value) is %s tested\n", B32RP.getValue() == 0xFFFFFFFF ? "Succesfuly" : "Unsuccesfuly");
+	printf("operator (index, value) is %s tested\n", B32RP.value == 0xFFFFFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest32=0x00000000;
 	for(char i=0; i<B32RP.size()-1;i++)
