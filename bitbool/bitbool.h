@@ -132,8 +132,44 @@ struct BOOL8{
         return ((value >> index) & 0x01);
     }
 
-    inline void operator = (const unsigned char val){value = val;}
-
+    inline unsigned char operator = (const unsigned char val){return value = val;}
+    
+    inline unsigned char operator + (const unsigned char val){return (value + val);}
+    inline unsigned char operator + (const BOOL8 b8){return (value + b8.value);}
+    inline unsigned char operator - (const unsigned char val){return (value - val);}
+    inline unsigned char operator - (const BOOL8 b8){return (value - b8.value);}
+    inline unsigned char operator * (const unsigned char val){return (value * val);}
+    inline unsigned char operator * (const BOOL8 b8){return (value * b8.value);}
+    inline unsigned char operator / (const unsigned char val){return (value / val);}
+    inline unsigned char operator / (const BOOL8 b8){return (value / b8.value);}
+    
+    inline unsigned char operator += (const unsigned char val){return (value += val);}
+    inline unsigned char operator += (const BOOL8 b8){return (value += b8.value);}
+    inline unsigned char operator -= (const unsigned char val){return (value -= val);}
+    inline unsigned char operator -= (const BOOL8 b8){return (value -= b8.value);}
+    inline unsigned char operator *= (const unsigned char val){return (value *= val);}
+    inline unsigned char operator *= (const BOOL8 b8){return (value *= b8.value);}
+    inline unsigned char operator /= (const unsigned char val){return (value /= val);}
+    inline unsigned char operator /= (const BOOL8 b8){return (value /= b8.value);}
+    
+    
+    inline unsigned char operator | (const unsigned char val){return (value | val);}
+    inline unsigned char operator | (const BOOL8 b8){return (value | b8.value);}
+    inline unsigned char operator & (const unsigned char val){return (value & val);}
+    inline unsigned char operator & (const BOOL8 b8){return (value & b8.value);}
+    inline unsigned char operator ^ (const unsigned char val){return (value ^ val);}
+    inline unsigned char operator ^ (const BOOL8 b8){return (value ^ b8.value);}
+    inline unsigned char operator << (const unsigned char val){return (value << val);}
+    inline unsigned char operator >> (const unsigned char val){return (value >> val);}
+    inline unsigned char operator ~ (void){return (~value);}
+    
+    inline unsigned char operator |= (const unsigned char val){return (value |= val);}
+    inline unsigned char operator |= (const BOOL8 b8){return (value |= b8.value);}
+    inline unsigned char operator &= (const unsigned char val){return (value &= val);}
+    inline unsigned char operator &= (const BOOL8 b8){return (value &= b8.value);}
+    inline unsigned char operator ^= (const unsigned char val){return (value ^= val);}
+    inline unsigned char operator ^= (const BOOL8 b8){return (value ^= b8.value);}
+    
     
     inline const unsigned char size() const{return BOOL8_BIT_SIZE;}
 
@@ -204,8 +240,44 @@ struct BOOL8{
                 return ( (value >> index) & 0x01 );\
             }\
     \
-            inline void operator = (const unsigned char val){value = val;}\
-            inline void operator = (const BOOL8 b8){value = b8.value;}\
+            inline unsigned char operator = (const unsigned char val){return value = val;}\
+            inline unsigned char operator = (const BOOL8 b8){return value = b8.value;}\
+            \
+     	    inline unsigned char operator + (const unsigned char val){return (value + val);}\
+	    inline unsigned char operator + (const BOOL8 b8){return (value + b8.value);}\
+	    inline unsigned char operator - (const unsigned char val){return (value - val);}\
+	    inline unsigned char operator - (const BOOL8 b8){return (value - b8.value);}\
+	    inline unsigned char operator * (const unsigned char val){return (value * val);}\
+	    inline unsigned char operator * (const BOOL8 b8){return (value * b8.value);}\
+	    inline unsigned char operator / (const unsigned char val){return (value / val);}\
+	    inline unsigned char operator / (const BOOL8 b8){return (value / b8.value);}\
+	    \
+	    inline unsigned char operator += (const unsigned char val){return (value += val);}\
+	    inline unsigned char operator += (const BOOL8 b8){return (value += b8.value);}\
+	    inline unsigned char operator -= (const unsigned char val){return (value -= val);}\
+	    inline unsigned char operator -= (const BOOL8 b8){return (value -= b8.value);}\
+	    inline unsigned char operator *= (const unsigned char val){return (value *= val);}\
+	    inline unsigned char operator *= (const BOOL8 b8){return (value *= b8.value);}\
+	    inline unsigned char operator /= (const unsigned char val){return (value /= val);}\
+	    inline unsigned char operator /= (const BOOL8 b8){return (value /= b8.value);}\
+	    \
+            inline unsigned char operator | (const unsigned char val){return (value | val);}\
+            inline unsigned char operator | (const BOOL8 b8){return (value | b8.value);}\
+	    inline unsigned char operator & (const unsigned char val){return (value & val);}\
+	    inline unsigned char operator & (const BOOL8 b8){return (value & b8.value);}\
+	    inline unsigned char operator ^ (const unsigned char val){return (value ^ val);}\
+	    inline unsigned char operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
+	    inline unsigned char operator << (const unsigned char val){return (value << val);}\
+	    inline unsigned char operator >> (const unsigned char val){return (value >> val);}\
+	    inline unsigned char operator ~ (void){return (~value);}\
+	    \
+	    inline unsigned char operator |= (const unsigned char val){return (value |= val);}\
+	    inline unsigned char operator |= (const BOOL8 b8){return (value |= b8.value);}\
+	    inline unsigned char operator &= (const unsigned char val){return (value &= val);}\
+	    inline unsigned char operator &= (const BOOL8 b8){return (value &= b8.value);}\
+	    inline unsigned char operator ^= (const unsigned char val){return (value ^= val);}\
+	    inline unsigned char operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
+	    \
             inline const unsigned char size() const{return BOOL8_BIT_SIZE;}\
             \
             \
@@ -297,8 +369,44 @@ struct BOOL8{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned char val){value = val;}\
-            inline void operator = (const BOOL8 b8){value = b8.value;}\
+            inline unsigned char operator = (const unsigned char val){return value = val;}\
+            inline unsigned char operator = (const BOOL8 b8){return value = b8.value;}\
+            \
+     	    inline unsigned char operator + (const unsigned char val){return (value + val);}\
+	    inline unsigned char operator + (const BOOL8 b8){return (value + b8.value);}\
+	    inline unsigned char operator - (const unsigned char val){return (value - val);}\
+	    inline unsigned char operator - (const BOOL8 b8){return (value - b8.value);}\
+	    inline unsigned char operator * (const unsigned char val){return (value * val);}\
+	    inline unsigned char operator * (const BOOL8 b8){return (value * b8.value);}\
+	    inline unsigned char operator / (const unsigned char val){return (value / val);}\
+	    inline unsigned char operator / (const BOOL8 b8){return (value / b8.value);}\
+	    \
+	    inline unsigned char operator += (const unsigned char val){return (value += val);}\
+	    inline unsigned char operator += (const BOOL8 b8){return (value += b8.value);}\
+	    inline unsigned char operator -= (const unsigned char val){return (value -= val);}\
+	    inline unsigned char operator -= (const BOOL8 b8){return (value -= b8.value);}\
+	    inline unsigned char operator *= (const unsigned char val){return (value *= val);}\
+	    inline unsigned char operator *= (const BOOL8 b8){return (value *= b8.value);}\
+	    inline unsigned char operator /= (const unsigned char val){return (value /= val);}\
+	    inline unsigned char operator /= (const BOOL8 b8){return (value /= b8.value);}\
+	    \
+            inline unsigned char operator | (const unsigned char val){return (value | val);}\
+	    inline unsigned char operator | (const BOOL8 b8){return (value | b8.value);}\
+	    inline unsigned char operator & (const unsigned char val){return (value & val);}\
+	    inline unsigned char operator & (const BOOL8 b8){return (value & b8.value);}\
+	    inline unsigned char operator ^ (const unsigned char val){return (value ^ val);}\
+	    inline unsigned char operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
+	    inline unsigned char operator << (const unsigned char val){return (value << val);}\
+	    inline unsigned char operator >> (const unsigned char val){return (value >> val);}\
+	    inline unsigned char operator ~ (void){return (~value);}\
+	    \
+	    inline unsigned char operator |= (const unsigned char val){return (value |= val);}\
+	    inline unsigned char operator |= (const BOOL8 b8){return (value |= b8.value);}\
+	    inline unsigned char operator &= (const unsigned char val){return (value &= val);}\
+	    inline unsigned char operator &= (const BOOL8 b8){return (value &= b8.value);}\
+	    inline unsigned char operator ^= (const unsigned char val){return (value ^= val);}\
+	    inline unsigned char operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
+    	    \
             inline const unsigned char size() const{return BOOL8_BIT_SIZE;}\
             \
             \
@@ -330,6 +438,10 @@ struct BOOL8{
 
 #define BOOL16_BIT_SIZE 16
 #define BOOL16_BYTE_SIZE (BOOL8_BIT_SIZE / 8)
+
+
+
+
 
 /**********************************************************************
  *
@@ -404,7 +516,43 @@ struct BOOL16{
         return ((value >> index) & 0x01);
     }
 
-    inline void operator = (const unsigned short val){value = val;}
+    inline unsigned short operator = (const unsigned short val){return value = val;}
+    
+    inline unsigned short operator + (const unsigned short val){return (value + val);}
+    inline unsigned short operator + (const BOOL16 b16){return (value + b16.value);}
+    inline unsigned short operator - (const unsigned short val){return (value - val);}
+    inline unsigned short operator - (const BOOL16 b16){return (value - b16.value);}
+    inline unsigned short operator * (const unsigned short val){return (value * val);}
+    inline unsigned short operator * (const BOOL16 b16){return (value * b16.value);}
+    inline unsigned short operator / (const unsigned short val){return (value / val);}
+    inline unsigned short operator / (const BOOL16 b16){return (value / b16.value);}
+    
+    inline unsigned short operator += (const unsigned short val){return (value += val);}
+    inline unsigned short operator += (const BOOL16 b16){return (value += b16.value);}
+    inline unsigned short operator -= (const unsigned short val){return (value -= val);}
+    inline unsigned short operator -= (const BOOL16 b16){return (value -= b16.value);}
+    inline unsigned short operator *= (const unsigned short val){return (value *= val);}
+    inline unsigned short operator *= (const BOOL16 b16){return (value *= b16.value);}
+    inline unsigned short operator /= (const unsigned short val){return (value /= val);}
+    inline unsigned short operator /= (const BOOL16 b16){return (value /= b16.value);}
+    
+    inline unsigned short operator | (const unsigned short val){return (value | val);}
+    inline unsigned short operator | (const BOOL16 b16){return (value | b16.value);}
+    inline unsigned short operator & (const unsigned short val){return (value & val);}
+    inline unsigned short operator & (const BOOL16 b16){return (value & b16.value);}
+    inline unsigned short operator ^ (const unsigned short val){return (value ^ val);}
+    inline unsigned short operator ^ (const BOOL16 b16){return (value ^ b16.value);}
+    inline unsigned short operator << (const unsigned short val){return (value << val);}
+    inline unsigned short operator >> (const unsigned short val){return (value >> val);}
+    inline unsigned short operator ~ (void){return (~value);}
+    
+    inline unsigned short operator |= (const unsigned short val){return (value |= val);}
+    inline unsigned short operator |= (const BOOL16 b16){return (value |= b16.value);}
+    inline unsigned short operator &= (const unsigned short val){return (value &= val);}
+    inline unsigned short operator &= (const BOOL16 b16){return (value &= b16.value);}
+    inline unsigned short operator ^= (const unsigned short val){return (value ^= val);}
+    inline unsigned short operator ^= (const BOOL16 b16){return (value ^= b16.value);}
+    
     inline const unsigned char size() const{return BOOL16_BIT_SIZE;}
 
 };
@@ -491,10 +639,44 @@ struct BOOL16{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned short val){value = val;}\
-            inline void operator = (const BOOL16 b16){value = b16.value;}\
-            inline const unsigned char size() const{return BOOL16_BIT_SIZE;}\
+            inline unsigned short operator = (const unsigned short val){return value = val;}\
+            inline unsigned short operator = (const BOOL16 b16){return value = b16.value;}\
             \
+            inline unsigned short operator + (const unsigned short val){return (value + val);}\
+	    inline unsigned short operator + (const BOOL16 b16){return (value + b16.value);}\
+	    inline unsigned short operator - (const unsigned short val){return (value - val);}\
+	    inline unsigned short operator - (const BOOL16 b16){return (value - b16.value);}\
+	    inline unsigned short operator * (const unsigned short val){return (value * val);}\
+	    inline unsigned short operator * (const BOOL16 b16){return (value * b16.value);}\
+	    inline unsigned short operator / (const unsigned short val){return (value / val);}\
+	    inline unsigned short operator / (const BOOL16 b16){return (value / b16.value);}\
+	    \
+	    inline unsigned short operator += (const unsigned short val){return (value += val);}\
+	    inline unsigned short operator += (const BOOL16 b16){return (value += b16.value);}\
+	    inline unsigned short operator -= (const unsigned short val){return (value -= val);}\
+	    inline unsigned short operator -= (const BOOL16 b16){return (value -= b16.value);}\
+	    inline unsigned short operator *= (const unsigned short val){return (value *= val);}\
+	    inline unsigned short operator *= (const BOOL16 b16){return (value *= b16.value);}\
+	    inline unsigned short operator /= (const unsigned short val){return (value /= val);}\
+	    inline unsigned short operator /= (const BOOL16 b16){return (value /= b16.value);}\
+	    \
+	    inline unsigned short operator | (const unsigned short val){return (value | val);}\
+	    inline unsigned short operator | (const BOOL16 b16){return (value | b16.value);}\
+	    inline unsigned short operator & (const unsigned short val){return (value & val);}\
+	    inline unsigned short operator & (const BOOL16 b16){return (value & b16.value);}\
+	    inline unsigned short operator ^ (const unsigned short val){return (value ^ val);}\
+	    inline unsigned short operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
+	    inline unsigned short operator << (const unsigned short val){return (value << val);}\
+	    inline unsigned short operator >> (const unsigned short val){return (value >> val);}\
+    	    inline unsigned short operator ~ (void){return (~value);}\
+            \
+            inline unsigned short operator |= (const unsigned short val){return (value |= val);}\
+	    inline unsigned short operator |= (const BOOL16 b16){return (value |= b16.value);}\
+	    inline unsigned short operator &= (const unsigned short val){return (value &= val);}\
+	    inline unsigned short operator &= (const BOOL16 b16){return (value &= b16.value);}\
+	    inline unsigned short operator ^= (const unsigned short val){return (value ^= val);}\
+	    inline unsigned short operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
+            inline const unsigned char size() const{return BOOL16_BIT_SIZE;}\
             \
     }
 
@@ -610,8 +792,43 @@ struct BOOL16{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned short val){value = val;}\
-            inline void operator = (const BOOL16 b16){value = b16.value;}\
+            inline unsigned short operator = (const unsigned short val){return value = val;}\
+            inline unsigned short operator = (const BOOL16 b16){return value = b16.value;}\
+            \
+            inline unsigned short operator + (const unsigned short val){return (value + val);}\
+	    inline unsigned short operator + (const BOOL16 b16){return (value + b16.value);}\
+	    inline unsigned short operator - (const unsigned short val){return (value - val);}\
+	    inline unsigned short operator - (const BOOL16 b16){return (value - b16.value);}\
+	    inline unsigned short operator * (const unsigned short val){return (value * val);}\
+	    inline unsigned short operator * (const BOOL16 b16){return (value * b16.value);}\
+	    inline unsigned short operator / (const unsigned short val){return (value / val);}\
+	    inline unsigned short operator / (const BOOL16 b16){return (value / b16.value);}\
+	    \
+	    inline unsigned short operator += (const unsigned short val){return (value += val);}\
+	    inline unsigned short operator += (const BOOL16 b16){return (value += b16.value);}\
+	    inline unsigned short operator -= (const unsigned short val){return (value -= val);}\
+	    inline unsigned short operator -= (const BOOL16 b16){return (value -= b16.value);}\
+	    inline unsigned short operator *= (const unsigned short val){return (value *= val);}\
+	    inline unsigned short operator *= (const BOOL16 b16){return (value *= b16.value);}\
+	    inline unsigned short operator /= (const unsigned short val){return (value /= val);}\
+	    inline unsigned short operator /= (const BOOL16 b16){return (value /= b16.value);}\
+	    \
+            inline unsigned short operator | (const unsigned short val){return (value | val);}\
+	    inline unsigned short operator | (const BOOL16 b16){return (value | b16.value);}\
+	    inline unsigned short operator & (const unsigned short val){return (value & val);}\
+	    inline unsigned short operator & (const BOOL16 b16){return (value & b16.value);}\
+	    inline unsigned short operator ^ (const unsigned short val){return (value ^ val);}\
+	    inline unsigned short operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
+	    inline unsigned short operator << (const unsigned short val){return (value << val);}\
+	    inline unsigned short operator >> (const unsigned short val){return (value >> val);}\
+    	    inline unsigned short operator ~ (void){return (~value);}\
+            \
+            inline unsigned short operator |= (const unsigned short val){return (value |= val);}\
+	    inline unsigned short operator |= (const BOOL16 b16){return (value |= b16.value);}\
+	    inline unsigned short operator &= (const unsigned short val){return (value &= val);}\
+	    inline unsigned short operator &= (const BOOL16 b16){return (value &= b16.value);}\
+	    inline unsigned short operator ^= (const unsigned short val){return (value ^= val);}\
+	    inline unsigned short operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
             inline const unsigned char size() const{return BOOL16_BIT_SIZE;}\
             \
             \
@@ -745,9 +962,43 @@ struct BOOL32{
         return ((value >> index) & 0x01);
     }
 
-    inline void operator = (const unsigned long val){value = val;}
-		
-
+    inline unsigned long operator = (const unsigned long val){return value = val;}
+    
+    inline unsigned long operator + (const unsigned long val){return (value + val);}
+    inline unsigned long operator + (const BOOL32 b32){return (value + b32.value);}
+    inline unsigned long operator - (const unsigned long val){return (value - val);}
+    inline unsigned long operator - (const BOOL32 b32){return (value - b32.value);}
+    inline unsigned long operator * (const unsigned long val){return (value * val);}
+    inline unsigned long operator * (const BOOL32 b32){return (value * b32.value);}
+    inline unsigned long operator / (const unsigned long val){return (value / val);}
+    inline unsigned long operator / (const BOOL32 b32){return (value / b32.value);}
+    
+    inline unsigned long operator += (const unsigned long val){return (value += val);}
+    inline unsigned long operator += (const BOOL32 b32){return (value += b32.value);}
+    inline unsigned long operator -= (const unsigned long val){return (value -= val);}
+    inline unsigned long operator -= (const BOOL32 b32){return (value -= b32.value);}
+    inline unsigned long operator *= (const unsigned long val){return (value *= val);}
+    inline unsigned long operator *= (const BOOL32 b32){return (value *= b32.value);}
+    inline unsigned long operator /= (const unsigned long val){return (value /= val);}
+    inline unsigned long operator /= (const BOOL32 b32){return (value /= b32.value);}
+    			
+    inline unsigned long operator | (const unsigned long val){return (value | val);}
+    inline unsigned long operator | (const BOOL32 b32){return (value | b32.value);}
+    inline unsigned long operator & (const unsigned long val){return (value & val);}
+    inline unsigned long operator & (const BOOL32 b32){return (value & b32.value);}
+    inline unsigned long operator ^ (const unsigned long val){return (value ^ val);}
+    inline unsigned long operator ^ (const BOOL32 b32){return (value ^ b32.value);}
+    inline unsigned long operator << (const unsigned long val){return (value << val);}
+    inline unsigned long operator >> (const unsigned long val){return (value >> val);}
+    inline unsigned long operator ~ (void){return (~value);}
+    
+    inline unsigned long operator |= (const unsigned long val){return (value |= val);}
+    inline unsigned long operator |= (const BOOL32 b32){return (value |= b32.value);}
+    inline unsigned long operator &= (const unsigned long val){return (value &= val);}
+    inline unsigned long operator &= (const BOOL32 b32){return (value &= b32.value);}
+    inline unsigned long operator ^= (const unsigned long val){return (value ^= val);}
+    inline unsigned long operator ^= (const BOOL32 b32){return (value ^= b32.value);}
+    
     inline const unsigned char size() const{return BOOL32_BIT_SIZE;}
 
 };
@@ -868,8 +1119,44 @@ struct BOOL32{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned long val){value = val;}\
-            inline void operator = (const BOOL32 b32){value = b32.value;}\
+            inline unsigned long operator = (const unsigned long val){return value = val;}\
+            inline unsigned long operator = (const BOOL32 b32){return value = b32.value;}\
+            \
+            inline unsigned long operator + (const unsigned long val){return (value + val);}\
+	    inline unsigned long operator + (const BOOL32 b32){return (value + b32.value);}\
+	    inline unsigned long operator - (const unsigned long val){return (value - val);}\
+	    inline unsigned long operator - (const BOOL32 b32){return (value - b32.value);}\
+	    inline unsigned long operator * (const unsigned long val){return (value * val);}\
+	    inline unsigned long operator * (const BOOL32 b32){return (value * b32.value);}\
+	    inline unsigned long operator / (const unsigned long val){return (value / val);}\
+	    inline unsigned long operator / (const BOOL32 b32){return (value / b32.value);}\
+	    \
+	    inline unsigned long operator += (const unsigned long val){return (value += val);}\
+	    inline unsigned long operator += (const BOOL32 b32){return (value += b32.value);}\
+	    inline unsigned long operator -= (const unsigned long val){return (value -= val);}\
+	    inline unsigned long operator -= (const BOOL32 b32){return (value -= b32.value);}\
+	    inline unsigned long operator *= (const unsigned long val){return (value *= val);}\
+	    inline unsigned long operator *= (const BOOL32 b32){return (value *= b32.value);}\
+	    inline unsigned long operator /= (const unsigned long val){return (value /= val);}\
+	    inline unsigned long operator /= (const BOOL32 b32){return (value /= b32.value);}\
+    	    \
+            inline unsigned long operator | (const unsigned long val){return (value | val);}\
+	    inline unsigned long operator | (const BOOL32 b32){return (value | b32.value);}\
+	    inline unsigned long operator & (const unsigned long val){return (value & val);}\
+	    inline unsigned long operator & (const BOOL32 b32){return (value & b32.value);}\
+	    inline unsigned long operator ^ (const unsigned long val){return (value ^ val);}\
+	    inline unsigned long operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
+	    inline unsigned long operator << (const unsigned long val){return (value << val);}\
+	    inline unsigned long operator >> (const unsigned long val){return (value >> val);}\
+	    inline unsigned long operator ~ (void){return (~value);}\
+	    \
+	    inline unsigned long operator |= (const unsigned long val){return (value |= val);}\
+	    inline unsigned long operator |= (const BOOL32 b32){return (value |= b32.value);}\
+	    inline unsigned long operator &= (const unsigned long val){return (value &= val);}\
+	    inline unsigned long operator &= (const BOOL32 b32){return (value &= b32.value);}\
+	    inline unsigned long operator ^= (const unsigned long val){return (value ^= val);}\
+	    inline unsigned long operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
+	    \
             inline const unsigned char size() const{return BOOL32_BIT_SIZE;}\
             \
             \
@@ -1033,8 +1320,44 @@ struct BOOL32{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline void operator = (const unsigned long val){value = val;}\
-            inline void operator = (const BOOL32 b32){value = b32.value;}\
+            inline unsigned long operator = (const unsigned long val){return value = val;}\
+            inline unsigned long operator = (const BOOL32 b32){return value = b32.value;}\
+            \
+            inline unsigned long operator + (const unsigned long val){return (value + val);}\
+	    inline unsigned long operator + (const BOOL32 b32){return (value + b32.value);}\
+	    inline unsigned long operator - (const unsigned long val){return (value - val);}\
+	    inline unsigned long operator - (const BOOL32 b32){return (value - b32.value);}\
+	    inline unsigned long operator * (const unsigned long val){return (value * val);}\
+	    inline unsigned long operator * (const BOOL32 b32){return (value * b32.value);}\
+	    inline unsigned long operator / (const unsigned long val){return (value / val);}\
+	    inline unsigned long operator / (const BOOL32 b32){return (value / b32.value);}\
+	    \
+	    inline unsigned long operator += (const unsigned long val){return (value += val);}\
+	    inline unsigned long operator += (const BOOL32 b32){return (value += b32.value);}\
+	    inline unsigned long operator -= (const unsigned long val){return (value -= val);}\
+	    inline unsigned long operator -= (const BOOL32 b32){return (value -= b32.value);}\
+	    inline unsigned long operator *= (const unsigned long val){return (value *= val);}\
+	    inline unsigned long operator *= (const BOOL32 b32){return (value *= b32.value);}\
+	    inline unsigned long operator /= (const unsigned long val){return (value /= val);}\
+	    inline unsigned long operator /= (const BOOL32 b32){return (value /= b32.value);}\
+    	    \
+            inline unsigned long operator | (const unsigned long val){return (value | val);}\
+	    inline unsigned long operator | (const BOOL32 b32){return (value | b32.value);}\
+	    inline unsigned long operator & (const unsigned long val){return (value & val);}\
+	    inline unsigned long operator & (const BOOL32 b32){return (value & b32.value);}\
+	    inline unsigned long operator ^ (const unsigned long val){return (value ^ val);}\
+	    inline unsigned long operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
+	    inline unsigned long operator << (const unsigned long val){return (value << val);}\
+	    inline unsigned long operator >> (const unsigned long val){return (value >> val);}\
+	    inline unsigned long operator ~ (void){return (~value);}\
+	    \
+	    inline unsigned long operator |= (const unsigned long val){return (value |= val);}\
+	    inline unsigned long operator |= (const BOOL32 b32){return (value |= b32.value);}\
+	    inline unsigned long operator &= (const unsigned long val){return (value &= val);}\
+	    inline unsigned long operator &= (const BOOL32 b32){return (value &= b32.value);}\
+	    inline unsigned long operator ^= (const unsigned long val){return (value ^= val);}\
+	    inline unsigned long operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
+	    \
             inline const unsigned char size() const{return BOOL32_BIT_SIZE;}\
             \
             \

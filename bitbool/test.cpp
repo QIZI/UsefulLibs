@@ -11,6 +11,8 @@ int main(){
  	BOOL8 B8;
 	
 	
+	
+	
 	B8.b0 = false;
 	B8.b1 = true;
 	B8.b2 = true;
@@ -19,8 +21,13 @@ int main(){
 	B8.b5 = true;
 	B8.b6 = true;	
 	B8.b7 = true;
-
 	
+	B8 = ~B8;
+	B8 |= 0xFF;
+	B8 &= 0xFE;
+	
+	
+	//B8 = B8 = B8.value;  	
 	printf("Static assighment is %s tested\n", B8.value == 0xFE ? "Succesfuly" : "Unsuccesfuly");
 	
 
@@ -65,12 +72,14 @@ int main(){
 	B8R.bSIX = true;
 	B8R.bSEVEN = true;	
 	B8R.bEIGHT = true;
-
+	
 	printf("\n%X\n",B8R.value);
-	printf("Static assighment is %s tested\n", B8R.value == 0xFE ? "Succesfuly" : "Unsuccesfuly");
+	printf("Static assigment is %s tested\n", B8R.value == 0xFE ? "Succesfuly" : "Unsuccesfuly");
 	
 	
-	B8R=BOOL8(0xFF);
+	B8R = BOOL8(true, true, true, true, true, true, true, false);
+
+	printf("BOOL8 contructor assigment is %s tested\n", B8R.value == 0x7F ? "Succesfuly" : "Unsuccesfuly");	
 	
 	B8R = 0xCC;
 	
@@ -122,6 +131,9 @@ int main(){
 	
 	printf("Static assighment is %s tested\n", B8RP.value == 0xFE ? "Succesfuly" : "Unsuccesfuly");
 	
+	B8RP = BOOL8(true, true, true, true, true, true, true, false);
+
+	printf("BOOL8 contructor assigment is %s tested\n", B8RP.value == 0x7F ? "Succesfuly" : "Unsuccesfuly");	
 
 	B8RP = 0xCC;
 	
@@ -173,7 +185,6 @@ int main(){
 
 	printf("Static assighment is %s tested\n", B16.value == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
-
 	B16 = 0xCCCC;
 	
 	printf("operator = and/or .value are %s tested\n", B16.value == 0xCCCC ? "Succesfuly" : "Unsuccesfuly");	
@@ -232,9 +243,13 @@ int main(){
 	B16R.bFOURTEEN = true;	
 	B16R.bFIFTEEN = true;	
 	B16R.bSIXTEEN = true;
-
-	printf("Static assighment is %s tested\n", B16R.value == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
+	
+	printf("Static assighment is %s tested\n", B16R.value == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
+		
+	B16R = BOOL16(true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false);
+
+	printf("BOOL16 contructor assigment is %s tested\n", B16R.value == 0x7FFF ? "Succesfuly" : "Unsuccesfuly");
 
 	B16R = 0xCCCC;
 	
@@ -295,9 +310,13 @@ int main(){
 	B16RP.PREFIX_FOURTEEN = true;	
 	B16RP.PREFIX_FIFTEEN = true;	
 	B16RP.PREFIX_SIXTEEN = true;
-
+	
+	
 	printf("Static assighment is %s tested\n", B16RP.value == 0xFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
+	B16RP = BOOL16(true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false);
+
+	printf("BOOL16 contructor assigment is %s tested\n", B16RP.value == 0x7FFF ? "Succesfuly" : "Unsuccesfuly");
 
 	B16RP = 0xCCCC;
 	
@@ -357,9 +376,12 @@ int main(){
 	B32.b29 = true;
 	B32.b30 = true;
 	B32.b31 = true;
-
-	printf("Static assighment is %s tested\n", B32.value == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
+		
+	
+	printf("Static assighment is %s tested\n", B32.value == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
+
+		
 
 	B32 = 0xCCCCCCCC;
 	
@@ -465,10 +487,13 @@ SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,TWENTYONE,TWENTYTWO,TWENTYTHREE,TWENTYFOUR,TW
 	B32R.bTHIRTYONE = true;
 	B32R.bTHIRTYTWO	 = true;
 
-
+	printf("\n%X\n",B32R.value);
 	printf("Static assighment is %s tested\n", B32R.value == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
-
+	B32R = BOOL32(true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false);
+	
+	printf("BOOL32 contructor assigment is %s tested\n", B32R.value == 0x7FFFFFFF ? "Succesfuly" : "Unsuccesfuly");
+	
 	B32R = 0xCCCCCCCC;
 	
 	printf("operator = and/or .value are %s tested\n", B32R.value == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
@@ -576,15 +601,18 @@ SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,TWENTYONE,TWENTYTWO,TWENTYTHREE,TWENTYFOUR,TW
 
 	printf("Static assighment is %s tested\n", B32RP.value == 0xFFFFFFFE ? "Succesfuly" : "Unsuccesfuly");
 	
-
+	B32RP = BOOL32(true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false);
+	
+	printf("BOOL32 contructor assigment is %s tested\n", B32RP.value == 0x7FFFFFFF ? "Succesfuly" : "Unsuccesfuly");
+	
 	B32RP = 0xCCCCCCCC;
 	
 	printf("operator = and/or .value are %s tested\n", B32RP.value == 0xCCCCCCCC ? "Succesfuly" : "Unsuccesfuly");	
 	
-	for(char i=0; i<B32RP.size();i++)
+	for(char i=0; i<B32RP.size()-2;i++)
 		B32RP(i,true);
 	 
-
+	
 	printf("operator (index, value) is %s tested\n", B32RP.value == 0xFFFFFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	readTest32=0x00000000;
