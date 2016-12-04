@@ -5,7 +5,7 @@
 
 int main(){
 	//booleight - test
-	unsigned char readTest8=0x00;		
+	uint8_t readTest8=0x00;		
 	
 	printf("//----BOOL8----//\n\nBOOL8 testing:\n\n");
  	BOOL8 B8;
@@ -158,7 +158,7 @@ int main(){
 
 	//boolhex - test
 	
-	unsigned short readTest16;
+	uint16_t readTest16;
 	
 	printf("//----BOOL16----//\n\nBOOL16 testing:\n\n");
 	
@@ -338,7 +338,7 @@ int main(){
 
 	
 
-	unsigned long readTest32;
+	uint32_t readTest32;
 	
 	printf("//----BOOL32----//\n\nBOOL32 testing:\n\n");
 	BOOL32 B32;
@@ -622,7 +622,9 @@ SEVENTEEN,EIGHTEEN,NINETEEN,TWENTY,TWENTYONE,TWENTYTWO,TWENTYTHREE,TWENTYFOUR,TW
 	printf("operator [] is %s tested\n", readTest32 == 0x7FFFFFFF ? "Succesfuly" : "Unsuccesfuly");
 	
 	printf("\n");
-
+	
+	
+	
 
 
 }

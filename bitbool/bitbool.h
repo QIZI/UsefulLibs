@@ -44,13 +44,8 @@
  * Use b0...b7...b15...b31 members instead.
  *
  ***********************************************************************/
-
-
-/******************************************************
- * Force conversion between incompatibile types			  *
- ******************************************************/
  
-
+#include <inttypes.h>
 
 /******************************************************
  * Force function with "inline" keyword to be inlined *
@@ -90,11 +85,11 @@
  *  varname[ [index] ] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL16
  *  varName.size(void) - return constant count of bits
- *  varName = [unsigned char] - overloaded operator will make easier
- *  to copy data from unsigned char
+ *  varName = [uint8_t] - overloaded operator will make easier
+ *  to copy data from uint8_t
  *
  **********************************************************************/
 
@@ -102,16 +97,16 @@ struct BOOL8{
 
     union{
         struct{
-	    unsigned char b0 :1;
-	    unsigned char b1 :1;
-	    unsigned char b2 :1;
-	    unsigned char b3 :1;
-	    unsigned char b4 :1;
-	    unsigned char b5 :1;
-	    unsigned char b6 :1;
-	    unsigned char b7 :1;
+	    uint8_t b0 :1;
+	    uint8_t b1 :1;
+	    uint8_t b2 :1;
+	    uint8_t b3 :1;
+	    uint8_t b4 :1;
+	    uint8_t b5 :1;
+	    uint8_t b6 :1;
+	    uint8_t b7 :1;
 	};
-	unsigned char value;
+	uint8_t value;
      };
     BOOL8() = default;
     BOOL8(const bool b0, const bool b1 = 0, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
@@ -119,59 +114,59 @@ struct BOOL8{
      : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7){}
 
     /**Dynamic Write*/
-    void operator ()(const unsigned char index, const bool bState){
+    void operator ()(const uint8_t index, const bool bState){
         value = (value & ( ~(0x01 << index))) | (bState << index);
     }
 
     /**Dynamic Read*/
-    inline bool operator () (const unsigned char index) const{
+    inline bool operator () (const uint8_t index) const{
         return (*this)[index];
     }
     /**Dynamic Read*/
-    bool operator [] (const unsigned char index) const{
+    bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
 
-    inline unsigned char operator = (const unsigned char val){return value = val;}
+    inline uint8_t operator = (const uint8_t val){return value = val;}
     
-    inline unsigned char operator + (const unsigned char val){return (value + val);}
-    inline unsigned char operator + (const BOOL8 b8){return (value + b8.value);}
-    inline unsigned char operator - (const unsigned char val){return (value - val);}
-    inline unsigned char operator - (const BOOL8 b8){return (value - b8.value);}
-    inline unsigned char operator * (const unsigned char val){return (value * val);}
-    inline unsigned char operator * (const BOOL8 b8){return (value * b8.value);}
-    inline unsigned char operator / (const unsigned char val){return (value / val);}
-    inline unsigned char operator / (const BOOL8 b8){return (value / b8.value);}
+    inline uint8_t operator + (const uint8_t val){return (value + val);}
+    inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}
+    inline uint8_t operator - (const uint8_t val){return (value - val);}
+    inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}
+    inline uint8_t operator * (const uint8_t val){return (value * val);}
+    inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}
+    inline uint8_t operator / (const uint8_t val){return (value / val);}
+    inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}
     
-    inline unsigned char operator += (const unsigned char val){return (value += val);}
-    inline unsigned char operator += (const BOOL8 b8){return (value += b8.value);}
-    inline unsigned char operator -= (const unsigned char val){return (value -= val);}
-    inline unsigned char operator -= (const BOOL8 b8){return (value -= b8.value);}
-    inline unsigned char operator *= (const unsigned char val){return (value *= val);}
-    inline unsigned char operator *= (const BOOL8 b8){return (value *= b8.value);}
-    inline unsigned char operator /= (const unsigned char val){return (value /= val);}
-    inline unsigned char operator /= (const BOOL8 b8){return (value /= b8.value);}
-    
-    
-    inline unsigned char operator | (const unsigned char val){return (value | val);}
-    inline unsigned char operator | (const BOOL8 b8){return (value | b8.value);}
-    inline unsigned char operator & (const unsigned char val){return (value & val);}
-    inline unsigned char operator & (const BOOL8 b8){return (value & b8.value);}
-    inline unsigned char operator ^ (const unsigned char val){return (value ^ val);}
-    inline unsigned char operator ^ (const BOOL8 b8){return (value ^ b8.value);}
-    inline unsigned char operator << (const unsigned char val){return (value << val);}
-    inline unsigned char operator >> (const unsigned char val){return (value >> val);}
-    inline unsigned char operator ~ (void){return (~value);}
-    
-    inline unsigned char operator |= (const unsigned char val){return (value |= val);}
-    inline unsigned char operator |= (const BOOL8 b8){return (value |= b8.value);}
-    inline unsigned char operator &= (const unsigned char val){return (value &= val);}
-    inline unsigned char operator &= (const BOOL8 b8){return (value &= b8.value);}
-    inline unsigned char operator ^= (const unsigned char val){return (value ^= val);}
-    inline unsigned char operator ^= (const BOOL8 b8){return (value ^= b8.value);}
+    inline uint8_t operator += (const uint8_t val){return (value += val);}
+    inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}
+    inline uint8_t operator -= (const uint8_t val){return (value -= val);}
+    inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}
+    inline uint8_t operator *= (const uint8_t val){return (value *= val);}
+    inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}
+    inline uint8_t operator /= (const uint8_t val){return (value /= val);}
+    inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}
     
     
-    inline const unsigned char size() const{return BOOL8_BIT_SIZE;}
+    inline uint8_t operator | (const uint8_t val){return (value | val);}
+    inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}
+    inline uint8_t operator & (const uint8_t val){return (value & val);}
+    inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}
+    inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}
+    inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}
+    inline uint8_t operator << (const uint8_t val){return (value << val);}
+    inline uint8_t operator >> (const uint8_t val){return (value >> val);}
+    inline uint8_t operator ~ (void){return (~value);}
+    
+    inline uint8_t operator |= (const uint8_t val){return (value |= val);}
+    inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}
+    inline uint8_t operator &= (const uint8_t val){return (value &= val);}
+    inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}
+    inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}
+    inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}
+    
+    
+    inline const uint8_t size() const{return BOOL8_BIT_SIZE;}
 
 };
 
@@ -192,11 +187,11 @@ struct BOOL8{
  *  varname[[index]] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL8
  *  varName.size(void) - return constant count of bits
- *  varName = [unsigned char] - overloaded operator will make easier
- *  to copy data from unsigned char
+ *  varName = [uint8_t] - overloaded operator will make easier
+ *  to copy data from uint8_t
  *
  *  NOTE: macro is overloaded, you do not need
  *  to rename all 8 bits
@@ -215,70 +210,70 @@ struct BOOL8{
     struct{\
         union{\
             struct{\
-	        unsigned char b##b0 :1;\
-            	unsigned char b##b1 :1;\
-            	unsigned char b##b2 :1;\
-            	unsigned char b##b3 :1;\
-            	unsigned char b##b4 :1;\
-            	unsigned char b##b5 :1;\
-            	unsigned char b##b6 :1;\
-            	unsigned char b##b7 :1;\
+	        uint8_t b##b0 :1;\
+            	uint8_t b##b1 :1;\
+            	uint8_t b##b2 :1;\
+            	uint8_t b##b3 :1;\
+            	uint8_t b##b4 :1;\
+            	uint8_t b##b5 :1;\
+            	uint8_t b##b6 :1;\
+            	uint8_t b##b7 :1;\
              };\
-             unsigned char value;\
+             uint8_t value;\
         };\
             /**Dynamic Write*/\
-            void operator ()(const unsigned char index, const bool state){\
+            void operator ()(const uint8_t index, const bool state){\
                 value = (value & ( ~(0x01 << index))) | (state << index);\
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const unsigned char index) const{\
+            inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
-            bool operator [] (const unsigned char index) const{\
+            bool operator [] (const uint8_t index) const{\
                 return ( (value >> index) & 0x01 );\
             }\
     \
-            inline unsigned char operator = (const unsigned char val){return value = val;}\
-            inline unsigned char operator = (const BOOL8 b8){return value = b8.value;}\
+            inline uint8_t operator = (const uint8_t val){return value = val;}\
+            inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
             \
-     	    inline unsigned char operator + (const unsigned char val){return (value + val);}\
-	    inline unsigned char operator + (const BOOL8 b8){return (value + b8.value);}\
-	    inline unsigned char operator - (const unsigned char val){return (value - val);}\
-	    inline unsigned char operator - (const BOOL8 b8){return (value - b8.value);}\
-	    inline unsigned char operator * (const unsigned char val){return (value * val);}\
-	    inline unsigned char operator * (const BOOL8 b8){return (value * b8.value);}\
-	    inline unsigned char operator / (const unsigned char val){return (value / val);}\
-	    inline unsigned char operator / (const BOOL8 b8){return (value / b8.value);}\
+     	    inline uint8_t operator + (const uint8_t val){return (value + val);}\
+	    inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
+	    inline uint8_t operator - (const uint8_t val){return (value - val);}\
+	    inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}\
+	    inline uint8_t operator * (const uint8_t val){return (value * val);}\
+	    inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}\
+	    inline uint8_t operator / (const uint8_t val){return (value / val);}\
+	    inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}\
 	    \
-	    inline unsigned char operator += (const unsigned char val){return (value += val);}\
-	    inline unsigned char operator += (const BOOL8 b8){return (value += b8.value);}\
-	    inline unsigned char operator -= (const unsigned char val){return (value -= val);}\
-	    inline unsigned char operator -= (const BOOL8 b8){return (value -= b8.value);}\
-	    inline unsigned char operator *= (const unsigned char val){return (value *= val);}\
-	    inline unsigned char operator *= (const BOOL8 b8){return (value *= b8.value);}\
-	    inline unsigned char operator /= (const unsigned char val){return (value /= val);}\
-	    inline unsigned char operator /= (const BOOL8 b8){return (value /= b8.value);}\
+	    inline uint8_t operator += (const uint8_t val){return (value += val);}\
+	    inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}\
+	    inline uint8_t operator -= (const uint8_t val){return (value -= val);}\
+	    inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}\
+	    inline uint8_t operator *= (const uint8_t val){return (value *= val);}\
+	    inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}\
+	    inline uint8_t operator /= (const uint8_t val){return (value /= val);}\
+	    inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}\
 	    \
-            inline unsigned char operator | (const unsigned char val){return (value | val);}\
-            inline unsigned char operator | (const BOOL8 b8){return (value | b8.value);}\
-	    inline unsigned char operator & (const unsigned char val){return (value & val);}\
-	    inline unsigned char operator & (const BOOL8 b8){return (value & b8.value);}\
-	    inline unsigned char operator ^ (const unsigned char val){return (value ^ val);}\
-	    inline unsigned char operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
-	    inline unsigned char operator << (const unsigned char val){return (value << val);}\
-	    inline unsigned char operator >> (const unsigned char val){return (value >> val);}\
-	    inline unsigned char operator ~ (void){return (~value);}\
+            inline uint8_t operator | (const uint8_t val){return (value | val);}\
+            inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}\
+	    inline uint8_t operator & (const uint8_t val){return (value & val);}\
+	    inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}\
+	    inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}\
+	    inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
+	    inline uint8_t operator << (const uint8_t val){return (value << val);}\
+	    inline uint8_t operator >> (const uint8_t val){return (value >> val);}\
+	    inline uint8_t operator ~ (void){return (~value);}\
 	    \
-	    inline unsigned char operator |= (const unsigned char val){return (value |= val);}\
-	    inline unsigned char operator |= (const BOOL8 b8){return (value |= b8.value);}\
-	    inline unsigned char operator &= (const unsigned char val){return (value &= val);}\
-	    inline unsigned char operator &= (const BOOL8 b8){return (value &= b8.value);}\
-	    inline unsigned char operator ^= (const unsigned char val){return (value ^= val);}\
-	    inline unsigned char operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
+	    inline uint8_t operator |= (const uint8_t val){return (value |= val);}\
+	    inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}\
+	    inline uint8_t operator &= (const uint8_t val){return (value &= val);}\
+	    inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}\
+	    inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}\
+	    inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
 	    \
-            inline const unsigned char size() const{return BOOL8_BIT_SIZE;}\
+            inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
             \
             \
     }
@@ -320,11 +315,11 @@ struct BOOL8{
  *  varname[ [index] ] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL8
  *  varName.size(void) - return constant count of bits
- *  varName = [unsigned char] - overloaded operator will make easier
- *  to copy data from unsigned char
+ *  varName = [uint8_t] - overloaded operator will make easier
+ *  to copy data from uint8_t
  *
  *  NOTE: macro is overloaded, you do not need
  *  to rename all 8 bits
@@ -344,70 +339,70 @@ struct BOOL8{
     struct{\
         union{\
             struct{\
-		unsigned char _prefix##b0 :1;\
-		unsigned char _prefix##b1 :1;\
-		unsigned char _prefix##b2 :1;\
-		unsigned char _prefix##b3 :1;\
-		unsigned char _prefix##b4 :1;\
-		unsigned char _prefix##b5 :1;\
-		unsigned char _prefix##b6 :1;\
-		unsigned char _prefix##b7 :1;\
+		uint8_t _prefix##b0 :1;\
+		uint8_t _prefix##b1 :1;\
+		uint8_t _prefix##b2 :1;\
+		uint8_t _prefix##b3 :1;\
+		uint8_t _prefix##b4 :1;\
+		uint8_t _prefix##b5 :1;\
+		uint8_t _prefix##b6 :1;\
+		uint8_t _prefix##b7 :1;\
             };\
-            unsigned char value;\
+            uint8_t value;\
         };\
             /**Dynamic Write*/\
-            void operator ()(const unsigned char index, const bool bState){\
+            void operator ()(const uint8_t index, const bool bState){\
                 value = (value & ( ~(0x01 << index ))) | (bState << index);\
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const unsigned char index) const{\
+            inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
-            bool operator [] (const unsigned char index) const{\
+            bool operator [] (const uint8_t index) const{\
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline unsigned char operator = (const unsigned char val){return value = val;}\
-            inline unsigned char operator = (const BOOL8 b8){return value = b8.value;}\
+            inline uint8_t operator = (const uint8_t val){return value = val;}\
+            inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
             \
-     	    inline unsigned char operator + (const unsigned char val){return (value + val);}\
-	    inline unsigned char operator + (const BOOL8 b8){return (value + b8.value);}\
-	    inline unsigned char operator - (const unsigned char val){return (value - val);}\
-	    inline unsigned char operator - (const BOOL8 b8){return (value - b8.value);}\
-	    inline unsigned char operator * (const unsigned char val){return (value * val);}\
-	    inline unsigned char operator * (const BOOL8 b8){return (value * b8.value);}\
-	    inline unsigned char operator / (const unsigned char val){return (value / val);}\
-	    inline unsigned char operator / (const BOOL8 b8){return (value / b8.value);}\
+     	    inline uint8_t operator + (const uint8_t val){return (value + val);}\
+	    inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
+	    inline uint8_t operator - (const uint8_t val){return (value - val);}\
+	    inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}\
+	    inline uint8_t operator * (const uint8_t val){return (value * val);}\
+	    inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}\
+	    inline uint8_t operator / (const uint8_t val){return (value / val);}\
+	    inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}\
 	    \
-	    inline unsigned char operator += (const unsigned char val){return (value += val);}\
-	    inline unsigned char operator += (const BOOL8 b8){return (value += b8.value);}\
-	    inline unsigned char operator -= (const unsigned char val){return (value -= val);}\
-	    inline unsigned char operator -= (const BOOL8 b8){return (value -= b8.value);}\
-	    inline unsigned char operator *= (const unsigned char val){return (value *= val);}\
-	    inline unsigned char operator *= (const BOOL8 b8){return (value *= b8.value);}\
-	    inline unsigned char operator /= (const unsigned char val){return (value /= val);}\
-	    inline unsigned char operator /= (const BOOL8 b8){return (value /= b8.value);}\
+	    inline uint8_t operator += (const uint8_t val){return (value += val);}\
+	    inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}\
+	    inline uint8_t operator -= (const uint8_t val){return (value -= val);}\
+	    inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}\
+	    inline uint8_t operator *= (const uint8_t val){return (value *= val);}\
+	    inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}\
+	    inline uint8_t operator /= (const uint8_t val){return (value /= val);}\
+	    inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}\
 	    \
-            inline unsigned char operator | (const unsigned char val){return (value | val);}\
-	    inline unsigned char operator | (const BOOL8 b8){return (value | b8.value);}\
-	    inline unsigned char operator & (const unsigned char val){return (value & val);}\
-	    inline unsigned char operator & (const BOOL8 b8){return (value & b8.value);}\
-	    inline unsigned char operator ^ (const unsigned char val){return (value ^ val);}\
-	    inline unsigned char operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
-	    inline unsigned char operator << (const unsigned char val){return (value << val);}\
-	    inline unsigned char operator >> (const unsigned char val){return (value >> val);}\
-	    inline unsigned char operator ~ (void){return (~value);}\
+            inline uint8_t operator | (const uint8_t val){return (value | val);}\
+	    inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}\
+	    inline uint8_t operator & (const uint8_t val){return (value & val);}\
+	    inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}\
+	    inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}\
+	    inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
+	    inline uint8_t operator << (const uint8_t val){return (value << val);}\
+	    inline uint8_t operator >> (const uint8_t val){return (value >> val);}\
+	    inline uint8_t operator ~ (void){return (~value);}\
 	    \
-	    inline unsigned char operator |= (const unsigned char val){return (value |= val);}\
-	    inline unsigned char operator |= (const BOOL8 b8){return (value |= b8.value);}\
-	    inline unsigned char operator &= (const unsigned char val){return (value &= val);}\
-	    inline unsigned char operator &= (const BOOL8 b8){return (value &= b8.value);}\
-	    inline unsigned char operator ^= (const unsigned char val){return (value ^= val);}\
-	    inline unsigned char operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
+	    inline uint8_t operator |= (const uint8_t val){return (value |= val);}\
+	    inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}\
+	    inline uint8_t operator &= (const uint8_t val){return (value &= val);}\
+	    inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}\
+	    inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}\
+	    inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
     	    \
-            inline const unsigned char size() const{return BOOL8_BIT_SIZE;}\
+            inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
             \
             \
     }
@@ -463,35 +458,35 @@ struct BOOL8{
  *  varname[ [index] ] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL16
  *  varName.size(void) - return constant count of bits
- *  varName = [unsigned short] - overloaded operator will make easier
- *  to copy data from unsigned shorts
+ *  varName = [uint16_t] - overloaded operator will make easier
+ *  to copy data from uint16_ts
  *
  **********************************************************************/
 
 struct BOOL16{
     union{
         struct{
-             unsigned short b0 :1;
-             unsigned short b1 :1;
-             unsigned short b2 :1;
-             unsigned short b3 :1;
-             unsigned short b4 :1;
-             unsigned short b5 :1;
-             unsigned short b6 :1;
-             unsigned short b7 :1;
-             unsigned short b8 :1;
-             unsigned short b9 :1;
-             unsigned short b10 :1;
-             unsigned short b11 :1;
-             unsigned short b12 :1;
-             unsigned short b13 :1;
-             unsigned short b14 :1;
-             unsigned short b15 :1;
+             uint8_t b0 :1;
+             uint8_t b1 :1;
+             uint8_t b2 :1;
+             uint8_t b3 :1;
+             uint8_t b4 :1;
+             uint8_t b5 :1;
+             uint8_t b6 :1;
+             uint8_t b7 :1;
+             uint8_t b8 :1;
+             uint8_t b9 :1;
+             uint8_t b10 :1;
+             uint8_t b11 :1;
+             uint8_t b12 :1;
+             uint8_t b13 :1;
+             uint8_t b14 :1;
+             uint8_t b15 :1;
     	};
-    	unsigned short value;
+    	uint16_t value;
     	
     };
     BOOL16()=default;
@@ -503,57 +498,57 @@ struct BOOL16{
         , b8(b8) ,b9(b9), b10(b10), b11(b11), b12(b12), b13(b13), b14(b14), b15(b15){}
 
     /**Dynamic Write*/
-    void operator ()(const unsigned char index, const bool bState){
+    void operator ()(const uint8_t index, const bool bState){
         value = (value & ( ~(0x01 << index))) |(bState << index);
     }
 
     /**Dynamic Read*/
-    inline bool operator () (const unsigned char index) const{
+    inline bool operator () (const uint8_t index) const{
         return (*this)[index];
     }
     /**Dynamic Read*/
-    bool operator [] (const unsigned char index) const{
+    bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
 
-    inline unsigned short operator = (const unsigned short val){return value = val;}
+    inline uint16_t operator = (const uint16_t val){return value = val;}
     
-    inline unsigned short operator + (const unsigned short val){return (value + val);}
-    inline unsigned short operator + (const BOOL16 b16){return (value + b16.value);}
-    inline unsigned short operator - (const unsigned short val){return (value - val);}
-    inline unsigned short operator - (const BOOL16 b16){return (value - b16.value);}
-    inline unsigned short operator * (const unsigned short val){return (value * val);}
-    inline unsigned short operator * (const BOOL16 b16){return (value * b16.value);}
-    inline unsigned short operator / (const unsigned short val){return (value / val);}
-    inline unsigned short operator / (const BOOL16 b16){return (value / b16.value);}
+    inline uint16_t operator + (const uint16_t val){return (value + val);}
+    inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}
+    inline uint16_t operator - (const uint16_t val){return (value - val);}
+    inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}
+    inline uint16_t operator * (const uint16_t val){return (value * val);}
+    inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}
+    inline uint16_t operator / (const uint16_t val){return (value / val);}
+    inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}
     
-    inline unsigned short operator += (const unsigned short val){return (value += val);}
-    inline unsigned short operator += (const BOOL16 b16){return (value += b16.value);}
-    inline unsigned short operator -= (const unsigned short val){return (value -= val);}
-    inline unsigned short operator -= (const BOOL16 b16){return (value -= b16.value);}
-    inline unsigned short operator *= (const unsigned short val){return (value *= val);}
-    inline unsigned short operator *= (const BOOL16 b16){return (value *= b16.value);}
-    inline unsigned short operator /= (const unsigned short val){return (value /= val);}
-    inline unsigned short operator /= (const BOOL16 b16){return (value /= b16.value);}
+    inline uint16_t operator += (const uint16_t val){return (value += val);}
+    inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}
+    inline uint16_t operator -= (const uint16_t val){return (value -= val);}
+    inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}
+    inline uint16_t operator *= (const uint16_t val){return (value *= val);}
+    inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}
+    inline uint16_t operator /= (const uint16_t val){return (value /= val);}
+    inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}
     
-    inline unsigned short operator | (const unsigned short val){return (value | val);}
-    inline unsigned short operator | (const BOOL16 b16){return (value | b16.value);}
-    inline unsigned short operator & (const unsigned short val){return (value & val);}
-    inline unsigned short operator & (const BOOL16 b16){return (value & b16.value);}
-    inline unsigned short operator ^ (const unsigned short val){return (value ^ val);}
-    inline unsigned short operator ^ (const BOOL16 b16){return (value ^ b16.value);}
-    inline unsigned short operator << (const unsigned short val){return (value << val);}
-    inline unsigned short operator >> (const unsigned short val){return (value >> val);}
-    inline unsigned short operator ~ (void){return (~value);}
+    inline uint16_t operator | (const uint16_t val){return (value | val);}
+    inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}
+    inline uint16_t operator & (const uint16_t val){return (value & val);}
+    inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}
+    inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}
+    inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}
+    inline uint16_t operator << (const uint16_t val){return (value << val);}
+    inline uint16_t operator >> (const uint16_t val){return (value >> val);}
+    inline uint16_t operator ~ (void){return (~value);}
     
-    inline unsigned short operator |= (const unsigned short val){return (value |= val);}
-    inline unsigned short operator |= (const BOOL16 b16){return (value |= b16.value);}
-    inline unsigned short operator &= (const unsigned short val){return (value &= val);}
-    inline unsigned short operator &= (const BOOL16 b16){return (value &= b16.value);}
-    inline unsigned short operator ^= (const unsigned short val){return (value ^= val);}
-    inline unsigned short operator ^= (const BOOL16 b16){return (value ^= b16.value);}
+    inline uint16_t operator |= (const uint16_t val){return (value |= val);}
+    inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}
+    inline uint16_t operator &= (const uint16_t val){return (value &= val);}
+    inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}
+    inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}
+    inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}
     
-    inline const unsigned char size() const{return BOOL16_BIT_SIZE;}
+    inline const uint8_t size() const{return BOOL16_BIT_SIZE;}
 
 };
 
@@ -575,11 +570,11 @@ struct BOOL16{
  *  varname[[index]] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL16
  *  varName.size(void) - return constant count of bits
- *  varName = [unsigned short] - overloaded operator will make easier
- *  to copy data from unsigned shorts
+ *  varName = [uint16_t] - overloaded operator will make easier
+ *  to copy data from uint16_ts
  *
  *  NOTE: macro is overloaded, you do not need
  *  to rename all 16 bits
@@ -606,77 +601,77 @@ struct BOOL16{
     struct{\
         union{\
             struct{\
-                 unsigned short b##b0 :1;\
-                 unsigned short b##b1 :1;\
-                 unsigned short b##b2 :1;\
-                 unsigned short b##b3 :1;\
-                 unsigned short b##b4 :1;\
-                 unsigned short b##b5 :1;\
-                 unsigned short b##b6 :1;\
-                 unsigned short b##b7 :1;\
-                 unsigned short b##b8 :1;\
-                 unsigned short b##b9 :1;\
-                 unsigned short b##b10 :1;\
-                 unsigned short b##b11 :1;\
-                 unsigned short b##b12 :1;\
-                 unsigned short b##b13 :1;\
-                 unsigned short b##b14 :1;\
-                 unsigned short b##b15 :1;\
+                 uint8_t b##b0 :1;\
+                 uint8_t b##b1 :1;\
+                 uint8_t b##b2 :1;\
+                 uint8_t b##b3 :1;\
+                 uint8_t b##b4 :1;\
+                 uint8_t b##b5 :1;\
+                 uint8_t b##b6 :1;\
+                 uint8_t b##b7 :1;\
+                 uint8_t b##b8 :1;\
+                 uint8_t b##b9 :1;\
+                 uint8_t b##b10 :1;\
+                 uint8_t b##b11 :1;\
+                 uint8_t b##b12 :1;\
+                 uint8_t b##b13 :1;\
+                 uint8_t b##b14 :1;\
+                 uint8_t b##b15 :1;\
             };\
-            unsigned short value;\
+            uint16_t value;\
        };\
             /**Dynamic Write*/\
-            void operator ()(const unsigned char index, const bool bState){\
+            void operator ()(const uint8_t index, const bool bState){\
                 value = (value & ( ~(0x01 << index))) | (bState << index);\
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const unsigned char index) const{\
+            inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
-            bool operator [] (const unsigned char index) const{\
+            bool operator [] (const uint8_t index) const{\
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline unsigned short operator = (const unsigned short val){return value = val;}\
-            inline unsigned short operator = (const BOOL16 b16){return value = b16.value;}\
+            inline uint16_t operator = (const uint16_t val){return value = val;}\
+            inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
             \
-            inline unsigned short operator + (const unsigned short val){return (value + val);}\
-	    inline unsigned short operator + (const BOOL16 b16){return (value + b16.value);}\
-	    inline unsigned short operator - (const unsigned short val){return (value - val);}\
-	    inline unsigned short operator - (const BOOL16 b16){return (value - b16.value);}\
-	    inline unsigned short operator * (const unsigned short val){return (value * val);}\
-	    inline unsigned short operator * (const BOOL16 b16){return (value * b16.value);}\
-	    inline unsigned short operator / (const unsigned short val){return (value / val);}\
-	    inline unsigned short operator / (const BOOL16 b16){return (value / b16.value);}\
+            inline uint16_t operator + (const uint16_t val){return (value + val);}\
+	    inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
+	    inline uint16_t operator - (const uint16_t val){return (value - val);}\
+	    inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}\
+	    inline uint16_t operator * (const uint16_t val){return (value * val);}\
+	    inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}\
+	    inline uint16_t operator / (const uint16_t val){return (value / val);}\
+	    inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}\
 	    \
-	    inline unsigned short operator += (const unsigned short val){return (value += val);}\
-	    inline unsigned short operator += (const BOOL16 b16){return (value += b16.value);}\
-	    inline unsigned short operator -= (const unsigned short val){return (value -= val);}\
-	    inline unsigned short operator -= (const BOOL16 b16){return (value -= b16.value);}\
-	    inline unsigned short operator *= (const unsigned short val){return (value *= val);}\
-	    inline unsigned short operator *= (const BOOL16 b16){return (value *= b16.value);}\
-	    inline unsigned short operator /= (const unsigned short val){return (value /= val);}\
-	    inline unsigned short operator /= (const BOOL16 b16){return (value /= b16.value);}\
+	    inline uint16_t operator += (const uint16_t val){return (value += val);}\
+	    inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}\
+	    inline uint16_t operator -= (const uint16_t val){return (value -= val);}\
+	    inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}\
+	    inline uint16_t operator *= (const uint16_t val){return (value *= val);}\
+	    inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}\
+	    inline uint16_t operator /= (const uint16_t val){return (value /= val);}\
+	    inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}\
 	    \
-	    inline unsigned short operator | (const unsigned short val){return (value | val);}\
-	    inline unsigned short operator | (const BOOL16 b16){return (value | b16.value);}\
-	    inline unsigned short operator & (const unsigned short val){return (value & val);}\
-	    inline unsigned short operator & (const BOOL16 b16){return (value & b16.value);}\
-	    inline unsigned short operator ^ (const unsigned short val){return (value ^ val);}\
-	    inline unsigned short operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
-	    inline unsigned short operator << (const unsigned short val){return (value << val);}\
-	    inline unsigned short operator >> (const unsigned short val){return (value >> val);}\
-    	    inline unsigned short operator ~ (void){return (~value);}\
+	    inline uint16_t operator | (const uint16_t val){return (value | val);}\
+	    inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}\
+	    inline uint16_t operator & (const uint16_t val){return (value & val);}\
+	    inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}\
+	    inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}\
+	    inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
+	    inline uint16_t operator << (const uint16_t val){return (value << val);}\
+	    inline uint16_t operator >> (const uint16_t val){return (value >> val);}\
+    	    inline uint16_t operator ~ (void){return (~value);}\
             \
-            inline unsigned short operator |= (const unsigned short val){return (value |= val);}\
-	    inline unsigned short operator |= (const BOOL16 b16){return (value |= b16.value);}\
-	    inline unsigned short operator &= (const unsigned short val){return (value &= val);}\
-	    inline unsigned short operator &= (const BOOL16 b16){return (value &= b16.value);}\
-	    inline unsigned short operator ^= (const unsigned short val){return (value ^= val);}\
-	    inline unsigned short operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
-            inline const unsigned char size() const{return BOOL16_BIT_SIZE;}\
+            inline uint16_t operator |= (const uint16_t val){return (value |= val);}\
+	    inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}\
+	    inline uint16_t operator &= (const uint16_t val){return (value &= val);}\
+	    inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}\
+	    inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}\
+	    inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
+            inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
             \
     }
 
@@ -727,11 +722,11 @@ struct BOOL16{
  *  varname[ [index] ] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL16
  *  varName.size(void) - return constant count of bits
- *  varName = [unsigned short] - overloaded operator will make easier
- *  to copy data from unsigned shorts
+ *  varName = [uint16_t] - overloaded operator will make easier
+ *  to copy data from uint16_ts
  *
  *  NOTE: macro is overloaded, you do not need
  *  to rename all 16 bits
@@ -759,77 +754,77 @@ struct BOOL16{
     struct{\
         union{\
             struct{\
-                 unsigned short _prefix##b0 :1;\
-                 unsigned short _prefix##b1 :1;\
-                 unsigned short _prefix##b2 :1;\
-                 unsigned short _prefix##b3 :1;\
-                 unsigned short _prefix##b4 :1;\
-                 unsigned short _prefix##b5 :1;\
-                 unsigned short _prefix##b6 :1;\
-                 unsigned short _prefix##b7 :1;\
-                 unsigned short _prefix##b8 :1;\
-                 unsigned short _prefix##b9 :1;\
-                 unsigned short _prefix##b10 :1;\
-                 unsigned short _prefix##b11 :1;\
-                 unsigned short _prefix##b12 :1;\
-                 unsigned short _prefix##b13 :1;\
-                 unsigned short _prefix##b14 :1;\
-                 unsigned short _prefix##b15 :1;\
+                 uint8_t _prefix##b0 :1;\
+                 uint8_t _prefix##b1 :1;\
+                 uint8_t _prefix##b2 :1;\
+                 uint8_t _prefix##b3 :1;\
+                 uint8_t _prefix##b4 :1;\
+                 uint8_t _prefix##b5 :1;\
+                 uint8_t _prefix##b6 :1;\
+                 uint8_t _prefix##b7 :1;\
+                 uint8_t _prefix##b8 :1;\
+                 uint8_t _prefix##b9 :1;\
+                 uint8_t _prefix##b10 :1;\
+                 uint8_t _prefix##b11 :1;\
+                 uint8_t _prefix##b12 :1;\
+                 uint8_t _prefix##b13 :1;\
+                 uint8_t _prefix##b14 :1;\
+                 uint8_t _prefix##b15 :1;\
             };\
-            unsigned short value;\
+            uint16_t value;\
          };\
             /**Dynamic Write*/\
-            void operator ()(const unsigned char index, const bool bState){\
+            void operator ()(const uint8_t index, const bool bState){\
                 value = (value & ( ~(0x01 << index))) | (bState << index);\
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const unsigned char index) const{\
+            inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
-            bool operator [] (const unsigned char index) const{\
+            bool operator [] (const uint8_t index) const{\
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline unsigned short operator = (const unsigned short val){return value = val;}\
-            inline unsigned short operator = (const BOOL16 b16){return value = b16.value;}\
+            inline uint16_t operator = (const uint16_t val){return value = val;}\
+            inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
             \
-            inline unsigned short operator + (const unsigned short val){return (value + val);}\
-	    inline unsigned short operator + (const BOOL16 b16){return (value + b16.value);}\
-	    inline unsigned short operator - (const unsigned short val){return (value - val);}\
-	    inline unsigned short operator - (const BOOL16 b16){return (value - b16.value);}\
-	    inline unsigned short operator * (const unsigned short val){return (value * val);}\
-	    inline unsigned short operator * (const BOOL16 b16){return (value * b16.value);}\
-	    inline unsigned short operator / (const unsigned short val){return (value / val);}\
-	    inline unsigned short operator / (const BOOL16 b16){return (value / b16.value);}\
+            inline uint16_t operator + (const uint16_t val){return (value + val);}\
+	    inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
+	    inline uint16_t operator - (const uint16_t val){return (value - val);}\
+	    inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}\
+	    inline uint16_t operator * (const uint16_t val){return (value * val);}\
+	    inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}\
+	    inline uint16_t operator / (const uint16_t val){return (value / val);}\
+	    inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}\
 	    \
-	    inline unsigned short operator += (const unsigned short val){return (value += val);}\
-	    inline unsigned short operator += (const BOOL16 b16){return (value += b16.value);}\
-	    inline unsigned short operator -= (const unsigned short val){return (value -= val);}\
-	    inline unsigned short operator -= (const BOOL16 b16){return (value -= b16.value);}\
-	    inline unsigned short operator *= (const unsigned short val){return (value *= val);}\
-	    inline unsigned short operator *= (const BOOL16 b16){return (value *= b16.value);}\
-	    inline unsigned short operator /= (const unsigned short val){return (value /= val);}\
-	    inline unsigned short operator /= (const BOOL16 b16){return (value /= b16.value);}\
+	    inline uint16_t operator += (const uint16_t val){return (value += val);}\
+	    inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}\
+	    inline uint16_t operator -= (const uint16_t val){return (value -= val);}\
+	    inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}\
+	    inline uint16_t operator *= (const uint16_t val){return (value *= val);}\
+	    inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}\
+	    inline uint16_t operator /= (const uint16_t val){return (value /= val);}\
+	    inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}\
 	    \
-            inline unsigned short operator | (const unsigned short val){return (value | val);}\
-	    inline unsigned short operator | (const BOOL16 b16){return (value | b16.value);}\
-	    inline unsigned short operator & (const unsigned short val){return (value & val);}\
-	    inline unsigned short operator & (const BOOL16 b16){return (value & b16.value);}\
-	    inline unsigned short operator ^ (const unsigned short val){return (value ^ val);}\
-	    inline unsigned short operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
-	    inline unsigned short operator << (const unsigned short val){return (value << val);}\
-	    inline unsigned short operator >> (const unsigned short val){return (value >> val);}\
-    	    inline unsigned short operator ~ (void){return (~value);}\
+            inline uint16_t operator | (const uint16_t val){return (value | val);}\
+	    inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}\
+	    inline uint16_t operator & (const uint16_t val){return (value & val);}\
+	    inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}\
+	    inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}\
+	    inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
+	    inline uint16_t operator << (const uint16_t val){return (value << val);}\
+	    inline uint16_t operator >> (const uint16_t val){return (value >> val);}\
+    	    inline uint16_t operator ~ (void){return (~value);}\
             \
-            inline unsigned short operator |= (const unsigned short val){return (value |= val);}\
-	    inline unsigned short operator |= (const BOOL16 b16){return (value |= b16.value);}\
-	    inline unsigned short operator &= (const unsigned short val){return (value &= val);}\
-	    inline unsigned short operator &= (const BOOL16 b16){return (value &= b16.value);}\
-	    inline unsigned short operator ^= (const unsigned short val){return (value ^= val);}\
-	    inline unsigned short operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
-            inline const unsigned char size() const{return BOOL16_BIT_SIZE;}\
+            inline uint16_t operator |= (const uint16_t val){return (value |= val);}\
+	    inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}\
+	    inline uint16_t operator &= (const uint16_t val){return (value &= val);}\
+	    inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}\
+	    inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}\
+	    inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
+            inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
             \
             \
     }
@@ -887,7 +882,7 @@ struct BOOL16{
  *  varname[ [index] ] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL32
  *  varName.size(void) - return constant count of bits
  *  varName = [unsigned int] - overloaded operator will make easier
@@ -898,40 +893,40 @@ struct BOOL16{
 struct BOOL32{
     union{
         struct{
-            unsigned long b0 :1;
-            unsigned long b1 :1;
-            unsigned long b2 :1;
-            unsigned long b3 :1;
-            unsigned long b4 :1;
-            unsigned long b5 :1;
-            unsigned long b6 :1;
-            unsigned long b7 :1;
-            unsigned long b8 :1;
-            unsigned long b9 :1;
-            unsigned long b10 :1;
-            unsigned long b11 :1;
-            unsigned long b12 :1;
-            unsigned long b13 :1;
-            unsigned long b14 :1;
-            unsigned long b15 :1;
-            unsigned long b16 :1;
-            unsigned long b17 :1;
-            unsigned long b18 :1;
-            unsigned long b19 :1;
-            unsigned long b20 :1;
-            unsigned long b21 :1;
-            unsigned long b22 :1;
-            unsigned long b23 :1;
-            unsigned long b24 :1;
-            unsigned long b25 :1;
-            unsigned long b26 :1;
-            unsigned long b27 :1;
-            unsigned long b28 :1;
-            unsigned long b29 :1;
-            unsigned long b30 :1;
-            unsigned long b31 :1;
+            uint8_t b0 :1;
+            uint8_t b1 :1;
+            uint8_t b2 :1;
+            uint8_t b3 :1;
+            uint8_t b4 :1;
+            uint8_t b5 :1;
+            uint8_t b6 :1;
+            uint8_t b7 :1;
+            uint8_t b8 :1;
+            uint8_t b9 :1;
+            uint8_t b10 :1;
+            uint8_t b11 :1;
+            uint8_t b12 :1;
+            uint8_t b13 :1;
+            uint8_t b14 :1;
+            uint8_t b15 :1;
+            uint8_t b16 :1;
+            uint8_t b17 :1;
+            uint8_t b18 :1;
+            uint8_t b19 :1;
+            uint8_t b20 :1;
+            uint8_t b21 :1;
+            uint8_t b22 :1;
+            uint8_t b23 :1;
+            uint8_t b24 :1;
+            uint8_t b25 :1;
+            uint8_t b26 :1;
+            uint8_t b27 :1;
+            uint8_t b28 :1;
+            uint8_t b29 :1;
+            uint8_t b30 :1;
+            uint8_t b31 :1;
          };
-         unsigned long value;
+         uint32_t value;
       };
 
     BOOL32()=default;
@@ -949,57 +944,57 @@ struct BOOL32{
         , b24(b24) ,b25(b25), b26(b26), b27(b27), b28(b28), b29(b29), b30(b30), b31(b31){}
 
     /**Dynamic Write*/
-    void operator ()(const unsigned char index, const bool bState){
+    void operator ()(const uint8_t index, const bool bState){
         value = (value & ( ~(0x01 << index))) | (bState << index);
     }
 
     /**Dynamic Read*/
-    inline bool operator () (const unsigned char index) const{
+    inline bool operator () (const uint8_t index) const{
         return (*this)[index];
     }
     /**Dynamic Read*/
-    bool operator [] (const unsigned char index) const{
+    bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
 
-    inline unsigned long operator = (const unsigned long val){return value = val;}
+    inline uint32_t operator = (const uint32_t val){return value = val;}
     
-    inline unsigned long operator + (const unsigned long val){return (value + val);}
-    inline unsigned long operator + (const BOOL32 b32){return (value + b32.value);}
-    inline unsigned long operator - (const unsigned long val){return (value - val);}
-    inline unsigned long operator - (const BOOL32 b32){return (value - b32.value);}
-    inline unsigned long operator * (const unsigned long val){return (value * val);}
-    inline unsigned long operator * (const BOOL32 b32){return (value * b32.value);}
-    inline unsigned long operator / (const unsigned long val){return (value / val);}
-    inline unsigned long operator / (const BOOL32 b32){return (value / b32.value);}
+    inline uint32_t operator + (const uint32_t val){return (value + val);}
+    inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}
+    inline uint32_t operator - (const uint32_t val){return (value - val);}
+    inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}
+    inline uint32_t operator * (const uint32_t val){return (value * val);}
+    inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}
+    inline uint32_t operator / (const uint32_t val){return (value / val);}
+    inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}
     
-    inline unsigned long operator += (const unsigned long val){return (value += val);}
-    inline unsigned long operator += (const BOOL32 b32){return (value += b32.value);}
-    inline unsigned long operator -= (const unsigned long val){return (value -= val);}
-    inline unsigned long operator -= (const BOOL32 b32){return (value -= b32.value);}
-    inline unsigned long operator *= (const unsigned long val){return (value *= val);}
-    inline unsigned long operator *= (const BOOL32 b32){return (value *= b32.value);}
-    inline unsigned long operator /= (const unsigned long val){return (value /= val);}
-    inline unsigned long operator /= (const BOOL32 b32){return (value /= b32.value);}
+    inline uint32_t operator += (const uint32_t val){return (value += val);}
+    inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}
+    inline uint32_t operator -= (const uint32_t val){return (value -= val);}
+    inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}
+    inline uint32_t operator *= (const uint32_t val){return (value *= val);}
+    inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}
+    inline uint32_t operator /= (const uint32_t val){return (value /= val);}
+    inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}
     			
-    inline unsigned long operator | (const unsigned long val){return (value | val);}
-    inline unsigned long operator | (const BOOL32 b32){return (value | b32.value);}
-    inline unsigned long operator & (const unsigned long val){return (value & val);}
-    inline unsigned long operator & (const BOOL32 b32){return (value & b32.value);}
-    inline unsigned long operator ^ (const unsigned long val){return (value ^ val);}
-    inline unsigned long operator ^ (const BOOL32 b32){return (value ^ b32.value);}
-    inline unsigned long operator << (const unsigned long val){return (value << val);}
-    inline unsigned long operator >> (const unsigned long val){return (value >> val);}
-    inline unsigned long operator ~ (void){return (~value);}
+    inline uint32_t operator | (const uint32_t val){return (value | val);}
+    inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}
+    inline uint32_t operator & (const uint32_t val){return (value & val);}
+    inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}
+    inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}
+    inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}
+    inline uint32_t operator << (const uint32_t val){return (value << val);}
+    inline uint32_t operator >> (const uint32_t val){return (value >> val);}
+    inline uint32_t operator ~ (void){return (~value);}
     
-    inline unsigned long operator |= (const unsigned long val){return (value |= val);}
-    inline unsigned long operator |= (const BOOL32 b32){return (value |= b32.value);}
-    inline unsigned long operator &= (const unsigned long val){return (value &= val);}
-    inline unsigned long operator &= (const BOOL32 b32){return (value &= b32.value);}
-    inline unsigned long operator ^= (const unsigned long val){return (value ^= val);}
-    inline unsigned long operator ^= (const BOOL32 b32){return (value ^= b32.value);}
+    inline uint32_t operator |= (const uint32_t val){return (value |= val);}
+    inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}
+    inline uint32_t operator &= (const uint32_t val){return (value &= val);}
+    inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}
+    inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}
+    inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}
     
-    inline const unsigned char size() const{return BOOL32_BIT_SIZE;}
+    inline const uint8_t size() const{return BOOL32_BIT_SIZE;}
 
 };
 
@@ -1070,94 +1065,94 @@ struct BOOL32{
     struct{\
         union{\
             struct{\
-                unsigned long b##b0 :1;\
-                unsigned long b##b1 :1;\
-                unsigned long b##b2 :1;\
-                unsigned long b##b3 :1;\
-                unsigned long b##b4 :1;\
-                unsigned long b##b5 :1;\
-                unsigned long b##b6 :1;\
-                unsigned long b##b7 :1;\
-                unsigned long b##b8 :1;\
-                unsigned long b##b9 :1;\
-                unsigned long b##b10 :1;\
-                unsigned long b##b11 :1;\
-                unsigned long b##b12 :1;\
-                unsigned long b##b13 :1;\
-                unsigned long b##b14 :1;\
-                unsigned long b##b15 :1;\
-                unsigned long b##b16 :1;\
-                unsigned long b##b17 :1;\
-                unsigned long b##b18 :1;\
-                unsigned long b##b19 :1;\
-                unsigned long b##b20 :1;\
-                unsigned long b##b21 :1;\
-                unsigned long b##b22 :1;\
-                unsigned long b##b23 :1;\
-                unsigned long b##b24 :1;\
-                unsigned long b##b25 :1;\
-                unsigned long b##b26 :1;\
-                unsigned long b##b27 :1;\
-                unsigned long b##b28 :1;\
-                unsigned long b##b29 :1;\
-                unsigned long b##b30 :1;\
-                unsigned long b##b31 :1;\
+                uint8_t b##b0 :1;\
+                uint8_t b##b1 :1;\
+                uint8_t b##b2 :1;\
+                uint8_t b##b3 :1;\
+                uint8_t b##b4 :1;\
+                uint8_t b##b5 :1;\
+                uint8_t b##b6 :1;\
+                uint8_t b##b7 :1;\
+                uint8_t b##b8 :1;\
+                uint8_t b##b9 :1;\
+                uint8_t b##b10 :1;\
+                uint8_t b##b11 :1;\
+                uint8_t b##b12 :1;\
+                uint8_t b##b13 :1;\
+                uint8_t b##b14 :1;\
+                uint8_t b##b15 :1;\
+                uint8_t b##b16 :1;\
+                uint8_t b##b17 :1;\
+                uint8_t b##b18 :1;\
+                uint8_t b##b19 :1;\
+                uint8_t b##b20 :1;\
+                uint8_t b##b21 :1;\
+                uint8_t b##b22 :1;\
+                uint8_t b##b23 :1;\
+                uint8_t b##b24 :1;\
+                uint8_t b##b25 :1;\
+                uint8_t b##b26 :1;\
+                uint8_t b##b27 :1;\
+                uint8_t b##b28 :1;\
+                uint8_t b##b29 :1;\
+                uint8_t b##b30 :1;\
+                uint8_t b##b31 :1;\
             };\
-            unsigned long value;\
+            uint32_t value;\
         };\
             /**Dynamic Write*/\
-            void operator ()(const unsigned char index, const bool bState){\
+            void operator ()(const uint8_t index, const bool bState){\
                 value = (value & ( ~(0x01 << index))) | (bState << index);\
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const unsigned char index) const{\
+            inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
-            bool operator [] (const unsigned char index) const{\
+            bool operator [] (const uint8_t index) const{\
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline unsigned long operator = (const unsigned long val){return value = val;}\
-            inline unsigned long operator = (const BOOL32 b32){return value = b32.value;}\
+            inline uint32_t operator = (const uint32_t val){return value = val;}\
+            inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
             \
-            inline unsigned long operator + (const unsigned long val){return (value + val);}\
-	    inline unsigned long operator + (const BOOL32 b32){return (value + b32.value);}\
-	    inline unsigned long operator - (const unsigned long val){return (value - val);}\
-	    inline unsigned long operator - (const BOOL32 b32){return (value - b32.value);}\
-	    inline unsigned long operator * (const unsigned long val){return (value * val);}\
-	    inline unsigned long operator * (const BOOL32 b32){return (value * b32.value);}\
-	    inline unsigned long operator / (const unsigned long val){return (value / val);}\
-	    inline unsigned long operator / (const BOOL32 b32){return (value / b32.value);}\
+            inline uint32_t operator + (const uint32_t val){return (value + val);}\
+	    inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
+	    inline uint32_t operator - (const uint32_t val){return (value - val);}\
+	    inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}\
+	    inline uint32_t operator * (const uint32_t val){return (value * val);}\
+	    inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}\
+	    inline uint32_t operator / (const uint32_t val){return (value / val);}\
+	    inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}\
 	    \
-	    inline unsigned long operator += (const unsigned long val){return (value += val);}\
-	    inline unsigned long operator += (const BOOL32 b32){return (value += b32.value);}\
-	    inline unsigned long operator -= (const unsigned long val){return (value -= val);}\
-	    inline unsigned long operator -= (const BOOL32 b32){return (value -= b32.value);}\
-	    inline unsigned long operator *= (const unsigned long val){return (value *= val);}\
-	    inline unsigned long operator *= (const BOOL32 b32){return (value *= b32.value);}\
-	    inline unsigned long operator /= (const unsigned long val){return (value /= val);}\
-	    inline unsigned long operator /= (const BOOL32 b32){return (value /= b32.value);}\
+	    inline uint32_t operator += (const uint32_t val){return (value += val);}\
+	    inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}\
+	    inline uint32_t operator -= (const uint32_t val){return (value -= val);}\
+	    inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}\
+	    inline uint32_t operator *= (const uint32_t val){return (value *= val);}\
+	    inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}\
+	    inline uint32_t operator /= (const uint32_t val){return (value /= val);}\
+	    inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}\
     	    \
-            inline unsigned long operator | (const unsigned long val){return (value | val);}\
-	    inline unsigned long operator | (const BOOL32 b32){return (value | b32.value);}\
-	    inline unsigned long operator & (const unsigned long val){return (value & val);}\
-	    inline unsigned long operator & (const BOOL32 b32){return (value & b32.value);}\
-	    inline unsigned long operator ^ (const unsigned long val){return (value ^ val);}\
-	    inline unsigned long operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
-	    inline unsigned long operator << (const unsigned long val){return (value << val);}\
-	    inline unsigned long operator >> (const unsigned long val){return (value >> val);}\
-	    inline unsigned long operator ~ (void){return (~value);}\
+            inline uint32_t operator | (const uint32_t val){return (value | val);}\
+	    inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}\
+	    inline uint32_t operator & (const uint32_t val){return (value & val);}\
+	    inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}\
+	    inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}\
+	    inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
+	    inline uint32_t operator << (const uint32_t val){return (value << val);}\
+	    inline uint32_t operator >> (const uint32_t val){return (value >> val);}\
+	    inline uint32_t operator ~ (void){return (~value);}\
 	    \
-	    inline unsigned long operator |= (const unsigned long val){return (value |= val);}\
-	    inline unsigned long operator |= (const BOOL32 b32){return (value |= b32.value);}\
-	    inline unsigned long operator &= (const unsigned long val){return (value &= val);}\
-	    inline unsigned long operator &= (const BOOL32 b32){return (value &= b32.value);}\
-	    inline unsigned long operator ^= (const unsigned long val){return (value ^= val);}\
-	    inline unsigned long operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
+	    inline uint32_t operator |= (const uint32_t val){return (value |= val);}\
+	    inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}\
+	    inline uint32_t operator &= (const uint32_t val){return (value &= val);}\
+	    inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}\
+	    inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}\
+	    inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
 	    \
-            inline const unsigned char size() const{return BOOL32_BIT_SIZE;}\
+            inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
             \
             \
     }
@@ -1222,7 +1217,7 @@ struct BOOL32{
  *  varname[ [index] ] - equivalent to varName([index])
  *  varName([index], [true/false]) - set state of
  *  bit according to index
- *  varName.getValue(void) - returns unsigned short representation
+ *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL32
  *  varName.size(void) - return constant count of bits
  *  varName = [unsigned int] - overloaded operator will make easier
@@ -1271,94 +1266,94 @@ struct BOOL32{
     struct{\
         union{\
             struct{\
-            unsigned long _prefix##b0 :1;\
-            unsigned long _prefix##b1 :1;\
-            unsigned long _prefix##b2 :1;\
-            unsigned long _prefix##b3 :1;\
-            unsigned long _prefix##b4 :1;\
-            unsigned long _prefix##b5 :1;\
-            unsigned long _prefix##b6 :1;\
-            unsigned long _prefix##b7 :1;\
-            unsigned long _prefix##b8 :1;\
-            unsigned long _prefix##b9 :1;\
-            unsigned long _prefix##b10 :1;\
-            unsigned long _prefix##b11 :1;\
-            unsigned long _prefix##b12 :1;\
-            unsigned long _prefix##b13 :1;\
-            unsigned long _prefix##b14 :1;\
-            unsigned long _prefix##b15 :1;\
-            unsigned long _prefix##b16 :1;\
-            unsigned long _prefix##b17 :1;\
-            unsigned long _prefix##b18 :1;\
-            unsigned long _prefix##b19 :1;\
-            unsigned long _prefix##b20 :1;\
-            unsigned long _prefix##b21 :1;\
-            unsigned long _prefix##b22 :1;\
-            unsigned long _prefix##b23 :1;\
-            unsigned long _prefix##b24 :1;\
-            unsigned long _prefix##b25 :1;\
-            unsigned long _prefix##b26 :1;\
-            unsigned long _prefix##b27 :1;\
-            unsigned long _prefix##b28 :1;\
-            unsigned long _prefix##b29 :1;\
-            unsigned long _prefix##b30 :1;\
-            unsigned long _prefix##b31 :1;\
+            uint8_t _prefix##b0 :1;\
+            uint8_t _prefix##b1 :1;\
+            uint8_t _prefix##b2 :1;\
+            uint8_t _prefix##b3 :1;\
+            uint8_t _prefix##b4 :1;\
+            uint8_t _prefix##b5 :1;\
+            uint8_t _prefix##b6 :1;\
+            uint8_t _prefix##b7 :1;\
+            uint8_t _prefix##b8 :1;\
+            uint8_t _prefix##b9 :1;\
+            uint8_t _prefix##b10 :1;\
+            uint8_t _prefix##b11 :1;\
+            uint8_t _prefix##b12 :1;\
+            uint8_t _prefix##b13 :1;\
+            uint8_t _prefix##b14 :1;\
+            uint8_t _prefix##b15 :1;\
+            uint8_t _prefix##b16 :1;\
+            uint8_t _prefix##b17 :1;\
+            uint8_t _prefix##b18 :1;\
+            uint8_t _prefix##b19 :1;\
+            uint8_t _prefix##b20 :1;\
+            uint8_t _prefix##b21 :1;\
+            uint8_t _prefix##b22 :1;\
+            uint8_t _prefix##b23 :1;\
+            uint8_t _prefix##b24 :1;\
+            uint8_t _prefix##b25 :1;\
+            uint8_t _prefix##b26 :1;\
+            uint8_t _prefix##b27 :1;\
+            uint8_t _prefix##b28 :1;\
+            uint8_t _prefix##b29 :1;\
+            uint8_t _prefix##b30 :1;\
+            uint8_t _prefix##b31 :1;\
             };\
-            unsigned long value;\
+            uint32_t value;\
         };\
             /**Dynamic Write*/\
-            void operator ()(const unsigned char index, const bool bState){\
+            void operator ()(const uint8_t index, const bool bState){\
                 value = (value & ( ~(0x01 << index))) | (bState << index);\
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const unsigned char index) const{\
+            inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
-            bool operator [] (const unsigned char index) const{\
+            bool operator [] (const uint8_t index) const{\
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline unsigned long operator = (const unsigned long val){return value = val;}\
-            inline unsigned long operator = (const BOOL32 b32){return value = b32.value;}\
+            inline uint32_t operator = (const uint32_t val){return value = val;}\
+            inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
             \
-            inline unsigned long operator + (const unsigned long val){return (value + val);}\
-	    inline unsigned long operator + (const BOOL32 b32){return (value + b32.value);}\
-	    inline unsigned long operator - (const unsigned long val){return (value - val);}\
-	    inline unsigned long operator - (const BOOL32 b32){return (value - b32.value);}\
-	    inline unsigned long operator * (const unsigned long val){return (value * val);}\
-	    inline unsigned long operator * (const BOOL32 b32){return (value * b32.value);}\
-	    inline unsigned long operator / (const unsigned long val){return (value / val);}\
-	    inline unsigned long operator / (const BOOL32 b32){return (value / b32.value);}\
+            inline uint32_t operator + (const uint32_t val){return (value + val);}\
+	    inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
+	    inline uint32_t operator - (const uint32_t val){return (value - val);}\
+	    inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}\
+	    inline uint32_t operator * (const uint32_t val){return (value * val);}\
+	    inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}\
+	    inline uint32_t operator / (const uint32_t val){return (value / val);}\
+	    inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}\
 	    \
-	    inline unsigned long operator += (const unsigned long val){return (value += val);}\
-	    inline unsigned long operator += (const BOOL32 b32){return (value += b32.value);}\
-	    inline unsigned long operator -= (const unsigned long val){return (value -= val);}\
-	    inline unsigned long operator -= (const BOOL32 b32){return (value -= b32.value);}\
-	    inline unsigned long operator *= (const unsigned long val){return (value *= val);}\
-	    inline unsigned long operator *= (const BOOL32 b32){return (value *= b32.value);}\
-	    inline unsigned long operator /= (const unsigned long val){return (value /= val);}\
-	    inline unsigned long operator /= (const BOOL32 b32){return (value /= b32.value);}\
+	    inline uint32_t operator += (const uint32_t val){return (value += val);}\
+	    inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}\
+	    inline uint32_t operator -= (const uint32_t val){return (value -= val);}\
+	    inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}\
+	    inline uint32_t operator *= (const uint32_t val){return (value *= val);}\
+	    inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}\
+	    inline uint32_t operator /= (const uint32_t val){return (value /= val);}\
+	    inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}\
     	    \
-            inline unsigned long operator | (const unsigned long val){return (value | val);}\
-	    inline unsigned long operator | (const BOOL32 b32){return (value | b32.value);}\
-	    inline unsigned long operator & (const unsigned long val){return (value & val);}\
-	    inline unsigned long operator & (const BOOL32 b32){return (value & b32.value);}\
-	    inline unsigned long operator ^ (const unsigned long val){return (value ^ val);}\
-	    inline unsigned long operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
-	    inline unsigned long operator << (const unsigned long val){return (value << val);}\
-	    inline unsigned long operator >> (const unsigned long val){return (value >> val);}\
-	    inline unsigned long operator ~ (void){return (~value);}\
+            inline uint32_t operator | (const uint32_t val){return (value | val);}\
+	    inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}\
+	    inline uint32_t operator & (const uint32_t val){return (value & val);}\
+	    inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}\
+	    inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}\
+	    inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
+	    inline uint32_t operator << (const uint32_t val){return (value << val);}\
+	    inline uint32_t operator >> (const uint32_t val){return (value >> val);}\
+	    inline uint32_t operator ~ (void){return (~value);}\
 	    \
-	    inline unsigned long operator |= (const unsigned long val){return (value |= val);}\
-	    inline unsigned long operator |= (const BOOL32 b32){return (value |= b32.value);}\
-	    inline unsigned long operator &= (const unsigned long val){return (value &= val);}\
-	    inline unsigned long operator &= (const BOOL32 b32){return (value &= b32.value);}\
-	    inline unsigned long operator ^= (const unsigned long val){return (value ^= val);}\
-	    inline unsigned long operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
+	    inline uint32_t operator |= (const uint32_t val){return (value |= val);}\
+	    inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}\
+	    inline uint32_t operator &= (const uint32_t val){return (value &= val);}\
+	    inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}\
+	    inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}\
+	    inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
 	    \
-            inline const unsigned char size() const{return BOOL32_BIT_SIZE;}\
+            inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
             \
             \
     }
