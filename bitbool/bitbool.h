@@ -21,7 +21,7 @@
  *
  ******************************************************************************/
 
-/**********************************************************************
+/*******************************************************************//*
  *
  * @file   bitbool.h
  * @Author Martin Baláž (qizi94@gmail.com)
@@ -70,45 +70,60 @@
 #define BOOL8_BIT_SIZE 8
 #define BOOL8_BYTE_SIZE (BOOL8_BIT_SIZE / 8)
 
-/**********************************************************************
+/*****************************************************//**
  *
- *  BOOL8
- *  Description:
+ *  desc here
+ *  
  *
  *  Usage:
- *  BOOL8 [varName](b0,...,b7)
+ *
+ *  BOOL8 varName(b0,...,b7)
+ *
  *  varName.b0=[true/false]
+ *
  *  ...
+ *
  *  varName.b7=[true/false]
  *
  *  varName( [index] ) - return bit according to index
+ *
  *  varname[ [index] ] - equivalent to varName([index])
+ *
  *  varName([index], [true/false]) - set state of
  *  bit according to index
+ *
  *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL16
+ *
  *  varName.size(void) - return constant count of bits
+ *
  *  varName = [uint8_t] - overloaded operator will make easier
  *  to copy data from uint8_t
  *
- **********************************************************************/
+ *
+ ***********************************************************/
 
 struct BOOL8{
 
     union{
         struct{
-	    uint8_t b0 :1;
-	    uint8_t b1 :1;
-	    uint8_t b2 :1;
-	    uint8_t b3 :1;
-	    uint8_t b4 :1;
-	    uint8_t b5 :1;
-	    uint8_t b6 :1;
-	    uint8_t b7 :1;
-	};
-	uint8_t value;
+					uint8_t b0 :1;
+					uint8_t b1 :1;
+					uint8_t b2 :1;
+					uint8_t b3 :1;
+					uint8_t b4 :1;
+					uint8_t b5 :1;
+					uint8_t b6 :1;
+					uint8_t b7 :1;
+				};
+				uint8_t value;
      };
     BOOL8() = default;
+          /**
+       * A constructor.
+       * A more elaborate description of the constructor.
+       * @note use with cousion	
+       */
     BOOL8(const bool b0, const bool b1 = 0, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
      const bool b5 = 0, const bool b6 = 0, const bool b7 = 0)
      : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7){}
@@ -126,7 +141,7 @@ struct BOOL8{
     bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
-
+    
     inline uint8_t operator = (const uint8_t val){return value = val;}
     
     inline uint8_t operator + (const uint8_t val){return (value + val);}
@@ -210,7 +225,7 @@ struct BOOL8{
     struct{\
         union{\
             struct{\
-	        uint8_t b##b0 :1;\
+	        		uint8_t b##b0 :1;\
             	uint8_t b##b1 :1;\
             	uint8_t b##b2 :1;\
             	uint8_t b##b3 :1;\
@@ -438,29 +453,42 @@ struct BOOL8{
 
 
 
-/**********************************************************************
+/******************************************************************//**
  *
  *  BOOL16
  *  Description:
  *
  *  Usage:
+ *
  *  BOOL16 [varName]
+ *
  *  BOOL16 [varName](b0,...,b7)
+ *
  *  varName.b0=[true/false]
+ *
  *  ...
- *  varName.15=[true/false]
+ *
+ *  varName.b15=[true/false]
  *
  *  varName( [index] ) - return bit according to index
+ *
  *  varname[ [index] ] - equivalent to varName([index])
+ *
  *  varName([index], [true/false]) - set state of
  *  bit according to index
+ *
  *  varName( [index] ) - return bit according to index
+ *
  *  varname[ [index] ] - equivalent to varName([index])
+ *
  *  varName([index], [true/false]) - set state of
  *  bit according to index
+ *
  *  varName.getValue(void) - returns uint16_t representation
  *  of bits in BOOL16
+ *
  *  varName.size(void) - return constant count of bits
+ *
  *  varName = [uint16_t] - overloaded operator will make easier
  *  to copy data from uint16_ts
  *
