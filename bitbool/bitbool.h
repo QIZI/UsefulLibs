@@ -21,12 +21,12 @@
  *
  ******************************************************************************/
 
-/*******************************************************************//*
+/******************************************************************//**
  *
  * @file   bitbool.h
- * @Author Martin Baláž (qizi94@gmail.com)
+ * @author Martin Baláž (qizi94@gmail.com)
  * @date   August, 2016
- * @brief  Bool states determined by bit states.
+ * @brief  true/false states determined by bit states.
  *
  * Writing and reading true/false states packed in to single or multi
  * byte variables.
@@ -37,7 +37,7 @@
  *
  * -same amout of information stored with less memory usage
  * -with optimalization such as -o2 and higher in GCC enabled,
- * there is little to none overhead in comparasion with 8 boolean array
+ * there is little to none overhead in comparasion with 8 boolean array.
  *
  * NOTE: avoid usage of "[ ]" or "( )" operator for bit access,
  * can cause insufficient code and overhead.
@@ -47,7 +47,7 @@
  
 #include <inttypes.h>
 
-/******************************************************
+/**************************************************//**
  * Force function with "inline" keyword to be inlined *
  ******************************************************/
 
@@ -56,7 +56,7 @@
 #endif
 
 
-/********************************************************
+/****************************************************//**
  * Argument counter for BOOL[8|16|32] macro overloading *
  ********************************************************/
 #define _ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20,_21,_22,_23,_24,_25,_26,_27,_28,_29,_30,_31,_32,_33, ...) _33
@@ -107,48 +107,122 @@ struct BOOL8{
 
     union{
         struct{
-					uint8_t b0 :1;
-					uint8_t b1 :1;
-					uint8_t b2 :1;
-					uint8_t b3 :1;
-					uint8_t b4 :1;
-					uint8_t b5 :1;
-					uint8_t b6 :1;
-					uint8_t b7 :1;
-				};
-				uint8_t value;
+        //@{
+    	/** Anonimous struct that represents b	its numbered from 0 to 7 */
+		uint8_t b0 :1;
+		uint8_t b1 :1;
+		uint8_t b2 :1;
+		uint8_t b3 :1;
+		uint8_t b4 :1;
+		uint8_t b5 :1;
+		uint8_t b6 :1;
+		uint8_t b7 :1;
+		//@}
+	};
+	uint8_t value;
      };
     BOOL8() = default;
-          /**
-       * A constructor.
-       * A more elaborate description of the constructor.
-       * @note use with cousion	
-       */
+    /*****************************************************//**
+    * A constructor
+    * sets bits from left to right indead of right to left
+    * @param b0 - b7 bits that can be set
+    * @note Constructor have default parameters.
+    ***********************************************************/
     BOOL8(const bool b0, const bool b1 = 0, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
      const bool b5 = 0, const bool b6 = 0, const bool b7 = 0)
      : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7){}
 
-    /**Dynamic Write*/
+    /*****************************************************//**
+    * Overloaded operator that can set any bit to 1 or 0.
+    * 
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @param bState - bit state that will be set to the specified bit
+    * @note Runtime bit operations.
+    ***********************************************************/
     void operator ()(const uint8_t index, const bool bState){
         value = (value & ( ~(0x01 << index))) | (bState << index);
     }
-
-    /**Dynamic Read*/
+	
+    /*****************************************************//**
+    * Overloaded operator that will return bit state at the index's offset
+    * 
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @return - state of the specified bit
+    * @note Runtime bit operations.
+    * @note Same as operator []
+    ***********************************************************/
     inline bool operator () (const uint8_t index) const{
         return (*this)[index];
     }
-    /**Dynamic Read*/
+    /*****************************************************//**
+    * Overloaded operator that will return bit state at the index's offset.
+    * 
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @return - state of the specified bit
+    * @note Runtime bit operations.
+    * @note Same as operator ()	.
+    ***********************************************************/
     bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
     
+    /*****************************************************//**
+    * Overloaded operator that will copy val to value.
+    * 
+    * @param val - value of variable on left side of = .
+    * @return - value of this->value.
+    ***********************************************************/
     inline uint8_t operator = (const uint8_t val){return value = val;}
     
+    /*****************************************************//**
+    * Overloaded operator that will Add value and val.
+    * 
+    * @param val - value of variable on left side of + 
+    * @return - returns the result addition
+    ***********************************************************/
     inline uint8_t operator + (const uint8_t val){return (value + val);}
+    
+    /*****************************************************//**
+    * Overloaded operator that will Add value and b8.
+    * 
+    * @param b8 - value of variable on left side of + 
+    * @return - returns the result addition.
+    ***********************************************************/
+    
     inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}
+    /*****************************************************//**
+    * Overloaded operator that will Subtract value and val.
+    * 
+    * @param val - value of variable on left side of -
+    * @return - returns the result subtraction
+    ***********************************************************/
     inline uint8_t operator - (const uint8_t val){return (value - val);}
+    
+    /*****************************************************//**
+    * Overloaded operator that will Subtract value and b8.
+    * 
+    * @param b8 - value of variable on left side of -
+    * @return - returns the result subtraction
+    ***********************************************************/
     inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}
+    
+    /*****************************************************//**
+    * Overloaded operator that will Multiply value and val.
+    * 
+    * @param val - value of variable on left side of *
+    * @return - returns the result multipling
+    ***********************************************************/
     inline uint8_t operator * (const uint8_t val){return (value * val);}
+    
+    /*****************************************************//**
+    * Overloaded operator that will Multiply value by b8.
+    * 
+    * @param val - value of variable on left side of *
+    * @return - returns the result multipling
+    ***********************************************************/
     inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}
     inline uint8_t operator / (const uint8_t val){return (value / val);}
     inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}
@@ -186,7 +260,7 @@ struct BOOL8{
 };
 
 
-/**********************************************************************
+/******************************************************************//**
  *
  *  BOOL8_REDEF(...)
  *  Description:
@@ -462,7 +536,7 @@ struct BOOL8{
  *
  *  BOOL16 [varName]
  *
- *  BOOL16 [varName](b0,...,b7)
+ *  BOOL16 [varName] (b0,...,b7)
  *
  *  varName.b0=[true/false]
  *
