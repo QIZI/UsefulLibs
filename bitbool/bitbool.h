@@ -1,7 +1,7 @@
 #ifndef BITBOOL_H
 #define BITBOOL_H
 /******************************  <Zlib>  **************************************
- * Copyright (c) 2016 Martin Baláž 
+ * Copyright (c) 2016 Martin Baláž
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -44,17 +44,16 @@
  * Use b0...b7...b15...b31 members instead.
  *
  ***********************************************************************/
- 
+
 #include <inttypes.h>
 
 /**************************************************//**
- * Force function with "inline" keyword to be inlined *
+ * Force function with "force_inline" keyword to be forcefuly inlined *
  ******************************************************/
 
 #ifdef __GNUC__  ///gcc compiler check
-#define inline inline __attribute__((always_inline))
+#define force_inline __attribute__((always_inline))
 #endif
-
 
 /****************************************************//**
  * Argument counter for BOOL[8|16|32] macro overloading *
@@ -73,7 +72,7 @@
 /*****************************************************//**
  *
  *  desc here
- *  
+ *
  *
  *  Usage:
  *
@@ -103,12 +102,16 @@
  *
  ***********************************************************/
 
+
+
 struct BOOL8{
 
     union{
         struct{
         //@{
-    	/** Anonimous struct that represents b	its numbered from 0 to 7 */
+    	/** Bit represented as member of struct.
+    	*/
+
 		uint8_t b0 :1;
 		uint8_t b1 :1;
 		uint8_t b2 :1;
@@ -117,10 +120,16 @@ struct BOOL8{
 		uint8_t b5 :1;
 		uint8_t b6 :1;
 		uint8_t b7 :1;
-		//@}
+
+	/**@}*/
 	};
+	//@{
+    	/** Is a variable that you can use to get value made from bits.
+    	*/
 	uint8_t value;
+	/**@}*/
      };
+
     BOOL8() = default;
     /*****************************************************//**
     * A constructor
@@ -134,7 +143,7 @@ struct BOOL8{
 
     /*****************************************************//**
     * Overloaded operator that can set any bit to 1 or 0.
-    * 
+    *
     * @param index - index that represents offset from the first bit
     * to the left
     * @param bState - bit state that will be set to the specified bit
@@ -143,22 +152,22 @@ struct BOOL8{
     void operator ()(const uint8_t index, const bool bState){
         value = (value & ( ~(0x01 << index))) | (bState << index);
     }
-	
+
     /*****************************************************//**
     * Overloaded operator that will return bit state at the index's offset
-    * 
+    *
     * @param index - index that represents offset from the first bit
     * to the left
     * @return - state of the specified bit
     * @note Runtime bit operations.
     * @note Same as operator []
     ***********************************************************/
-    inline bool operator () (const uint8_t index) const{
+    force_inline bool operator () (const uint8_t index) const{
         return (*this)[index];
     }
     /*****************************************************//**
     * Overloaded operator that will return bit state at the index's offset.
-    * 
+    *
     * @param index - index that represents offset from the first bit
     * to the left
     * @return - state of the specified bit
@@ -168,94 +177,68 @@ struct BOOL8{
     bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
-    
+
     /*****************************************************//**
     * Overloaded operator that will copy val to value.
-    * 
+    *
     * @param val - value of variable on left side of = .
     * @return - value of this->value.
     ***********************************************************/
-    inline uint8_t operator = (const uint8_t val){return value = val;}
-    
+    force_inline uint8_t operator = (const uint8_t val){return value = val;}
+
+
+    //@{
+    /** Overloaded aritmetic operator, that take uint8_t or BOOL8 as parameters
+	@returns - always returns results as uint8_t
+    */
+
+    force_inline uint8_t operator + (const uint8_t val){return (value + val);}
+    force_inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}
+    force_inline uint8_t operator - (const uint8_t val){return (value - val);}
+    force_inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}
+    force_inline uint8_t operator * (const uint8_t val){return (value * val);}
+    force_inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}
+    force_inline uint8_t operator / (const uint8_t val){return (value / val);}
+    force_inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}
+
+    force_inline uint8_t operator += (const uint8_t val){return (value += val);}
+    force_inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}
+    force_inline uint8_t operator -= (const uint8_t val){return (value -= val);}
+    force_inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}
+    force_inline uint8_t operator *= (const uint8_t val){return (value *= val);}
+    force_inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}
+    force_inline uint8_t operator /= (const uint8_t val){return (value /= val);}
+    force_inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}
+    //@}
+
+    //@{
+    /** Overloaded bitwise operator, that take uint8_t or BOOL8 as parameters
+	@returns - always returns results as uint8_t
+    */
+    force_inline uint8_t operator | (const uint8_t val){return (value | val);}
+    force_inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}
+    force_inline uint8_t operator & (const uint8_t val){return (value & val);}
+    force_inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}
+    force_inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}
+    force_inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}
+    force_inline uint8_t operator << (const uint8_t val){return (value << val);}
+    force_inline uint8_t operator >> (const uint8_t val){return (value >> val);}
+    force_inline uint8_t operator ~ (void){return (~value);}
+
+    force_inline uint8_t operator |= (const uint8_t val){return (value |= val);}
+    force_inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}
+    force_inline uint8_t operator &= (const uint8_t val){return (value &= val);}
+    force_inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}
+    force_inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}
+    force_inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}
+    //@}
+
     /*****************************************************//**
-    * Overloaded operator that will Add value and val.
-    * 
-    * @param val - value of variable on left side of + 
-    * @return - returns the result addition
+    * Size in bits.
+    *
+    * @returns const number of bits
     ***********************************************************/
-    inline uint8_t operator + (const uint8_t val){return (value + val);}
-    
-    /*****************************************************//**
-    * Overloaded operator that will Add value and b8.
-    * 
-    * @param b8 - value of variable on left side of + 
-    * @return - returns the result addition.
-    ***********************************************************/
-    
-    inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}
-    /*****************************************************//**
-    * Overloaded operator that will Subtract value and val.
-    * 
-    * @param val - value of variable on left side of -
-    * @return - returns the result subtraction
-    ***********************************************************/
-    inline uint8_t operator - (const uint8_t val){return (value - val);}
-    
-    /*****************************************************//**
-    * Overloaded operator that will Subtract value and b8.
-    * 
-    * @param b8 - value of variable on left side of -
-    * @return - returns the result subtraction
-    ***********************************************************/
-    inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}
-    
-    /*****************************************************//**
-    * Overloaded operator that will Multiply value and val.
-    * 
-    * @param val - value of variable on left side of *
-    * @return - returns the result multipling
-    ***********************************************************/
-    inline uint8_t operator * (const uint8_t val){return (value * val);}
-    
-    /*****************************************************//**
-    * Overloaded operator that will Multiply value by b8.
-    * 
-    * @param val - value of variable on left side of *
-    * @return - returns the result multipling
-    ***********************************************************/
-    inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}
-    inline uint8_t operator / (const uint8_t val){return (value / val);}
-    inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}
-    
-    inline uint8_t operator += (const uint8_t val){return (value += val);}
-    inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}
-    inline uint8_t operator -= (const uint8_t val){return (value -= val);}
-    inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}
-    inline uint8_t operator *= (const uint8_t val){return (value *= val);}
-    inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}
-    inline uint8_t operator /= (const uint8_t val){return (value /= val);}
-    inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}
-    
-    
-    inline uint8_t operator | (const uint8_t val){return (value | val);}
-    inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}
-    inline uint8_t operator & (const uint8_t val){return (value & val);}
-    inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}
-    inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}
-    inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}
-    inline uint8_t operator << (const uint8_t val){return (value << val);}
-    inline uint8_t operator >> (const uint8_t val){return (value >> val);}
-    inline uint8_t operator ~ (void){return (~value);}
-    
-    inline uint8_t operator |= (const uint8_t val){return (value |= val);}
-    inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}
-    inline uint8_t operator &= (const uint8_t val){return (value &= val);}
-    inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}
-    inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}
-    inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}
-    
-    
-    inline const uint8_t size() const{return BOOL8_BIT_SIZE;}
+    force_inline const uint8_t size() const{return BOOL8_BIT_SIZE;}
 
 };
 
@@ -316,7 +299,7 @@ struct BOOL8{
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const uint8_t index) const{\
+            force_inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
@@ -324,45 +307,45 @@ struct BOOL8{
                 return ( (value >> index) & 0x01 );\
             }\
     \
-            inline uint8_t operator = (const uint8_t val){return value = val;}\
-            inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
+            force_inline uint8_t operator = (const uint8_t val){return value = val;}\
+            force_inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
             \
-     	    inline uint8_t operator + (const uint8_t val){return (value + val);}\
-	    inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
-	    inline uint8_t operator - (const uint8_t val){return (value - val);}\
-	    inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}\
-	    inline uint8_t operator * (const uint8_t val){return (value * val);}\
-	    inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}\
-	    inline uint8_t operator / (const uint8_t val){return (value / val);}\
-	    inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}\
+     	    force_inline uint8_t operator + (const uint8_t val){return (value + val);}\
+	    force_inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
+	    force_inline uint8_t operator - (const uint8_t val){return (value - val);}\
+	    force_inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}\
+	    force_inline uint8_t operator * (const uint8_t val){return (value * val);}\
+	    force_inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}\
+	    force_inline uint8_t operator / (const uint8_t val){return (value / val);}\
+	    force_inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}\
 	    \
-	    inline uint8_t operator += (const uint8_t val){return (value += val);}\
-	    inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}\
-	    inline uint8_t operator -= (const uint8_t val){return (value -= val);}\
-	    inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}\
-	    inline uint8_t operator *= (const uint8_t val){return (value *= val);}\
-	    inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}\
-	    inline uint8_t operator /= (const uint8_t val){return (value /= val);}\
-	    inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}\
+	    force_inline uint8_t operator += (const uint8_t val){return (value += val);}\
+	    force_inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}\
+	    force_inline uint8_t operator -= (const uint8_t val){return (value -= val);}\
+	    force_inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}\
+	    force_inline uint8_t operator *= (const uint8_t val){return (value *= val);}\
+	    force_inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}\
+	    force_inline uint8_t operator /= (const uint8_t val){return (value /= val);}\
+	    force_inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}\
 	    \
-            inline uint8_t operator | (const uint8_t val){return (value | val);}\
-            inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}\
-	    inline uint8_t operator & (const uint8_t val){return (value & val);}\
-	    inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}\
-	    inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}\
-	    inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
-	    inline uint8_t operator << (const uint8_t val){return (value << val);}\
-	    inline uint8_t operator >> (const uint8_t val){return (value >> val);}\
-	    inline uint8_t operator ~ (void){return (~value);}\
+            force_inline uint8_t operator | (const uint8_t val){return (value | val);}\
+            force_inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}\
+	    force_inline uint8_t operator & (const uint8_t val){return (value & val);}\
+	    force_inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}\
+	    force_inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}\
+	    force_inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
+	    force_inline uint8_t operator << (const uint8_t val){return (value << val);}\
+	    force_inline uint8_t operator >> (const uint8_t val){return (value >> val);}\
+	    force_inline uint8_t operator ~ (void){return (~value);}\
 	    \
-	    inline uint8_t operator |= (const uint8_t val){return (value |= val);}\
-	    inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}\
-	    inline uint8_t operator &= (const uint8_t val){return (value &= val);}\
-	    inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}\
-	    inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}\
-	    inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
+	    force_inline uint8_t operator |= (const uint8_t val){return (value |= val);}\
+	    force_inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}\
+	    force_inline uint8_t operator &= (const uint8_t val){return (value &= val);}\
+	    force_inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}\
+	    force_inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}\
+	    force_inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
 	    \
-            inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
+            force_inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
             \
             \
     }
@@ -445,7 +428,7 @@ struct BOOL8{
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const uint8_t index) const{\
+            force_inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
@@ -453,45 +436,45 @@ struct BOOL8{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline uint8_t operator = (const uint8_t val){return value = val;}\
-            inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
+            force_inline uint8_t operator = (const uint8_t val){return value = val;}\
+            force_inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
             \
-     	    inline uint8_t operator + (const uint8_t val){return (value + val);}\
-	    inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
-	    inline uint8_t operator - (const uint8_t val){return (value - val);}\
-	    inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}\
-	    inline uint8_t operator * (const uint8_t val){return (value * val);}\
-	    inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}\
-	    inline uint8_t operator / (const uint8_t val){return (value / val);}\
-	    inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}\
+     	    force_inline uint8_t operator + (const uint8_t val){return (value + val);}\
+	    force_inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
+	    force_inline uint8_t operator - (const uint8_t val){return (value - val);}\
+	    force_inline uint8_t operator - (const BOOL8 b8){return (value - b8.value);}\
+	    force_inline uint8_t operator * (const uint8_t val){return (value * val);}\
+	    force_inline uint8_t operator * (const BOOL8 b8){return (value * b8.value);}\
+	    force_inline uint8_t operator / (const uint8_t val){return (value / val);}\
+	    force_inline uint8_t operator / (const BOOL8 b8){return (value / b8.value);}\
 	    \
-	    inline uint8_t operator += (const uint8_t val){return (value += val);}\
-	    inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}\
-	    inline uint8_t operator -= (const uint8_t val){return (value -= val);}\
-	    inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}\
-	    inline uint8_t operator *= (const uint8_t val){return (value *= val);}\
-	    inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}\
-	    inline uint8_t operator /= (const uint8_t val){return (value /= val);}\
-	    inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}\
+	    force_inline uint8_t operator += (const uint8_t val){return (value += val);}\
+	    force_inline uint8_t operator += (const BOOL8 b8){return (value += b8.value);}\
+	    force_inline uint8_t operator -= (const uint8_t val){return (value -= val);}\
+	    force_inline uint8_t operator -= (const BOOL8 b8){return (value -= b8.value);}\
+	    force_inline uint8_t operator *= (const uint8_t val){return (value *= val);}\
+	    force_inline uint8_t operator *= (const BOOL8 b8){return (value *= b8.value);}\
+	    force_inline uint8_t operator /= (const uint8_t val){return (value /= val);}\
+	    force_inline uint8_t operator /= (const BOOL8 b8){return (value /= b8.value);}\
 	    \
-            inline uint8_t operator | (const uint8_t val){return (value | val);}\
-	    inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}\
-	    inline uint8_t operator & (const uint8_t val){return (value & val);}\
-	    inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}\
-	    inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}\
-	    inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
-	    inline uint8_t operator << (const uint8_t val){return (value << val);}\
-	    inline uint8_t operator >> (const uint8_t val){return (value >> val);}\
-	    inline uint8_t operator ~ (void){return (~value);}\
+            force_inline uint8_t operator | (const uint8_t val){return (value | val);}\
+	    force_inline uint8_t operator | (const BOOL8 b8){return (value | b8.value);}\
+	    force_inline uint8_t operator & (const uint8_t val){return (value & val);}\
+	    force_inline uint8_t operator & (const BOOL8 b8){return (value & b8.value);}\
+	    force_inline uint8_t operator ^ (const uint8_t val){return (value ^ val);}\
+	    force_inline uint8_t operator ^ (const BOOL8 b8){return (value ^ b8.value);}\
+	    force_inline uint8_t operator << (const uint8_t val){return (value << val);}\
+	    force_inline uint8_t operator >> (const uint8_t val){return (value >> val);}\
+	    force_inline uint8_t operator ~ (void){return (~value);}\
 	    \
-	    inline uint8_t operator |= (const uint8_t val){return (value |= val);}\
-	    inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}\
-	    inline uint8_t operator &= (const uint8_t val){return (value &= val);}\
-	    inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}\
-	    inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}\
-	    inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
+	    force_inline uint8_t operator |= (const uint8_t val){return (value |= val);}\
+	    force_inline uint8_t operator |= (const BOOL8 b8){return (value |= b8.value);}\
+	    force_inline uint8_t operator &= (const uint8_t val){return (value &= val);}\
+	    force_inline uint8_t operator &= (const BOOL8 b8){return (value &= b8.value);}\
+	    force_inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}\
+	    force_inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
     	    \
-            inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
+            force_inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
             \
             \
     }
@@ -571,6 +554,9 @@ struct BOOL8{
 struct BOOL16{
     union{
         struct{
+        //@{
+    	/** Bit represented as member of struct.
+    	*/
              uint8_t b0 :1;
              uint8_t b1 :1;
              uint8_t b2 :1;
@@ -587,11 +573,22 @@ struct BOOL16{
              uint8_t b13 :1;
              uint8_t b14 :1;
              uint8_t b15 :1;
+        /**@}*/
     	};
+    	//@{
+    	/** Is a variable that you can use to get value made from bits.
+    	*/
     	uint16_t value;
-    	
+    	/**@}*/
     };
     BOOL16()=default;
+
+    /*****************************************************//**
+    * A constructor
+    * sets bits from left to right indead of right to left
+    * @param b0 - b15 bits that can be set
+    * @note Constructor have default parameters.
+    ***********************************************************/
     BOOL16(const bool b0, const bool b1 = 0, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
         const bool b5 = 0, const bool b6 = 0, const bool b7 = 0,
         const bool b8 = 0, const bool b9 = 0, const bool b10 = 0, const bool b11 = 0, const bool b12 = 0,
@@ -599,58 +596,103 @@ struct BOOL16{
         : b0(b0) ,b1(b1), b2(b2), b3(b3), b4(b4), b5(b5), b6(b6), b7(b7)
         , b8(b8) ,b9(b9), b10(b10), b11(b11), b12(b12), b13(b13), b14(b14), b15(b15){}
 
-    /**Dynamic Write*/
+    /*****************************************************//**
+    * Overloaded operator that can set any bit to 1 or 0.
+    *
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @param bState - bit state that will be set to the specified bit
+    * @note Runtime bit operations.
+    ***********************************************************/
     void operator ()(const uint8_t index, const bool bState){
         value = (value & ( ~(0x01 << index))) |(bState << index);
     }
 
-    /**Dynamic Read*/
-    inline bool operator () (const uint8_t index) const{
+    /*****************************************************//**
+    * Overloaded operator that will return bit state at the index's offset
+    *
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @return - state of the specified bit
+    * @note Runtime bit operations.
+    * @note Same as operator []
+    ***********************************************************/
+    force_inline bool operator () (const uint8_t index) const{
         return (*this)[index];
     }
-    /**Dynamic Read*/
+
+    /*****************************************************//**
+    * Overloaded operator that will return bit state at the index's offset.
+    *
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @return - state of the specified bit
+    * @note Runtime bit operations.
+    * @note Same as operator ()	.
+    ***********************************************************/
     bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
 
-    inline uint16_t operator = (const uint16_t val){return value = val;}
-    
-    inline uint16_t operator + (const uint16_t val){return (value + val);}
-    inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}
-    inline uint16_t operator - (const uint16_t val){return (value - val);}
-    inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}
-    inline uint16_t operator * (const uint16_t val){return (value * val);}
-    inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}
-    inline uint16_t operator / (const uint16_t val){return (value / val);}
-    inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}
-    
-    inline uint16_t operator += (const uint16_t val){return (value += val);}
-    inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}
-    inline uint16_t operator -= (const uint16_t val){return (value -= val);}
-    inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}
-    inline uint16_t operator *= (const uint16_t val){return (value *= val);}
-    inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}
-    inline uint16_t operator /= (const uint16_t val){return (value /= val);}
-    inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}
-    
-    inline uint16_t operator | (const uint16_t val){return (value | val);}
-    inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}
-    inline uint16_t operator & (const uint16_t val){return (value & val);}
-    inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}
-    inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}
-    inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}
-    inline uint16_t operator << (const uint16_t val){return (value << val);}
-    inline uint16_t operator >> (const uint16_t val){return (value >> val);}
-    inline uint16_t operator ~ (void){return (~value);}
-    
-    inline uint16_t operator |= (const uint16_t val){return (value |= val);}
-    inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}
-    inline uint16_t operator &= (const uint16_t val){return (value &= val);}
-    inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}
-    inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}
-    inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}
-    
-    inline const uint8_t size() const{return BOOL16_BIT_SIZE;}
+    /*****************************************************//**
+    * Overloaded operator that will copy val to value.
+    *
+    * @param val - value of variable on left side of = .
+    * @return - value of this->value.
+    ***********************************************************/
+    force_inline uint16_t operator = (const uint16_t val){return value = val;}
+
+    //@{
+    /** Overloaded aritmetic operator, that take uint16_t or BOOL16 as parameters
+	@returns - always returns results as uint16_t
+    */
+    force_inline uint16_t operator + (const uint16_t val){return (value + val);}
+    force_inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}
+    force_inline uint16_t operator - (const uint16_t val){return (value - val);}
+    force_inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}
+    force_inline uint16_t operator * (const uint16_t val){return (value * val);}
+    force_inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}
+    force_inline uint16_t operator / (const uint16_t val){return (value / val);}
+    force_inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}
+
+    force_inline uint16_t operator += (const uint16_t val){return (value += val);}
+    force_inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}
+    force_inline uint16_t operator -= (const uint16_t val){return (value -= val);}
+    force_inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}
+    force_inline uint16_t operator *= (const uint16_t val){return (value *= val);}
+    force_inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}
+    force_inline uint16_t operator /= (const uint16_t val){return (value /= val);}
+    force_inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}
+    //@}
+
+    //@{
+    /** Overloaded bitwise operator, that take uint16_t or BOOL16 as parameters
+	@returns - always returns results as uint16_t
+    */
+    force_inline uint16_t operator | (const uint16_t val){return (value | val);}
+    force_inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}
+    force_inline uint16_t operator & (const uint16_t val){return (value & val);}
+    force_inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}
+    force_inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}
+    force_inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}
+    force_inline uint16_t operator << (const uint16_t val){return (value << val);}
+    force_inline uint16_t operator >> (const uint16_t val){return (value >> val);}
+    force_inline uint16_t operator ~ (void){return (~value);}
+
+    force_inline uint16_t operator |= (const uint16_t val){return (value |= val);}
+    force_inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}
+    force_inline uint16_t operator &= (const uint16_t val){return (value &= val);}
+    force_inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}
+    force_inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}
+    force_inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}
+    //@}
+
+    /*****************************************************//**
+    * Size in bits.
+    *
+    * @returns const number of bits
+    ***********************************************************/
+    force_inline const uint8_t size() const{return BOOL16_BIT_SIZE;}
 
 };
 
@@ -728,7 +770,7 @@ struct BOOL16{
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const uint8_t index) const{\
+            force_inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
@@ -736,44 +778,44 @@ struct BOOL16{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline uint16_t operator = (const uint16_t val){return value = val;}\
-            inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
+            force_inline uint16_t operator = (const uint16_t val){return value = val;}\
+            force_inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
             \
-            inline uint16_t operator + (const uint16_t val){return (value + val);}\
-	    inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
-	    inline uint16_t operator - (const uint16_t val){return (value - val);}\
-	    inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}\
-	    inline uint16_t operator * (const uint16_t val){return (value * val);}\
-	    inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}\
-	    inline uint16_t operator / (const uint16_t val){return (value / val);}\
-	    inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}\
+            force_inline uint16_t operator + (const uint16_t val){return (value + val);}\
+	    force_inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
+	    force_inline uint16_t operator - (const uint16_t val){return (value - val);}\
+	    force_inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}\
+	    force_inline uint16_t operator * (const uint16_t val){return (value * val);}\
+	    force_inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}\
+	    force_inline uint16_t operator / (const uint16_t val){return (value / val);}\
+	    force_inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}\
 	    \
-	    inline uint16_t operator += (const uint16_t val){return (value += val);}\
-	    inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}\
-	    inline uint16_t operator -= (const uint16_t val){return (value -= val);}\
-	    inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}\
-	    inline uint16_t operator *= (const uint16_t val){return (value *= val);}\
-	    inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}\
-	    inline uint16_t operator /= (const uint16_t val){return (value /= val);}\
-	    inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}\
+	    force_inline uint16_t operator += (const uint16_t val){return (value += val);}\
+	    force_inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}\
+	    force_inline uint16_t operator -= (const uint16_t val){return (value -= val);}\
+	    force_inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}\
+	    force_inline uint16_t operator *= (const uint16_t val){return (value *= val);}\
+	    force_inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}\
+	    force_inline uint16_t operator /= (const uint16_t val){return (value /= val);}\
+	    force_inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}\
 	    \
-	    inline uint16_t operator | (const uint16_t val){return (value | val);}\
-	    inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}\
-	    inline uint16_t operator & (const uint16_t val){return (value & val);}\
-	    inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}\
-	    inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}\
-	    inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
-	    inline uint16_t operator << (const uint16_t val){return (value << val);}\
-	    inline uint16_t operator >> (const uint16_t val){return (value >> val);}\
-    	    inline uint16_t operator ~ (void){return (~value);}\
+	    force_inline uint16_t operator | (const uint16_t val){return (value | val);}\
+	    force_inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}\
+	    force_inline uint16_t operator & (const uint16_t val){return (value & val);}\
+	    force_inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}\
+	    force_inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}\
+	    force_inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
+	    force_inline uint16_t operator << (const uint16_t val){return (value << val);}\
+	    force_inline uint16_t operator >> (const uint16_t val){return (value >> val);}\
+    	    force_inline uint16_t operator ~ (void){return (~value);}\
             \
-            inline uint16_t operator |= (const uint16_t val){return (value |= val);}\
-	    inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}\
-	    inline uint16_t operator &= (const uint16_t val){return (value &= val);}\
-	    inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}\
-	    inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}\
-	    inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
-            inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
+            force_inline uint16_t operator |= (const uint16_t val){return (value |= val);}\
+	    force_inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}\
+	    force_inline uint16_t operator &= (const uint16_t val){return (value &= val);}\
+	    force_inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}\
+	    force_inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}\
+	    force_inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
+            force_inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
             \
     }
 
@@ -881,7 +923,7 @@ struct BOOL16{
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const uint8_t index) const{\
+            force_inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
@@ -889,44 +931,44 @@ struct BOOL16{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline uint16_t operator = (const uint16_t val){return value = val;}\
-            inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
+            force_inline uint16_t operator = (const uint16_t val){return value = val;}\
+            force_inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
             \
-            inline uint16_t operator + (const uint16_t val){return (value + val);}\
-	    inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
-	    inline uint16_t operator - (const uint16_t val){return (value - val);}\
-	    inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}\
-	    inline uint16_t operator * (const uint16_t val){return (value * val);}\
-	    inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}\
-	    inline uint16_t operator / (const uint16_t val){return (value / val);}\
-	    inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}\
+            force_inline uint16_t operator + (const uint16_t val){return (value + val);}\
+	    force_inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
+	    force_inline uint16_t operator - (const uint16_t val){return (value - val);}\
+	    force_inline uint16_t operator - (const BOOL16 b16){return (value - b16.value);}\
+	    force_inline uint16_t operator * (const uint16_t val){return (value * val);}\
+	    force_inline uint16_t operator * (const BOOL16 b16){return (value * b16.value);}\
+	    force_inline uint16_t operator / (const uint16_t val){return (value / val);}\
+	    force_inline uint16_t operator / (const BOOL16 b16){return (value / b16.value);}\
 	    \
-	    inline uint16_t operator += (const uint16_t val){return (value += val);}\
-	    inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}\
-	    inline uint16_t operator -= (const uint16_t val){return (value -= val);}\
-	    inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}\
-	    inline uint16_t operator *= (const uint16_t val){return (value *= val);}\
-	    inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}\
-	    inline uint16_t operator /= (const uint16_t val){return (value /= val);}\
-	    inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}\
+	    force_inline uint16_t operator += (const uint16_t val){return (value += val);}\
+	    force_inline uint16_t operator += (const BOOL16 b16){return (value += b16.value);}\
+	    force_inline uint16_t operator -= (const uint16_t val){return (value -= val);}\
+	    force_inline uint16_t operator -= (const BOOL16 b16){return (value -= b16.value);}\
+	    force_inline uint16_t operator *= (const uint16_t val){return (value *= val);}\
+	    force_inline uint16_t operator *= (const BOOL16 b16){return (value *= b16.value);}\
+	    force_inline uint16_t operator /= (const uint16_t val){return (value /= val);}\
+	    force_inline uint16_t operator /= (const BOOL16 b16){return (value /= b16.value);}\
 	    \
-            inline uint16_t operator | (const uint16_t val){return (value | val);}\
-	    inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}\
-	    inline uint16_t operator & (const uint16_t val){return (value & val);}\
-	    inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}\
-	    inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}\
-	    inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
-	    inline uint16_t operator << (const uint16_t val){return (value << val);}\
-	    inline uint16_t operator >> (const uint16_t val){return (value >> val);}\
-    	    inline uint16_t operator ~ (void){return (~value);}\
+            force_inline uint16_t operator | (const uint16_t val){return (value | val);}\
+	    force_inline uint16_t operator | (const BOOL16 b16){return (value | b16.value);}\
+	    force_inline uint16_t operator & (const uint16_t val){return (value & val);}\
+	    force_inline uint16_t operator & (const BOOL16 b16){return (value & b16.value);}\
+	    force_inline uint16_t operator ^ (const uint16_t val){return (value ^ val);}\
+	    force_inline uint16_t operator ^ (const BOOL16 b16){return (value ^ b16.value);}\
+	    force_inline uint16_t operator << (const uint16_t val){return (value << val);}\
+	    force_inline uint16_t operator >> (const uint16_t val){return (value >> val);}\
+    	    force_inline uint16_t operator ~ (void){return (~value);}\
             \
-            inline uint16_t operator |= (const uint16_t val){return (value |= val);}\
-	    inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}\
-	    inline uint16_t operator &= (const uint16_t val){return (value &= val);}\
-	    inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}\
-	    inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}\
-	    inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
-            inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
+            force_inline uint16_t operator |= (const uint16_t val){return (value |= val);}\
+	    force_inline uint16_t operator |= (const BOOL16 b16){return (value |= b16.value);}\
+	    force_inline uint16_t operator &= (const uint16_t val){return (value &= val);}\
+	    force_inline uint16_t operator &= (const BOOL16 b16){return (value &= b16.value);}\
+	    force_inline uint16_t operator ^= (const uint16_t val){return (value ^= val);}\
+	    force_inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
+            force_inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
             \
             \
     }
@@ -957,7 +999,7 @@ struct BOOL16{
 #define SELECT_PREF16(N, ...) __SELECTION_PREF16(N, __VA_ARGS__)
 
 #define BOOL16_REDEF_PREFIX(...) SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__)
-#define BOOL16_REDEF_PREF(...) SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__) 
+#define BOOL16_REDEF_PREF(...) SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__)
 
 
 
@@ -972,7 +1014,7 @@ struct BOOL16{
  *
  *  BOOL32(...)
  *  Description:
- *  
+ *
  *
  *  Usage:
  *  BOOL32 [varName]
@@ -995,6 +1037,9 @@ struct BOOL16{
 struct BOOL32{
     union{
         struct{
+        //@{
+    	/** Bit represented as member of struct.
+    	*/
             uint8_t b0 :1;
             uint8_t b1 :1;
             uint8_t b2 :1;
@@ -1027,11 +1072,24 @@ struct BOOL32{
             uint8_t b29 :1;
             uint8_t b30 :1;
             uint8_t b31 :1;
+         /**@}*/
          };
+
+         //@{
+    	/** Is a variable that you can use to get value made from bits.
+    	*/
          uint32_t value;
+         /**@}*/
       };
 
     BOOL32()=default;
+
+    /*****************************************************//**
+    * A constructor
+    * sets bits from left to right indead of right to left
+    * @param b0 - b31 bits that can be set
+    * @note Constructor have default parameters.
+    ***********************************************************/
     BOOL32(const bool b0, const bool b1 = 0, const bool b2 = 0, const bool b3 = 0, const bool b4 = 0,
         const bool b5 = 0, const bool b6 = 0, const bool b7 = 0,
         const bool b8 = 0, const bool b9 = 0, const bool b10 = 0, const bool b11 = 0, const bool b12 = 0,
@@ -1045,58 +1103,106 @@ struct BOOL32{
         , b16(b16) ,b17(b17), b18(b18), b19(b19), b20(b20), b21(b21), b22(b22), b23(b23)
         , b24(b24) ,b25(b25), b26(b26), b27(b27), b28(b28), b29(b29), b30(b30), b31(b31){}
 
-    /**Dynamic Write*/
+
+    /*****************************************************//**
+    * Overloaded operator that can set any bit to 1 or 0.
+    *
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @param bState - bit state that will be set to the specified bit
+    * @note Runtime bit operations.
+    ***********************************************************/
     void operator ()(const uint8_t index, const bool bState){
         value = (value & ( ~(0x01 << index))) | (bState << index);
     }
 
-    /**Dynamic Read*/
-    inline bool operator () (const uint8_t index) const{
+    /*****************************************************//**
+    * Overloaded operator that will return bit state at the index's offset
+    *
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @return - state of the specified bit
+    * @note Runtime bit operations.
+    * @note Same as operator []
+    ***********************************************************/
+    force_inline bool operator () (const uint8_t index) const{
         return (*this)[index];
     }
-    /**Dynamic Read*/
+
+    /*****************************************************//**
+    * Overloaded operator that will return bit state at the index's offset.
+    *
+    * @param index - index that represents offset from the first bit
+    * to the left
+    * @return - state of the specified bit
+    * @note Runtime bit operations.
+    * @note Same as operator ()	.
+    ***********************************************************/
     bool operator [] (const uint8_t index) const{
         return ((value >> index) & 0x01);
     }
 
-    inline uint32_t operator = (const uint32_t val){return value = val;}
-    
-    inline uint32_t operator + (const uint32_t val){return (value + val);}
-    inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}
-    inline uint32_t operator - (const uint32_t val){return (value - val);}
-    inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}
-    inline uint32_t operator * (const uint32_t val){return (value * val);}
-    inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}
-    inline uint32_t operator / (const uint32_t val){return (value / val);}
-    inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}
-    
-    inline uint32_t operator += (const uint32_t val){return (value += val);}
-    inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}
-    inline uint32_t operator -= (const uint32_t val){return (value -= val);}
-    inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}
-    inline uint32_t operator *= (const uint32_t val){return (value *= val);}
-    inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}
-    inline uint32_t operator /= (const uint32_t val){return (value /= val);}
-    inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}
-    			
-    inline uint32_t operator | (const uint32_t val){return (value | val);}
-    inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}
-    inline uint32_t operator & (const uint32_t val){return (value & val);}
-    inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}
-    inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}
-    inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}
-    inline uint32_t operator << (const uint32_t val){return (value << val);}
-    inline uint32_t operator >> (const uint32_t val){return (value >> val);}
-    inline uint32_t operator ~ (void){return (~value);}
-    
-    inline uint32_t operator |= (const uint32_t val){return (value |= val);}
-    inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}
-    inline uint32_t operator &= (const uint32_t val){return (value &= val);}
-    inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}
-    inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}
-    inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}
-    
-    inline const uint8_t size() const{return BOOL32_BIT_SIZE;}
+
+    /*****************************************************//**
+    * Overloaded operator that will copy val to value.
+    *
+    * @param val - value of variable on left side of = .
+    * @return - value of this->value.
+    ***********************************************************/
+    force_inline uint32_t operator = (const uint32_t val){return value = val;}
+
+
+    //@{
+    /** Overloaded aritmetic operator, that take uint16_t or BOOL32 as parameters
+	@returns - always returns results as uint32_t
+    */
+    force_inline uint32_t operator + (const uint32_t val){return (value + val);}
+    force_inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}
+    force_inline uint32_t operator - (const uint32_t val){return (value - val);}
+    force_inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}
+    force_inline uint32_t operator * (const uint32_t val){return (value * val);}
+    force_inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}
+    force_inline uint32_t operator / (const uint32_t val){return (value / val);}
+    force_inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}
+
+    force_inline uint32_t operator += (const uint32_t val){return (value += val);}
+    force_inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}
+    force_inline uint32_t operator -= (const uint32_t val){return (value -= val);}
+    force_inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}
+    force_inline uint32_t operator *= (const uint32_t val){return (value *= val);}
+    force_inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}
+    force_inline uint32_t operator /= (const uint32_t val){return (value /= val);}
+    force_inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}
+    //@}
+
+    //@{
+    /** Overloaded bitwise operator, that take uint32_t or BOOL32 as parameters
+	@returns - always returns results as uint32_t
+    */
+    force_inline uint32_t operator | (const uint32_t val){return (value | val);}
+    force_inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}
+    force_inline uint32_t operator & (const uint32_t val){return (value & val);}
+    force_inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}
+    force_inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}
+    force_inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}
+    force_inline uint32_t operator << (const uint32_t val){return (value << val);}
+    force_inline uint32_t operator >> (const uint32_t val){return (value >> val);}
+    force_inline uint32_t operator ~ (void){return (~value);}
+
+    force_inline uint32_t operator |= (const uint32_t val){return (value |= val);}
+    force_inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}
+    force_inline uint32_t operator &= (const uint32_t val){return (value &= val);}
+    force_inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}
+    force_inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}
+    force_inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}
+    //@}
+
+    /*****************************************************//**
+    * Size in bits.
+    *
+    * @returns const number of bits
+    ***********************************************************/
+    force_inline const uint8_t size() const{return BOOL32_BIT_SIZE;}
 
 };
 
@@ -1208,7 +1314,7 @@ struct BOOL32{
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const uint8_t index) const{\
+            force_inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
@@ -1216,45 +1322,45 @@ struct BOOL32{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline uint32_t operator = (const uint32_t val){return value = val;}\
-            inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
+            force_inline uint32_t operator = (const uint32_t val){return value = val;}\
+            force_inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
             \
-            inline uint32_t operator + (const uint32_t val){return (value + val);}\
-	    inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
-	    inline uint32_t operator - (const uint32_t val){return (value - val);}\
-	    inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}\
-	    inline uint32_t operator * (const uint32_t val){return (value * val);}\
-	    inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}\
-	    inline uint32_t operator / (const uint32_t val){return (value / val);}\
-	    inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}\
+            force_inline uint32_t operator + (const uint32_t val){return (value + val);}\
+	    force_inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
+	    force_inline uint32_t operator - (const uint32_t val){return (value - val);}\
+	    force_inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}\
+	    force_inline uint32_t operator * (const uint32_t val){return (value * val);}\
+	    force_inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}\
+	    force_inline uint32_t operator / (const uint32_t val){return (value / val);}\
+	    force_inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}\
 	    \
-	    inline uint32_t operator += (const uint32_t val){return (value += val);}\
-	    inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}\
-	    inline uint32_t operator -= (const uint32_t val){return (value -= val);}\
-	    inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}\
-	    inline uint32_t operator *= (const uint32_t val){return (value *= val);}\
-	    inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}\
-	    inline uint32_t operator /= (const uint32_t val){return (value /= val);}\
-	    inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}\
+	    force_inline uint32_t operator += (const uint32_t val){return (value += val);}\
+	    force_inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}\
+	    force_inline uint32_t operator -= (const uint32_t val){return (value -= val);}\
+	    force_inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}\
+	    force_inline uint32_t operator *= (const uint32_t val){return (value *= val);}\
+	    force_inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}\
+	    force_inline uint32_t operator /= (const uint32_t val){return (value /= val);}\
+	    force_inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}\
     	    \
-            inline uint32_t operator | (const uint32_t val){return (value | val);}\
-	    inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}\
-	    inline uint32_t operator & (const uint32_t val){return (value & val);}\
-	    inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}\
-	    inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}\
-	    inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
-	    inline uint32_t operator << (const uint32_t val){return (value << val);}\
-	    inline uint32_t operator >> (const uint32_t val){return (value >> val);}\
-	    inline uint32_t operator ~ (void){return (~value);}\
+            force_inline uint32_t operator | (const uint32_t val){return (value | val);}\
+	    force_inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}\
+	    force_inline uint32_t operator & (const uint32_t val){return (value & val);}\
+	    force_inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}\
+	    force_inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}\
+	    force_inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
+	    force_inline uint32_t operator << (const uint32_t val){return (value << val);}\
+	    force_inline uint32_t operator >> (const uint32_t val){return (value >> val);}\
+	    force_inline uint32_t operator ~ (void){return (~value);}\
 	    \
-	    inline uint32_t operator |= (const uint32_t val){return (value |= val);}\
-	    inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}\
-	    inline uint32_t operator &= (const uint32_t val){return (value &= val);}\
-	    inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}\
-	    inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}\
-	    inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
+	    force_inline uint32_t operator |= (const uint32_t val){return (value |= val);}\
+	    force_inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}\
+	    force_inline uint32_t operator &= (const uint32_t val){return (value &= val);}\
+	    force_inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}\
+	    force_inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}\
+	    force_inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
 	    \
-            inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
+            force_inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
             \
             \
     }
@@ -1409,7 +1515,7 @@ struct BOOL32{
             }\
     \
             /**Dynamic Read*/\
-            inline bool operator () (const uint8_t index) const{\
+            force_inline bool operator () (const uint8_t index) const{\
                 return (*this)[index];\
             }\
             /**Dynamic Read*/\
@@ -1417,45 +1523,45 @@ struct BOOL32{
                 return ((value >> index) & 0x01);\
             }\
     \
-            inline uint32_t operator = (const uint32_t val){return value = val;}\
-            inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
+            force_inline uint32_t operator = (const uint32_t val){return value = val;}\
+            force_inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
             \
-            inline uint32_t operator + (const uint32_t val){return (value + val);}\
-	    inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
-	    inline uint32_t operator - (const uint32_t val){return (value - val);}\
-	    inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}\
-	    inline uint32_t operator * (const uint32_t val){return (value * val);}\
-	    inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}\
-	    inline uint32_t operator / (const uint32_t val){return (value / val);}\
-	    inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}\
+            force_inline uint32_t operator + (const uint32_t val){return (value + val);}\
+	    force_inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
+	    force_inline uint32_t operator - (const uint32_t val){return (value - val);}\
+	    force_inline uint32_t operator - (const BOOL32 b32){return (value - b32.value);}\
+	    force_inline uint32_t operator * (const uint32_t val){return (value * val);}\
+	    force_inline uint32_t operator * (const BOOL32 b32){return (value * b32.value);}\
+	    force_inline uint32_t operator / (const uint32_t val){return (value / val);}\
+	    force_inline uint32_t operator / (const BOOL32 b32){return (value / b32.value);}\
 	    \
-	    inline uint32_t operator += (const uint32_t val){return (value += val);}\
-	    inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}\
-	    inline uint32_t operator -= (const uint32_t val){return (value -= val);}\
-	    inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}\
-	    inline uint32_t operator *= (const uint32_t val){return (value *= val);}\
-	    inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}\
-	    inline uint32_t operator /= (const uint32_t val){return (value /= val);}\
-	    inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}\
+	    force_inline uint32_t operator += (const uint32_t val){return (value += val);}\
+	    force_inline uint32_t operator += (const BOOL32 b32){return (value += b32.value);}\
+	    force_inline uint32_t operator -= (const uint32_t val){return (value -= val);}\
+	    force_inline uint32_t operator -= (const BOOL32 b32){return (value -= b32.value);}\
+	    force_inline uint32_t operator *= (const uint32_t val){return (value *= val);}\
+	    force_inline uint32_t operator *= (const BOOL32 b32){return (value *= b32.value);}\
+	    force_inline uint32_t operator /= (const uint32_t val){return (value /= val);}\
+	    force_inline uint32_t operator /= (const BOOL32 b32){return (value /= b32.value);}\
     	    \
-            inline uint32_t operator | (const uint32_t val){return (value | val);}\
-	    inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}\
-	    inline uint32_t operator & (const uint32_t val){return (value & val);}\
-	    inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}\
-	    inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}\
-	    inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
-	    inline uint32_t operator << (const uint32_t val){return (value << val);}\
-	    inline uint32_t operator >> (const uint32_t val){return (value >> val);}\
-	    inline uint32_t operator ~ (void){return (~value);}\
+            force_inline uint32_t operator | (const uint32_t val){return (value | val);}\
+	    force_inline uint32_t operator | (const BOOL32 b32){return (value | b32.value);}\
+	    force_inline uint32_t operator & (const uint32_t val){return (value & val);}\
+	    force_inline uint32_t operator & (const BOOL32 b32){return (value & b32.value);}\
+	    force_inline uint32_t operator ^ (const uint32_t val){return (value ^ val);}\
+	    force_inline uint32_t operator ^ (const BOOL32 b32){return (value ^ b32.value);}\
+	    force_inline uint32_t operator << (const uint32_t val){return (value << val);}\
+	    force_inline uint32_t operator >> (const uint32_t val){return (value >> val);}\
+	    force_inline uint32_t operator ~ (void){return (~value);}\
 	    \
-	    inline uint32_t operator |= (const uint32_t val){return (value |= val);}\
-	    inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}\
-	    inline uint32_t operator &= (const uint32_t val){return (value &= val);}\
-	    inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}\
-	    inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}\
-	    inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
+	    force_inline uint32_t operator |= (const uint32_t val){return (value |= val);}\
+	    force_inline uint32_t operator |= (const BOOL32 b32){return (value |= b32.value);}\
+	    force_inline uint32_t operator &= (const uint32_t val){return (value &= val);}\
+	    force_inline uint32_t operator &= (const BOOL32 b32){return (value &= b32.value);}\
+	    force_inline uint32_t operator ^= (const uint32_t val){return (value ^= val);}\
+	    force_inline uint32_t operator ^= (const BOOL32 b32){return (value ^= b32.value);}\
 	    \
-            inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
+            force_inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
             \
             \
     }
