@@ -5,7 +5,7 @@ Libraries and Header files that I created during other projects
 ## Bitbool
 Header only library which provides types with more abstract way of accessing the bits [BOOL8, BOOL16, BOOL32].
 
-Features:
+### Features:
 - Abstract access to bits as members of the struct/class
 - Possibility to rename the bit-members and their prefixes.
 - Bit-wise, aritmethic and conditional operators are overloaded to feel like you are woriking with basic types.
@@ -68,6 +68,7 @@ int main(){
     br = b;
     unsigned char ch = br; 
     brp ~= ch; 
+    ch = brp.value; // every BOOLX type have an union member .value which reperesents the value of bits. 
 }
 
 ```
