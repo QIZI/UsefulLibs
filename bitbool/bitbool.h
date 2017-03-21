@@ -186,6 +186,13 @@ struct BOOL8{
     ***********************************************************/
     force_inline uint8_t operator = (const uint8_t val){return value = val;}
 
+    /*****************************************************//**
+    * Overloaded operator that will copy value when 
+    * passing BOOL8 to uint8_t.
+    *
+    * @return - value of this->value.
+    ***********************************************************/
+    force_inline operator uint8_t(){return value;}
 
     //@{
     /** Overloaded arithmetic operator, thats take uint8_t or BOOL8 as parameter
@@ -309,6 +316,7 @@ struct BOOL8{
     \
             force_inline uint8_t operator = (const uint8_t val){return value = val;}\
             force_inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
+            force_inline operator uint8_t(){return value;}\
             \
      	    force_inline uint8_t operator + (const uint8_t val){return (value + val);}\
 	    force_inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
@@ -438,6 +446,7 @@ struct BOOL8{
     \
             force_inline uint8_t operator = (const uint8_t val){return value = val;}\
             force_inline uint8_t operator = (const BOOL8 b8){return value = b8.value;}\
+            force_inline operator uint8_t(){return value;}\
             \
      	    force_inline uint8_t operator + (const uint8_t val){return (value + val);}\
 	    force_inline uint8_t operator + (const BOOL8 b8){return (value + b8.value);}\
@@ -642,6 +651,14 @@ struct BOOL16{
     ***********************************************************/
     force_inline uint16_t operator = (const uint16_t val){return value = val;}
 
+    /*****************************************************//**
+    * Overloaded operator that will copy value when 
+    * passing BOOL16 to uint16_t.
+    *
+    * @return - value of this->value.
+    ***********************************************************/
+    force_inline operator uint16_t(){return value;}
+
     //@{
     /** Overloaded arithmetic operator, that takes uint16_t or BOOL16 as parameter
 	@returns - always returns results as uint16_t
@@ -780,6 +797,7 @@ struct BOOL16{
     \
             force_inline uint16_t operator = (const uint16_t val){return value = val;}\
             force_inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
+            force_inline operator uint16_t(){return value;}\
             \
             force_inline uint16_t operator + (const uint16_t val){return (value + val);}\
 	    force_inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
@@ -933,6 +951,7 @@ struct BOOL16{
     \
             force_inline uint16_t operator = (const uint16_t val){return value = val;}\
             force_inline uint16_t operator = (const BOOL16 b16){return value = b16.value;}\
+            force_inline operator uint16_t(){return value;}\
             \
             force_inline uint16_t operator + (const uint16_t val){return (value + val);}\
 	    force_inline uint16_t operator + (const BOOL16 b16){return (value + b16.value);}\
@@ -1151,6 +1170,13 @@ struct BOOL32{
     ***********************************************************/
     force_inline uint32_t operator = (const uint32_t val){return value = val;}
 
+    /*****************************************************//**
+    * Overloaded operator that will copy value when 
+    * passing BOOL32 to uint32_t.
+    *
+    * @return - value of this->value.
+    ***********************************************************/
+    force_inline operator uint32_t(){return value;}
 
     //@{
     /** Overloaded arithmetic operator, that take uint16_t or BOOL32 as parameter
@@ -1324,6 +1350,7 @@ struct BOOL32{
     \
             force_inline uint32_t operator = (const uint32_t val){return value = val;}\
             force_inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
+            force_inline operator uint32_t(){return value;}\
             \
             force_inline uint32_t operator + (const uint32_t val){return (value + val);}\
 	    force_inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
@@ -1525,6 +1552,7 @@ struct BOOL32{
     \
             force_inline uint32_t operator = (const uint32_t val){return value = val;}\
             force_inline uint32_t operator = (const BOOL32 b32){return value = b32.value;}\
+            force_inline operator uint32_t(){return value;}\
             \
             force_inline uint32_t operator + (const uint32_t val){return (value + val);}\
 	    force_inline uint32_t operator + (const BOOL32 b32){return (value + b32.value);}\
