@@ -373,8 +373,10 @@ struct BOOL8{
 #define __SELECTION8_(N, ...) __SELECTION8_ ## N (__VA_ARGS__)
 #define __SELECT8_(N, ...) __SELECTION8_(N, __VA_ARGS__)
 
-#define BOOL8_REDEF(...) __SELECT8_(__NARGS(__VA_ARGS__), __VA_ARGS__)
 
+//name variants for BOOL8 redefined names with default prefix 'b'
+#define BOOL8_REDEF(...) __SELECT8_(__NARGS(__VA_ARGS__), __VA_ARGS__)
+#define BOOL8_REDEFINE BOOL8_REDEF
 
 
 
@@ -502,12 +504,14 @@ struct BOOL8{
 #define __SELECTION_PREF8_9(_prefix,b0, b1, b2, b3, b4, b5, b6, b7) __BOOL8_REDEF_PREF8(_prefix,b0, b1, b2, b3, b4, b5, b6, b7)
 
 #define __SELECTION_PREF8(N, ...) __SELECTION_PREF8_ ## N (__VA_ARGS__)
-#define SELECT_PREF8(N, ...) __SELECTION_PREF8(N, __VA_ARGS__)
-
-#define BOOL8_REDEF_PREFIX(...) SELECT_PREF8(__NARGS(__VA_ARGS__), __VA_ARGS__)
+#define __SELECT_PREF8(N, ...) __SELECTION_PREF8(N, __VA_ARGS__)
 
 
-
+//name variants for BOOL8 redefined names + prefix
+#define BOOL8_REDEF_PREF(...) __SELECT_PREF8(__NARGS(__VA_ARGS__), __VA_ARGS__)
+#define BOOL8_REDEFINE_PREFIX BOOL8_REDEF_PREF
+#define BOOL8_REDEF_PREFIX BOOL8_REDEF_PREF
+#define BOOL8_REDEFINE_PREFIX BOOL8_REDEF_PREF
 
 
 
@@ -860,7 +864,10 @@ struct BOOL16{
 #define __SELECTION16_(N, ...) __SELECTION16_ ## N (__VA_ARGS__)
 #define __SELECT16_(N, ...) __SELECTION16_(N, __VA_ARGS__)
 
+
+//name variants for BOOL16 redefined names with default prefix 'b'
 #define BOOL16_REDEF(...) __SELECT16_(__NARGS(__VA_ARGS__), __VA_ARGS__)
+#define BOOL16_REDEFINE BOOL16_REDEF
 
 
 
@@ -1015,10 +1022,13 @@ struct BOOL16{
 
 
 #define __SELECTION_PREF16(N, ...) __SELECTION_PREF16_ ## N (__VA_ARGS__)
-#define SELECT_PREF16(N, ...) __SELECTION_PREF16(N, __VA_ARGS__)
+#define __SELECT_PREF16(N, ...) __SELECTION_PREF16(N, __VA_ARGS__)
 
-#define BOOL16_REDEF_PREFIX(...) SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__)
-#define BOOL16_REDEF_PREF(...) SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__)
+//name variants for BOOL16 redefined names + prefix
+#define BOOL16_REDEF_PREF(...) __SELECT_PREF16(__NARGS(__VA_ARGS__), __VA_ARGS__)
+#define BOOL16_REDEFINE_PREF BOOL16_REDEF_PREF
+#define BOOL16_REDEF_PREFIX BOOL16_REDEF_PREF
+#define BOOL16_REDEFINE_PREFIX BOOL16_REDEF_PREF
 
 
 
@@ -1429,10 +1439,12 @@ struct BOOL32{
 #define __SELECTION32_32(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31) __BOOL32_REDEF32(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31)
 
 #define __SELECTION32_(N, ...) __SELECTION32_ ## N (__VA_ARGS__)
-#define __SELECT32_(N, ...) __SELECTION32_(N, __VA_ARGS__)
+#define __SELECT32(N, ...) __SELECTION32_(N, __VA_ARGS__)
 
-#define BOOL32_REDEF(...) __SELECT32_(__NARGS(__VA_ARGS__), __VA_ARGS__)
 
+//name variants for BOOL32 redefined names with default prefix 'b'
+#define BOOL32_REDEF(...) __SELECT32(__NARGS(__VA_ARGS__), __VA_ARGS__)
+#define BOOL32_REFEFINE BOOL32_REDEF
 
 
 
@@ -1632,10 +1644,13 @@ struct BOOL32{
 #define __SELECTION_PREF32_33(_prefix,b0, b1, b2, b3, b4, b5, b6, b7,b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31) __BOOL32_REDEF_PREF32(_prefix,b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31)
 
 #define __SELECTION_PREF32(N, ...) __SELECTION_PREF32_ ## N (__VA_ARGS__)
-#define SELECT_PREF32(N, ...) __SELECTION_PREF32(N, __VA_ARGS__)
+#define __SELECT_PREF32(N, ...) __SELECTION_PREF32(N, __VA_ARGS__)
 
-#define BOOL32_REDEF_PREFIX(...) SELECT_PREF32(__NARGS(__VA_ARGS__), __VA_ARGS__)
-
+//name variants for BOOL32 redefined names + prefix
+#define BOOL32_REDEF_PREF(...) __SELECT_PREF32(__NARGS(__VA_ARGS__), __VA_ARGS__)
+#define BOOL32_REDEF_PREFIX BOOL32_REDEF_PREF
+#define BOOL32_REDEFINE_PREF BOOL32_REDEF_PREF 
+#define BOOL32_REDEFINE_PREFIX BOOL32_REDEF_PREF
 
 
 
