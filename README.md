@@ -11,6 +11,8 @@ Features:
 - Bit-wise, aritmethic and conditional operators are overloaded to feel like you are woriking with basic types.
 - Compatibility with basic types like char, short and int. 
 
+### Example:
+
 ```c++
 #include "bitbool.h"
 
@@ -45,7 +47,7 @@ int main(){
         br.bOpened = true;
     }
 
-    //we now can go even further, and aslo use renaming of default prefix
+    //we now can go even further and aslo use rename the default prefix
 
     BOOL8_REDEFINE_PREFIX(//BOOL8_REDEF_PREF, BOOL8_REDEFINE_PREF, BOOL8_REDEF_PREFIX will do the same
         is,//first parameter is name of prefix
@@ -66,9 +68,6 @@ int main(){
     br = b;
     unsigned char ch = br; 
     brp ~= ch; 
-
-
-
 }
 
 ```
