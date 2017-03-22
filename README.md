@@ -6,7 +6,7 @@ Libraries and Header files that I created during other projects
 Header only library which provides types with more abstract way of accessing the bits [BOOL8, BOOL16, BOOL32].
 
 ### Features:
-- Abstract access to bits as members of the struct/class
+- Abstract access to bits as members of the struct/class.
 - Possibility to rename the bit-members and their prefixes.
 - Bit-wise, aritmethic and conditional operators are overloaded to feel like you are woriking with basic types.
 - Compatibility with basic types like char, short and int. 
@@ -22,7 +22,7 @@ int main(){
     b.b0 = true;
     b.b4 = false;
     b.b7 = true;
-    b.b4 = (b.b3 || b.b0 ) // value of b.b3 is in this prat of code 0, because we assigned it in declaration.
+    b.b4 = (b.b3 || b.b0 ) // value of b.b3 is in this part of code 0, because we assigned it in declaration.
 
 
 
