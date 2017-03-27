@@ -8,7 +8,7 @@ Header only library which provides types with more abstract way of accessing the
 ### Features:
 - Abstract access to bits as members of the struct/class.
 - Possibility to rename the bit-members and their prefixes.
-- Bit-wise, aritmethic and conditional operators are overloaded to feel like you are woriking with basic types.
+- Bit-wise, aritmethic and conditional operators are overloaded to feel like you are working with basic types.
 - Compatibility with basic types like char, short and int. 
 
 ### Example:
@@ -30,7 +30,7 @@ int main(){
     //solution to that is using macro BOOLX type which is included in library, and only tested with GCC/g++ and CLANG/clang++.
 
     BOOL8_REDEFINE( //BOOL8_REDEF will do the same
-        Stared,
+        Started,
         Finished,
         Opened,
         Busy
@@ -47,7 +47,7 @@ int main(){
         br.bOpened = true;
     }
 
-    //we now can go even further and aslo use rename the default prefix
+    //we now can go even further and also rename the default prefix
 
     BOOL8_REDEFINE_PREFIX(//BOOL8_REDEF_PREF, BOOL8_REDEFINE_PREF, BOOL8_REDEF_PREFIX will do the same
         is,//first parameter is name of prefix
@@ -62,13 +62,13 @@ int main(){
     brp.isVisible = true;
 
     // everything is the same as with previous types
-    // you can copy between these types(and also basic types) without manual conversion.
+    // you can copy between these types(and also basic types) without manual cast.
 
     b = brp;
     br = b;
     unsigned char ch = br; 
     brp ~= ch; 
-    ch = brp.value; // every BOOLX type have an union member .value which reperesents the value of bits. 
+    ch = brp.value; // every BOOLX type has a union member '.value' which reperesents the value of bits. 
 }
 
 ```
