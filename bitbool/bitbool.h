@@ -46,6 +46,8 @@
  ***********************************************************************/
 
 #include <inttypes.h>
+#include <stdexcept>
+#include <string>
 
 /**************************************************//**
  * Force function with "force_inline" keyword to be forcefuly inlined *
@@ -101,8 +103,6 @@
  *
  *
  ***********************************************************/
-
-
 
 struct BOOL8{
 
@@ -247,8 +247,118 @@ struct BOOL8{
     ***********************************************************/
     force_inline const uint8_t size() const{return BOOL8_BIT_SIZE;}
 
+    /*****************************************************//**
+    * Get the bit state at the index's offset. Before that, range check will be performed.
+    * Throw out_of_range when index is out of range.
+    *
+    * @returns bit state at index position but with range check.
+    * @note same as [] or () operators.
+    ***********************************************************/
+    bool test(const uint8_t index) const{
+        
+        if(!(index < BOOL8_BIT_SIZE) == true){
+            throw std::out_of_range ("BOOL8: Only 8 bits available in this type, max index [7]!");
+        }
+        return (*this)[index];
+     };
+
+
+    /*****************************************************//**
+    * True state count.
+    *
+    * @returns number of bits that are in 'true' state.
+    ***********************************************************/
+    uint8_t count() const {
+        
+        uint8_t nOnBits = 0;
+        for(uint8_t cBits = 0; cBits < BOOL8_BIT_SIZE; cBits++){
+            if((value & (0x01 << ( cBits))) != 0){
+                nOnBits++;
+            }
+        }
+        return nOnBits;
+    }
+
+    /*****************************************************//**
+    * Last true state position.
+    *
+    * @returns possition of last bit which is set to 'true' state.
+    ***********************************************************/
+    uint8_t last() const{
+        uint8_t cBits = BOOL8_BIT_SIZE;
+        while((value >> cBits) == 0 && (cBits--));   
+        return cBits;
+    } 
+
+    /*****************************************************//**
+    * None of bits are set to 'true' state.
+    *
+    * @returns 'true' when all states of bits are set to 'false',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool none() const{ return (value == 0);}
+
+    /*****************************************************//**
+    * Any of bits are set to 'true' state.
+    *
+    * @returns 'true' when any states of bits are set to 'true',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool any()  const{ return (value != 0);}
+
+
+    /*****************************************************//**
+    * All of bits are set to 'true' state.
+    *
+    * @returns 'true' when all states of bits are set to 'true',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool all()  const{ return (value == 0xFF);}
+
+
+    /*****************************************************//**
+    * Casts bitbool type value to C string.
+    *
+    * @param cstr  - pointer to C style string which will be filled.
+    * @param nBits - specifiecs the number of bits that will be exposed to cast.
+    ***********************************************************/
+    void to_cstring(char* cstr, uint8_t nBits = BOOL8_BIT_SIZE){
+        cstr[nBits] = '\0';
+        do{ 
+            if((value & (0x01 << ( nBits))) != 0){
+                cstr[(BOOL8_BIT_SIZE - nBits - 1)] = '1';
+            }
+            else {
+                cstr[(BOOL8_BIT_SIZE - nBits - 1)] = '0';
+            }
+        }while(nBits--);
+    }
+    
+
+    /*****************************************************//**
+    * Casts bitbool type value to std::string.
+    *
+    * @param nBits - specifiecs the number of bits that will be exposed to cast.
+    * @return - STD string filed with.
+    ***********************************************************/
+    std::string to_string(uint8_t nBits = BOOL8_BIT_SIZE) {
+        std::string bitStr;
+        bitStr.resize(nBits, '0');
+        do{ 
+            if((value & (0x01 << ( nBits))) != 0){
+                bitStr.at(bitStr.size() - nBits - 1) = '1';
+            }
+        }while(nBits--);
+        return bitStr;
+        
+    }
+
+
+
 };
 
+
+    
 
 /******************************************************************//**
  *
@@ -353,9 +463,63 @@ struct BOOL8{
 	    force_inline uint8_t operator ^= (const uint8_t val){return (value ^= val);}\
 	    force_inline uint8_t operator ^= (const BOOL8 b8){return (value ^= b8.value);}\
 	    \
-            force_inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
+        force_inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
+        \
+        \
+        bool test(const uint8_t index) const{\
             \
+            if(!(index < BOOL8_BIT_SIZE) == true){\
+                throw std::out_of_range ("BOOL8: Only 8 bits available in this type, max index [7]!");\
+            }\
+            return (*this)[index];\
+        }\
+        \
+        \
+        \
+        uint8_t count() const {\
             \
+            uint8_t nOnBits = 0;\
+            for(uint8_t cBits = 0; cBits < BOOL8_BIT_SIZE; cBits++){\
+                if((value & (0x01 << ( cBits))) != 0){\
+                    nOnBits++;\
+                }\
+            }\
+            return nOnBits;\
+        }\
+        \
+        uint8_t last() const{\
+            uint8_t cBits = BOOL8_BIT_SIZE;\
+            while((value >> cBits) == 0 && (cBits--));\
+            return cBits;\
+        }\
+        \
+        force_inline bool none() const{ return (value == 0);}\
+        force_inline bool any()  const{ return (value != 0);}\
+        force_inline bool all()  const{ return (value == 0xFF);}\
+        \
+        void to_cstring(char* cstr, uint8_t nBits = BOOL8_BIT_SIZE){\
+            cstr[nBits] = '\0';\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    cstr[(BOOL8_BIT_SIZE - nBits - 1)] = '1';\
+                }\
+                else {\
+                    cstr[(BOOL8_BIT_SIZE - nBits - 1)] = '0';\
+                }\
+            }while(nBits--);\
+        }\
+        \
+        std::string to_string(uint8_t nBits = BOOL8_BIT_SIZE) {\
+            std::string bitStr;\
+            bitStr.resize(nBits, '0');\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    bitStr.at(bitStr.size() - nBits - 1) = '1';\
+                }\
+            }while(nBits--);\
+            return bitStr;\
+            \
+        }\
     }
 
 
@@ -488,6 +652,60 @@ struct BOOL8{
             force_inline const uint8_t size() const{return BOOL8_BIT_SIZE;}\
             \
             \
+        bool test(const uint8_t index) const{\
+            \
+            if(!(index < BOOL8_BIT_SIZE) == true){\
+                throw std::out_of_range ("BOOL8: Only 8 bits available in this type, max index [7]!");\
+            }\
+            return (*this)[index];\
+        }\
+        \
+        \
+        \
+        uint8_t count() const {\
+            \
+            uint8_t nOnBits = 0;\
+            for(uint8_t cBits = 0; cBits < BOOL8_BIT_SIZE; cBits++){\
+                if((value & (0x01 << ( cBits))) != 0){\
+                    nOnBits++;\
+                }\
+            }\
+            return nOnBits;\
+        }\
+        \
+        uint8_t last() const{\
+            uint8_t cBits = BOOL8_BIT_SIZE;\
+            while((value >> cBits) == 0 && (cBits--));\
+            return cBits;\
+        }\
+        \
+        force_inline bool none() const{ return (value == 0);}\
+        force_inline bool any()  const{ return (value != 0);}\
+        force_inline bool all()  const{ return (value == 0xFF);}\
+        \
+        void to_cstring(char* cstr, uint8_t nBits = BOOL8_BIT_SIZE){\
+            cstr[nBits] = '\0';\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    cstr[(BOOL8_BIT_SIZE - nBits - 1)] = '1';\
+                }\
+                else {\
+                    cstr[(BOOL8_BIT_SIZE - nBits - 1)] = '0';\
+                }\
+            }while(nBits--);\
+        }\
+        \
+        std::string to_string(uint8_t nBits = BOOL8_BIT_SIZE) {\
+            std::string bitStr;\
+            bitStr.resize(nBits, '0');\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    bitStr.at(bitStr.size() - nBits - 1) = '1';\
+                }\
+            }while(nBits--);\
+            return bitStr;\
+            \
+        }\
     }
 
 
@@ -715,6 +933,111 @@ struct BOOL16{
     ***********************************************************/
     force_inline const uint8_t size() const{return BOOL16_BIT_SIZE;}
 
+    /*****************************************************//**
+    * Get the bit state at the index's offset. Before that, range check will be performed.
+    * Throw out_of_range when index is out of range.
+    *
+    * @returns bit state at index position but with range check.
+    * @note same as [] or () operators.
+    ***********************************************************/
+    bool test(const uint8_t index) const{
+        
+        if(!(index < BOOL16_BIT_SIZE) == true){
+            throw std::out_of_range ("BOOL16: Only 16 bits available in this type, max index [15]!");
+        }
+        return (*this)[index];
+     };
+
+
+    /*****************************************************//**
+    * True state count.
+    *
+    * @returns number of bits that are in 'true' state.
+    ***********************************************************/
+    uint8_t count() const {
+        
+        uint8_t nOnBits = 0;
+        for(uint8_t cBits = 0; cBits < BOOL16_BIT_SIZE; cBits++){
+            if((value & (0x01 << ( cBits))) != 0){
+                nOnBits++;
+            }
+        }
+        return nOnBits;
+    }
+
+    /*****************************************************//**
+    * Last true state position.
+    *
+    * @returns possition of last bit which is set to 'true' state.
+    ***********************************************************/
+    uint8_t last() const{
+        uint8_t cBits = BOOL16_BIT_SIZE;
+        while((value >> cBits) == 0 && (cBits--));   
+        return cBits;
+    } 
+
+    /*****************************************************//**
+    * None of bits are set to 'true' state.
+    *
+    * @returns 'true' when all states of bits are set to 'false',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool none() const{ return (value == 0);}
+
+    /*****************************************************//**
+    * Any of bits are set to 'true' state.
+    *
+    * @returns 'true' when any states of bits are set to 'true',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool any()  const{ return (value != 0);}
+
+
+    /*****************************************************//**
+    * All of bits are set to 'true' state.
+    *
+    * @returns 'true' when all states of bits are set to 'true',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool all()  const{ return (value == 0xFFFF);}
+
+
+    /*****************************************************//**
+    * Casts bitbool type value to C string.
+    *
+    * @param cstr  - pointer to C style string which will be filled.
+    * @param nBits - specifiecs the number of bits that will be exposed to cast.
+    ***********************************************************/
+    void to_cstring(char* cstr, uint8_t nBits = BOOL16_BIT_SIZE){
+        cstr[nBits] = '\0';
+        do{ 
+            if((value & (0x01 << ( nBits))) != 0){
+                cstr[(BOOL16_BIT_SIZE - nBits - 1)] = '1';
+            }
+            else {
+                cstr[(BOOL16_BIT_SIZE - nBits - 1)] = '0';
+            }
+        }while(nBits--);
+    }
+    
+
+    /*****************************************************//**
+    * Casts bitbool type value to std::string.
+    *
+    * @param nBits - specifiecs the number of bits that will be exposed to cast.
+    * @return - STD string filed with.
+    ***********************************************************/
+    std::string to_string(uint8_t nBits = BOOL16_BIT_SIZE) {
+        std::string bitStr;
+        bitStr.resize(nBits, '0');
+        do{ 
+            if((value & (0x01 << ( nBits))) != 0){
+                bitStr.at(bitStr.size() - nBits - 1) = '1';
+            }
+        }while(nBits--);
+        return bitStr;
+        
+    }
 };
 
 
@@ -839,6 +1162,60 @@ struct BOOL16{
 	    force_inline uint16_t operator ^= (const BOOL16 b16){return (value ^= b16.value);}\
             force_inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
             \
+        bool test(const uint8_t index) const{\
+            \
+            if(!(index < BOOL16_BIT_SIZE) == true){\
+                throw std::out_of_range ("BOOL16: Only 16 bits available in this type, max index [15]!");\
+            }\
+            return (*this)[index];\
+        }\
+        \
+        \
+        \
+        uint8_t count() const {\
+            \
+            uint8_t nOnBits = 0;\
+            for(uint8_t cBits = 0; cBits < BOOL16_BIT_SIZE; cBits++){\
+                if((value & (0x01 << ( cBits))) != 0){\
+                    nOnBits++;\
+                }\
+            }\
+            return nOnBits;\
+        }\
+        \
+        uint8_t last() const{\
+            uint8_t cBits = BOOL16_BIT_SIZE;\
+            while((value >> cBits) == 0 && (cBits--));\
+            return cBits;\
+        }\
+        \
+        force_inline bool none() const{ return (value == 0);}\
+        force_inline bool any()  const{ return (value != 0);}\
+        force_inline bool all()  const{ return (value == 0xFFFF);}\
+        \
+        void to_cstring(char* cstr, uint8_t nBits = BOOL16_BIT_SIZE){\
+            cstr[nBits] = '\0';\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    cstr[(BOOL16_BIT_SIZE - nBits - 1)] = '1';\
+                }\
+                else {\
+                    cstr[(BOOL16_BIT_SIZE - nBits - 1)] = '0';\
+                }\
+            }while(nBits--);\
+        }\
+        \
+        std::string to_string(uint8_t nBits = BOOL16_BIT_SIZE) {\
+            std::string bitStr;\
+            bitStr.resize(nBits, '0');\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    bitStr.at(bitStr.size() - nBits - 1) = '1';\
+                }\
+            }while(nBits--);\
+            return bitStr;\
+            \
+        }\
     }
 
 
@@ -997,6 +1374,60 @@ struct BOOL16{
             force_inline const uint8_t size() const{return BOOL16_BIT_SIZE;}\
             \
             \
+        bool test(const uint8_t index) const{\
+            \
+            if(!(index < BOOL16_BIT_SIZE) == true){\
+                throw std::out_of_range ("BOOL16: Only 16 bits available in this type, max index [15]!");\
+            }\
+            return (*this)[index];\
+        }\
+        \
+        \
+        \
+        uint8_t count() const {\
+            \
+            uint8_t nOnBits = 0;\
+            for(uint8_t cBits = 0; cBits < BOOL16_BIT_SIZE; cBits++){\
+                if((value & (0x01 << ( cBits))) != 0){\
+                    nOnBits++;\
+                }\
+            }\
+            return nOnBits;\
+        }\
+        \
+        uint8_t last() const{\
+            uint8_t cBits = BOOL16_BIT_SIZE;\
+            while((value >> cBits) == 0 && (cBits--));\
+            return cBits;\
+        }\
+        \
+        force_inline bool none() const{ return (value == 0);}\
+        force_inline bool any()  const{ return (value != 0);}\
+        force_inline bool all()  const{ return (value == 0xFFFF);}\
+        \
+        void to_cstring(char* cstr, uint8_t nBits = BOOL16_BIT_SIZE){\
+            cstr[nBits] = '\0';\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    cstr[(BOOL16_BIT_SIZE - nBits - 1)] = '1';\
+                }\
+                else {\
+                    cstr[(BOOL16_BIT_SIZE - nBits - 1)] = '0';\
+                }\
+            }while(nBits--);\
+        }\
+        \
+        std::string to_string(uint8_t nBits = BOOL16_BIT_SIZE) {\
+            std::string bitStr;\
+            bitStr.resize(nBits, '0');\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    bitStr.at(bitStr.size() - nBits - 1) = '1';\
+                }\
+            }while(nBits--);\
+            return bitStr;\
+            \
+        }\
     }
 
 
@@ -1240,6 +1671,111 @@ struct BOOL32{
     ***********************************************************/
     force_inline const uint8_t size() const{return BOOL32_BIT_SIZE;}
 
+    /*****************************************************//**
+    * Get the bit state at the index's offset. Before that, range check will be performed.
+    * Throw out_of_range when index is out of range.
+    *
+    * @returns bit state at index position but with range check.
+    * @note same as [] or () operators.
+    ***********************************************************/
+    bool test(const uint8_t index) const{
+        
+        if(!(index < BOOL32_BIT_SIZE) == true){
+            throw std::out_of_range ("BOOL32: Only 32 bits available in this type, max index [31]!");
+        }
+        return (*this)[index];
+     };
+
+
+    /*****************************************************//**
+    * True state count.
+    *
+    * @returns number of bits that are in 'true' state.
+    ***********************************************************/
+    uint8_t count() const {
+        
+        uint8_t nOnBits = 0;
+        for(uint8_t cBits = 0; cBits < BOOL32_BIT_SIZE; cBits++){
+            if((value & (0x01 << ( cBits))) != 0){
+                nOnBits++;
+            }
+        }
+        return nOnBits;
+    }
+
+    /*****************************************************//**
+    * Last true state position.
+    *
+    * @returns possition of last bit which is set to 'true' state.
+    ***********************************************************/
+    uint8_t last() const{
+        uint8_t cBits = BOOL32_BIT_SIZE;
+        while((value >> cBits) == 0 && (cBits--));   
+        return cBits;
+    } 
+
+    /*****************************************************//**
+    * None of bits are set to 'true' state.
+    *
+    * @returns 'true' when all states of bits are set to 'false',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool none() const{ return (value == 0);}
+
+    /*****************************************************//**
+    * Any of bits are set to 'true' state.
+    *
+    * @returns 'true' when any states of bits are set to 'true',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool any()  const{ return (value != 0);}
+
+
+    /*****************************************************//**
+    * All of bits are set to 'true' state.
+    *
+    * @returns 'true' when all states of bits are set to 'true',
+    *  otherwise returns 'false'.
+    ***********************************************************/
+    force_inline bool all()  const{ return (value == 0xFFFFFFFF);}
+
+
+    /*****************************************************//**
+    * Casts bitbool type value to C string.
+    *
+    * @param cstr  - pointer to C style string which will be filled.
+    * @param nBits - specifiecs the number of bits that will be exposed to cast.
+    ***********************************************************/
+    void to_cstring(char* cstr, uint8_t nBits = BOOL32_BIT_SIZE){
+        cstr[nBits] = '\0';
+        do{ 
+            if((value & (0x01 << ( nBits))) != 0){
+                cstr[(BOOL32_BIT_SIZE - nBits - 1)] = '1';
+            }
+            else {
+                cstr[(BOOL32_BIT_SIZE - nBits - 1)] = '0';
+            }
+        }while(nBits--);
+    }
+    
+
+    /*****************************************************//**
+    * Casts bitbool type value to std::string.
+    *
+    * @param nBits - specifiecs the number of bits that will be exposed to cast.
+    * @return - STD string filed with.
+    ***********************************************************/
+    std::string to_string(uint8_t nBits = BOOL32_BIT_SIZE) {
+        std::string bitStr;
+        bitStr.resize(nBits, '0');
+        do{ 
+            if((value & (0x01 << ( nBits))) != 0){
+                bitStr.at(bitStr.size() - nBits - 1) = '1';
+            }
+        }while(nBits--);
+        return bitStr;
+        
+    }
 };
 
 
@@ -1400,6 +1936,60 @@ struct BOOL32{
             force_inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
             \
             \
+        bool test(const uint8_t index) const{\
+            \
+            if(!(index < BOOL32_BIT_SIZE) == true){\
+                throw std::out_of_range ("BOOL32: Only 32 bits available in this type, max index [31]!");\
+            }\
+            return (*this)[index];\
+        }\
+        \
+        \
+        \
+        uint8_t count() const {\
+            \
+            uint8_t nOnBits = 0;\
+            for(uint8_t cBits = 0; cBits < BOOL32_BIT_SIZE; cBits++){\
+                if((value & (0x01 << ( cBits))) != 0){\
+                    nOnBits++;\
+                }\
+            }\
+            return nOnBits;\
+        }\
+        \
+        uint8_t last() const{\
+            uint8_t cBits = BOOL32_BIT_SIZE;\
+            while((value >> cBits) == 0 && (cBits--));\
+            return cBits;\
+        }\
+        \
+        force_inline bool none() const{ return (value == 0);}\
+        force_inline bool any()  const{ return (value != 0);}\
+        force_inline bool all()  const{ return (value == 0xFFFFFFFF);}\
+        \
+        void to_cstring(char* cstr, uint8_t nBits = BOOL32_BIT_SIZE){\
+            cstr[nBits] = '\0';\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    cstr[(BOOL32_BIT_SIZE - nBits - 1)] = '1';\
+                }\
+                else {\
+                    cstr[(BOOL32_BIT_SIZE - nBits - 1)] = '0';\
+                }\
+            }while(nBits--);\
+        }\
+        \
+        std::string to_string(uint8_t nBits = BOOL32_BIT_SIZE) {\
+            std::string bitStr;\
+            bitStr.resize(nBits, '0');\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    bitStr.at(bitStr.size() - nBits - 1) = '1';\
+                }\
+            }while(nBits--);\
+            return bitStr;\
+            \
+        }\
     }
 
 
@@ -1604,6 +2194,60 @@ struct BOOL32{
             force_inline const uint8_t size() const{return BOOL32_BIT_SIZE;}\
             \
             \
+        bool test(const uint8_t index) const{\
+            \
+            if(!(index < BOOL32_BIT_SIZE) == true){\
+                throw std::out_of_range ("BOOL32: Only 32 bits available in this type, max index [31]!");\
+            }\
+            return (*this)[index];\
+        }\
+        \
+        \
+        \
+        uint8_t count() const {\
+            \
+            uint8_t nOnBits = 0;\
+            for(uint8_t cBits = 0; cBits < BOOL32_BIT_SIZE; cBits++){\
+                if((value & (0x01 << ( cBits))) != 0){\
+                    nOnBits++;\
+                }\
+            }\
+            return nOnBits;\
+        }\
+        \
+        uint8_t last() const{\
+            uint8_t cBits = BOOL32_BIT_SIZE;\
+            while((value >> cBits) == 0 && (cBits--));\
+            return cBits;\
+        }\
+        \
+        force_inline bool none() const{ return (value == 0);}\
+        force_inline bool any()  const{ return (value != 0);}\
+        force_inline bool all()  const{ return (value == 0xFFFFFFFF);}\
+        \
+        void to_cstring(char* cstr, uint8_t nBits = BOOL32_BIT_SIZE){\
+            cstr[nBits] = '\0';\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    cstr[(BOOL32_BIT_SIZE - nBits - 1)] = '1';\
+                }\
+                else {\
+                    cstr[(BOOL32_BIT_SIZE - nBits - 1)] = '0';\
+                }\
+            }while(nBits--);\
+        }\
+        \
+        std::string to_string(uint8_t nBits = BOOL32_BIT_SIZE) {\
+            std::string bitStr;\
+            bitStr.resize(nBits, '0');\
+            do{ \
+                if((value & (0x01 << ( nBits))) != 0){\
+                    bitStr.at(bitStr.size() - nBits - 1) = '1';\
+                }\
+            }while(nBits--);\
+            return bitStr;\
+            \
+        }\
     }
 
 
