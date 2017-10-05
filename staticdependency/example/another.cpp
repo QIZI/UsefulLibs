@@ -1,4 +1,3 @@
- 
 #include "baseclass.h"
 
 #include <iostream>

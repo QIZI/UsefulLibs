@@ -1,4 +1,4 @@
- #include "../staticdependency.h"
+#include "../staticdependency.h"
 #include "baseclass.h"
 #include <iostream>
 
