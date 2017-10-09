@@ -47,7 +47,7 @@ public:
 	    staticDependency().emplace_back(ClassRegister<BaseClass>(std::move(className), Create));
 	}
 	
-	static std::vector< ClassRegister<BaseClass> >& getRaw(){
+	static const std::vector< ClassRegister<BaseClass> >& getRaw(){
 		return staticDependency();
 	}
 
