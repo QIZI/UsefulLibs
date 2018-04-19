@@ -1,5 +1,5 @@
 #pragma once
 
 struct Base{
-	virtual void run() = 0;
+	virtual void run() {std::cout<<"Something that would Base class run\n";};
 }; 

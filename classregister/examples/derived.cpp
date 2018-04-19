@@ -2,7 +2,7 @@
 
 FACTORY_REGISTER_CLASS(A, Base) //register class A
 void A:: run() {
-		std::cout<<"instance_of_A\n";
+		std::cout<<"Something that would A class run\n";
 }
 
 
@@ -10,7 +10,7 @@ void A:: run() {
 
 class Egg :  public Base{
 	void run(){
-		std::cout<<"Password: 123\n";
+		std::cout<<"Something that would Egg class run\n";
 	}
 };
 FACTORY_REGISTER_CLASS(Egg, Base)

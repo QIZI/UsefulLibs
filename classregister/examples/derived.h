@@ -15,7 +15,7 @@ class A : public Base{
 class B : public Base{
 	public:
 	void run() override{
-		std::cout<<"instance_of_B\n";
+		std::cout<<"Something that would B class run\n";
 	}
 	
 

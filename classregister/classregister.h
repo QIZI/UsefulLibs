@@ -25,6 +25,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <optional>
 
 #define FACTORY_NO_BASECLASS void
 
@@ -39,23 +40,25 @@ class ClassRegister{
 typedef BaseClass* (*ConstructionFunction)(void);
 
 public:
+	typedef BaseClass* base_type;
 
 	ConstructionFunction create;
 	
-	static constexpr void ConstructClassRegister(std::string&& className, ConstructionFunction Create){
+
+	static constexpr void AddToClassRegister(std::string&& className, ConstructionFunction Create){
 	    staticDependency().emplace(className ,ClassRegister<BaseClass>(Create));
 	}
 	
 	static const std::unordered_map<std::string, ClassRegister<BaseClass> >& getRaw(){
 		return staticDependency();
 	}
-	static const ClassRegister<BaseClass> get(const std::string& className){
-		auto result = staticDependency().find(className);
+	static const std::optional<ClassRegister<BaseClass>> get(const std::string& className){
+		const auto& result = staticDependency().find(className);
 		if(result != staticDependency().end()){
 			return staticDependency().find(className)->second;
 		}
 		else {
-			
+			return std::nullopt;
 		}
 	}
 
@@ -76,7 +79,7 @@ std::unordered_map<std::string, ClassRegister<T> >& ClassRegister<T>::staticDepe
 template <class DerivedClass,class BaseClass>
 struct RegisterTheClass{
 	constexpr RegisterTheClass(std::string&& className){
-		ClassRegister<BaseClass>::ConstructClassRegister(std::move(className), [](void)->BaseClass* {return new DerivedClass;}) ;
+		ClassRegister<BaseClass>::AddToClassRegister(std::move(className), [](void)->BaseClass* {return new DerivedClass;}) ;
 	}
 };
 
