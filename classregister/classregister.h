@@ -27,12 +27,11 @@
 #include <string>
 #include <optional>
 
-#define FACTORY_NO_BASECLASS void
 
-#define FACTORY_REGISTER_CLASS(className, baseClassName) inline ul::factory::RegisterTheClass<className, baseClassName> __Class_##className##_with_BaseClass_##baseClassName##__(std::string{#className});
+#define REGISTER_CLASS(className, baseClassName) inline ul::RegisterTheClass<className, baseClassName> __Class_##className##_with_BaseClass_##baseClassName##__(std::string{#className});
 
 
-namespace ul{namespace factory{
+namespace ul{
 
 
 template <class BaseClass>
@@ -44,6 +43,7 @@ public:
 
 	ConstructionFunction create;
 	
+	constexpr ClassRegister(ConstructionFunction Create) : create(Create) {}
 
 	static constexpr void AddToClassRegister(std::string&& className, ConstructionFunction Create){
 	    staticDependency().emplace(className ,ClassRegister<BaseClass>(Create));
@@ -52,6 +52,7 @@ public:
 	static const std::unordered_map<std::string, ClassRegister<BaseClass> >& getRaw(){
 		return staticDependency();
 	}
+
 	static const std::optional<ClassRegister<BaseClass>> get(const std::string& className){
 		const auto& result = staticDependency().find(className);
 		if(result != staticDependency().end()){
@@ -61,11 +62,8 @@ public:
 			return std::nullopt;
 		}
 	}
-
-private:
 	
-	constexpr ClassRegister(ConstructionFunction Create) : create(Create) {}	
-
+private:
 	static std::unordered_map<std::string, ClassRegister<BaseClass> >& staticDependency();
 };
 
@@ -83,6 +81,6 @@ struct RegisterTheClass{
 	}
 };
 
-}}
+}
 #endif
 

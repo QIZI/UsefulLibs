@@ -13,7 +13,7 @@ struct notting {
 };
 
 
-FACTORY_REGISTER_CLASS(notting,void)
+REGISTER_CLASS(notting,void)
 
 int main(){
 
@@ -22,27 +22,34 @@ int main(){
 		std::cout<<"ClassName: "<<cr.first<<'\n';
 	}		*/	
 
+	std::cout<<"Classes are:\n";
+	for(const auto& rgClass: ClassRegister<Base>::getRaw()){
+		std::cout<<rgClass.first<<'\n';
+	}
 
 	std::vector<Base*> bases;
 	std::string className;
+
 	while(className != "exit"){
 		for(const auto& base : bases){
 			base->run();
+			
 		}
 
 		std::cout<<"enter the class name: ";
 		std::cin>>className;
-		if(const auto& entry = factory::ClassRegister<Base>::get(className)){
+		if(const auto& entry = ClassRegister<Base>::get(className)){
 			bases.push_back(entry->create());
 		}
 		else{
 			std::cout<<"Class not found!\n";
 		}
+		
 		std::cout<<"\n";
 	}
 
 
-	if(const auto& entry = factory::ClassRegister<Base>::get("Egg")){
+	if(const auto& entry = ClassRegister<Base>::get("Egg")){
 		Base* b = entry->create();
 		b->run();
 	}
