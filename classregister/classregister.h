@@ -28,10 +28,10 @@
 #include <optional>
 
 
-#define REGISTER_CLASS(className, baseClassName) inline ul::RegisterTheClass<className, baseClassName> __Class_##className##_with_BaseClass_##baseClassName##__(std::string{#className});
+#define FACTORY_REGISTER_CLASS(className, baseClassName) inline ul::factory::RegisterTheClass<className, baseClassName> __Class_##className##_with_BaseClass_##baseClassName##__(std::string{#className});
 
 
-namespace ul{
+namespace ul{namespace factory{
 
 
 template <class BaseClass>
@@ -81,6 +81,6 @@ struct RegisterTheClass{
 	}
 };
 
-}
+}}
 #endif
 

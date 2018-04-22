@@ -19,4 +19,4 @@ class B : public Base{
 	}
 	
 
-}; REGISTER_CLASS(B, Base) 
+}; FACTORY_REGISTER_CLASS(B, Base) 

@@ -1,6 +1,6 @@
 #include "derived.h"
 
-REGISTER_CLASS(A, Base) //register class A
+FACTORY_REGISTER_CLASS(A, Base) //register class A
 void A:: run() {
 		std::cout<<"Something that would A class run\n";
 }
@@ -13,6 +13,6 @@ class Egg :  public Base{
 		std::cout<<"Something that would Egg class run\n";
 	}
 };
-REGISTER_CLASS(Egg, Base)
+FACTORY_REGISTER_CLASS(Egg, Base)
 
 
