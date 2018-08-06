@@ -1,5 +1,5 @@
 #include "eventsystem.h"
-
+#include <iostream>
 struct Test{
     
     void testEvent()
@@ -40,7 +40,7 @@ struct SecondTest{
         EventManager::AddListener("test_trigger",this, &SecondTest::anotherTestEvent);
     }
     void rm(){
-        EventManager::RemoveListener("test_trigger",this,&SecondTest::testEvent);
+        EventManager::RemoveListener("test_trigger",this,&SecondTest::anotherTestEvent);
         //EventManager::RemoveAllListeners("test_trigger", this);
     }
     ~SecondTest(){
