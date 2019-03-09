@@ -1,6 +1,7 @@
 #include <vector>
 #include <string.h>
 #include <iostream>
+#include <algorithm>
 #include <cstddef>
 
 template<class T>
@@ -14,8 +15,8 @@ struct IndexNode{
     void setPrevious(size_t previous){_previous = previous;}
     void setNext(size_t next){_next = next;}
 
-    size_t getPrevious(){return _previous;}
-    size_t getNext(){return _next;}
+    size_t getPrevious() const {return _previous;}
+    size_t getNext() const {return _next;}
 
     T& getData(){return _data;}
 
@@ -25,6 +26,10 @@ struct IndexNode{
     IndexNode(size_t previous, size_t next, Args&&... args) : _previous(previous),_next(next),_data(args...) {}
     IndexNode(size_t previous,size_t next, const T& data) : _previous(previous),_next(next), _data(data){}
     IndexNode(size_t previous = 0,size_t next = 0) : _previous(previous),_next(next){}
+
+    bool operator == (const IndexNode& other){
+        return (_previous == other.getPrevious() && _next == other.getNext()); 
+    }
 
     private:
     size_t _previous;
@@ -80,17 +85,34 @@ class IndexIterator{
         ++(*this);
         return IndexIterator(_iList, previus);
     }
-    
+
+    IndexIterator operator+(size_t v){
+        auto remembered = _current;
+        for(; v > 0; --v)
+            ++(*this);
+        auto advanced = _current;
+        _current = remembered;
+        return IndexIterator(_iList, advanced);
+    }
+
+    IndexIterator operator-(size_t v){
+        auto remembered = _current;
+        for(; v > 0; --v)
+            --(*this);
+        auto advanced = _current;
+        _current = remembered;
+        return IndexIterator(_iList, advanced);
+    }
    
     T& operator * (void){
         return _iList->_pool[_current].getData();
     }
 
-    size_t getPreviousIndex(){return _iList->_pool[_current].getPrevious();}
+    size_t getPreviousIndex() const{return _iList->_pool[_current].getPrevious();}
     
-    size_t getCurrentIndex(){return _current;}
+    size_t getCurrentIndex() const {return _current;}
     
-    size_t getNextIndex(){return _iList->_pool[_current].getNext();}
+    size_t getNextIndex() const {return _iList->_pool[_current].getNext();}
     
     
     private:
@@ -210,7 +232,7 @@ class IndexList{
             _pool[next].setPrevious(previous);
             _pool[previous].setNext(next);
 
-            _pool[current] = IndexNode<T>(0,0,-1);
+            _pool[current] = IndexNode<T>(0,0,{});
             _pool[current].setNext(_removeListBegin);
             _pool[current].setPrevious(current);
 
@@ -280,9 +302,28 @@ class IndexList{
         }
     }
 
+    void reorderE(){
+        auto isErased = [this](const IndexNode<T>& node){ 
+            return (_pool[node.getPrevious()] == node);
+        };
+        /*std::sort(_pool.begin() + 1, _pool.end(), [&](const auto& a, const auto& b){
+            
+
+
+            return _pool[a.getPrevious()].getNext() < _pool[b.getPrevious()].getNext();
+        });
+
+        for(int i = 1; i < _pool.size(); ++i){
+            _pool[i]._next = i + 1;
+            _pool[i]._previous = i - 1; 
+        }
+
+        _pool.back()._next = 0;*/
+    }
+
     void reorder(){ //for better cache locality
         //TBI
-        for(size_t index = 0; index < _pool.size()-1; index++){
+        /*for(size_t index = 0; index < _pool.size()-1; index++){
             size_t current = _pool[index].getNext();
            
             
@@ -301,9 +342,24 @@ class IndexList{
             }
             
             
+        }*/
+        if(_removeListBegin != 0){
+            for(size_t index = 0; index < _pool.size(); index++){
+                size_t current = _pool[index].getNext();
+                if(current != (index + 1)){
+                    std::swap(_pool[current], _pool[index + 1]);
+                            
+                    const size_t previous   = _pool[current].getPrevious();
+                    const size_t next       = _pool[current].getNext();
+
+                    _pool[previous].setNext(current);
+                    _pool[next].setPrevious(current);   
+                            
+                            
+                    _pool[index].setNext(index + 1);
+                }
+            }
         }
-        
-        
     }
 
     size_t size(){
