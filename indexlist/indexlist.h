@@ -23,7 +23,9 @@ struct IndexNode{
     IndexNode(size_t previous, size_t next, Args&&... args) : _previous(previous),_next(next),_data(args...) {}
     IndexNode(size_t previous, size_t next, const T& data)  : _previous(previous),_next(next), _data(data){}
     IndexNode(size_t previous = 0, size_t next = 0)         : _previous(previous),_next(next){}
+    //IndexNode(IndexNode&& node) noexcept = default;
 
+    //IndexNode& operator = (IndexNode&& node) noexcept = default;
     bool operator == (const IndexNode& other){
         return (_previous == other.getPrevious() && _next == other.getNext()); 
     }
@@ -45,7 +47,7 @@ class IndexIterator{
     using reference         = T&;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    IndexIterator() : _iList(nullptr),_current(0){}
+    constexpr IndexIterator() : _iList(nullptr),_current(0){}
 
     IndexIterator& operator = (const IndexIterator& it){
         _iList      = it._iList;
@@ -124,7 +126,7 @@ class IndexIterator{
     IndexList<T>* _iList;
     size_t _current;
 
-    IndexIterator(IndexList<T>* iList, size_t index) : _iList(iList), _current(index) {}
+    constexpr IndexIterator(IndexList<T>* iList, size_t index) : _iList(iList), _current(index) {}
     friend class IndexList<T>;
 };
 template <class T>
@@ -158,7 +160,7 @@ class IndexList{
     } 
 
     void reserve(size_t nSize){
-        _pool.reserve(nSize);
+        _pool.reserve(nSize+1);
     }
 
     IndexIterator<T> insert(IndexIterator<T> it, const T& data){
@@ -198,14 +200,14 @@ class IndexList{
     
 
     template <class... Args>
-    IndexIterator<T> emplace(IndexIterator<T> it, Args&&... args){
+    IndexIterator<T> emplace(const IndexIterator<T>& it, Args&&... args){
         const size_t current        = it.getCurrentIndex();
         const size_t currentNext    = _pool[current].getNext();
         size_t newIndex             = _pool.size();
         
         
         if(_eraseListBegin == emptyEraseList){
-            _pool.emplace_back(IndexNode<T>(current, currentNext, args...));
+            _pool.emplace_back(current, currentNext, args...);
         }
         else{
             newIndex        = _eraseListBegin;
@@ -223,6 +225,31 @@ class IndexList{
     }
 
     template <class... Args>
+    IndexIterator<T> emplace(const size_t current, Args&&... args){
+        
+        const size_t currentNext    = _pool[current].getNext();
+        size_t newIndex             = _pool.size();
+        
+        
+        if(_eraseListBegin == emptyEraseList){
+            _pool.emplace_back(current, currentNext, args...);
+        }
+        else{
+            newIndex        = _eraseListBegin;
+            _eraseListBegin = _pool[_eraseListBegin].getNext();
+            _pool[newIndex] = IndexNode<T>(current, currentNext, args...);
+             
+        }
+        
+        _pool[currentNext].setPrevious(newIndex);
+        _pool[current].setNext(newIndex);
+        
+        _size++;
+
+        return IndexIterator<T>(this, newIndex);
+    }
+
+    template <class... Args>
     IndexIterator<T> emplace_front(Args&&... args){
         return emplace(end(),args...);
     }
@@ -230,7 +257,7 @@ class IndexList{
     template <class... Args>
     IndexIterator<T> emplace_back(Args&&... args){
        
-        return emplace(IndexIterator<T>(this, _pool[endIndex].getPrevious()),args...);
+        return emplace( _pool[endIndex].getPrevious(),args...);
     }
 
     
@@ -247,12 +274,7 @@ class IndexList{
             _pool[current].setNext(_eraseListBegin);
             _pool[current].setPrevious(current);
 
-            _eraseListBegin = current;
-            //_pool[current].~IndexNode();
-            //std::swap(_pool[current],IndexNode<T>{});
-            
-            
-
+            _eraseListBegin = current;         
             _size--;
         }
     }
@@ -285,80 +307,60 @@ class IndexList{
         
     }
 
-    void shrink_to_fit(){
-        size_t current = _eraseListBegin;
-        size_t swapableSpece = _pool.size()-1;
-        while(current != emptyEraseList){
-            size_t next = _pool[current].getNext();
-            
-            while(swapableSpece > endIndex){
-                if(current >= swapableSpece){
-                    swapableSpece--;
-                    break;
-                }
-                else if(isNodeErased(_pool[swapableSpece])){
-                    swapableSpece--;
-                }
-                else{
-                    std::swap(_pool[current],_pool[swapableSpece]);
-                    _pool[swapableSpece].setPrevious(swapableSpece);
-                    swapableSpece--;
 
-                    _pool[_pool[current].getPrevious()].setNext(current);
-                    _pool[_pool[current].getNext()].setPrevious(current);
-                    break;
-                }
-            } 
-            
-            
-            current = next;
+    void shrink_to_fit(){
+        (void)std::partition(_pool.begin() + 1, _pool.end(), [this](const auto& node){
+            return !isNodeErased(node);
+        });
+
+        for(size_t index = 1; index <= _size; ++index){
+            _pool[index]._next      = index + 1;
+            _pool[index]._previous  = index - 1;
         }
+
         _eraseListBegin = emptyEraseList;
+
         _pool.resize(_size+1);
         _pool.shrink_to_fit();
-    }
-    
-    void reorder(){
-                
-        std::sort(_pool.begin() + 1, _pool.end(), [this](const auto& a, const auto& b){
-            return !isNodeErased(a);
-        });
-        _eraseListBegin = emptyEraseList;
-        for(size_t index = 1; index < _pool.size(); ++index){
-            
-            
-            if(index <= _size){
-                _pool[index]._next = index + 1;
-                _pool[index]._previous = index - 1; 
-            }
-            else{
-                _pool[index]._previous = index;
-                if(_eraseListBegin == emptyEraseList){
-                    _eraseListBegin = index;
-                    _pool[index]._next = 0;
-                }
-                else{
-                    _pool[index]._next = _eraseListBegin;
-                    _eraseListBegin = index;
-                }
 
-            }
-        }
         _pool[endIndex].setPrevious(_size);
         _pool[endIndex].setNext(endIndex+1);
         _pool[_size].setNext(endIndex);
-        
     }
 
+    void reorder(){
+        (void)std::partition(_pool.begin() + 1, _pool.end(), [this](const auto& node){
+            return !isNodeErased(node);
+        });
 
-    size_t size(){
+        for(size_t index = 1; index <= _size; ++index){
+            _pool[index]._next      = index + 1;
+            _pool[index]._previous  = index - 1;
+        }
+
+        _eraseListBegin = _pool.size() - 1;
+
+        for(size_t end = _pool.size() - 1; end > _size; --end){
+            _pool[end]._next        = end - 1;
+            _pool[end]._previous    = end;
+        }
+
+        _pool[_size + 1]._next = 0;
+
+        _pool[endIndex].setPrevious(_size);
+        _pool[endIndex].setNext(endIndex+1);
+        _pool[_size].setNext(endIndex);
+    }
+    
+
+    size_t size() const{
         return _size;
     }
-    size_t capacity(){
+    size_t capacity() const{
         return (_pool.capacity() - 1);
     }
 
-    bool empty(){
+    bool empty() const{
         return (_size == 0);
     }
 
@@ -370,10 +372,10 @@ class IndexList{
     ~IndexList(){
 
     }
-    bool isNodeErased(const IndexNode<T>& node){
-        return (_pool[node.getPrevious()] == node);
+    bool isNodeErased(const IndexNode<T>& node) const{
+        return (_pool[node.getPrevious()].getNext() == node.getNext());
     }
-    size_t getNodeIndex(const IndexNode<T>& node){
+    size_t getNodeIndex(const IndexNode<T>& node) const{
         return _pool[node.getPrevious()].getNext();
     }
 

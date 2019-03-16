@@ -65,7 +65,7 @@ int main(){
     list.reorder();
     
 printList(list,false);
-
+    
     for(auto rit = list.rbegin(); rit != list.rend(); rit++){
         std::cout<<"Value: "<<*rit<<std::endl;
     }
