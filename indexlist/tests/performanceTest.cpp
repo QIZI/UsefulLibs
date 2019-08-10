@@ -7,6 +7,7 @@
 #include <thread>
 #include <list>
 #include <forward_list>
+#include <deque>
 
 template <typename T>
 void printList(IndexList<T> list, bool raw = true){
@@ -45,19 +46,19 @@ void printList(IndexList<T> list, bool raw = true){
 namespace chrono = std::chrono;
 
 struct A{
-    uint32_t _[10];
-    A(uint32_t a) {_[0] = a;} 
+    uint8_t _[250];
+    A(uint8_t a) {_[0] = a;} 
     A(){}
 };
 
 int main(){
     
-    IndexList<uint32_t> list;
-    std::vector<uint32_t> vec;
-    std::forward_list<uint32_t> realThing; 
+    IndexList<A> indexList;
+    std::deque<A> vec;
+    std::list<A> list; 
 
-    list.reserve(400000); 
-    vec.reserve(400000);
+    //list.reserve(64/*400000*/); 
+    //vec.reserve(400000);
 
     //IndexList<A> list;
     auto start =  chrono::high_resolution_clock::now();
@@ -65,41 +66,80 @@ int main(){
 
     start =  chrono::high_resolution_clock::now();
     for(size_t count = 0; count < 400000; count++){
-        list.emplace_back();
+        indexList.emplace_back();
     }
    
     end = chrono::high_resolution_clock::now();
     auto timeDiff = chrono::duration_cast<chrono::microseconds>(end - start).count();
 
-    std::cout<<"ListEmplaceBack "<<std::endl;
+    std::cout<<"IndexList_emplace_back "<<std::endl;
     std::cout<<"Time difference: "<<timeDiff<<" us\n";
     
     //auto it = list.begin();
     start =  chrono::high_resolution_clock::now();
 
     for(size_t count = 0; count < 400000; count++){
-        vec.push_back(0);
+        vec.emplace_back();
     }
     end = chrono::high_resolution_clock::now();
 
     timeDiff = chrono::duration_cast<chrono::microseconds>(end - start).count();
 
-    std::cout<<"VectorEmplaceBack "<<std::endl;
+    std::cout<<"Vector_emplace_back "<<std::endl;
     std::cout<<"Time difference: "<<timeDiff<<" us\n";
 
 
     start =  chrono::high_resolution_clock::now();
 
     for(size_t count = 0; count < 400000; count++){
-        vec.push_back(0);
+        list.emplace_back();
     }
     end = chrono::high_resolution_clock::now();
 
     timeDiff = chrono::duration_cast<chrono::microseconds>(end - start).count();
 
-    std::cout<<"RealListEmplaceBack "<<std::endl;
+    std::cout<<"LinkedList_emplace_back "<<std::endl;
+    std::cout<<"Time difference: "<<timeDiff<<" us\n";
+
+    std::cout<<"\n\n";
+
+
+    start =  chrono::high_resolution_clock::now();
+
+    for(auto& obj : indexList){
+        obj._[0]+=1;
+    }
+    end = chrono::high_resolution_clock::now();
+
+    std::cout<<"IndexList_range_loop "<<std::endl;
     std::cout<<"Time difference: "<<timeDiff<<" us\n";
     
+    //auto it = list.begin();
+    start =  chrono::high_resolution_clock::now();
+
+    for(auto& obj : vec){
+        obj._[0]+=1;
+    }
+    end = chrono::high_resolution_clock::now();
+
+    timeDiff = chrono::duration_cast<chrono::microseconds>(end - start).count();
+
+    std::cout<<"Vector_range_loop "<<std::endl;
+    std::cout<<"Time difference: "<<timeDiff<<" us\n";
+
+
+    start =  chrono::high_resolution_clock::now();
+
+    for(auto& obj : list){
+        obj._[0]+=1;
+    }
+    end = chrono::high_resolution_clock::now();
+
+    timeDiff = chrono::duration_cast<chrono::microseconds>(end - start).count();
+
+    std::cout<<"LinkedList_range_loop "<<std::endl;
+    std::cout<<"Time difference: "<<timeDiff<<" us\n";
+
     #ifdef ENABLE
   //  printList(list);
     
@@ -118,7 +158,7 @@ int main(){
 
     
     //list.reorder();
-    list.shrink_to_fit();
+    //list.shrink_to_fit();
     //std::this_thread::sleep_for(chrono::milliseconds(20));
 
     

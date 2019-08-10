@@ -3,36 +3,41 @@
 #include <iostream>
 #include <algorithm>
 #include <cstddef>
+#include <utility>
 
 template<class T>
 class IndexList;
 
+using index_t = size_t;
 template<class T>
 struct IndexNode{
     public:
+    
 
-    void setPrevious(size_t previous){_previous = previous;}
-    void setNext(size_t next){_next = next;}
+    void setPrevious(index_t previous){_previous = previous;}
+    void setNext(index_t next){_next = next;}
 
-    size_t getPrevious()    const {return _previous;}
-    size_t getNext()        const {return _next;}
+    index_t getPrevious()    const {return _previous;}
+    index_t getNext()        const {return _next;}
 
     T& getData(){return _data;}
 
     template <class... Args>
-    IndexNode(size_t previous, size_t next, Args&&... args) : _previous(previous),_next(next),_data(args...) {}
-    IndexNode(size_t previous, size_t next, const T& data)  : _previous(previous),_next(next), _data(data){}
-    IndexNode(size_t previous = 0, size_t next = 0)         : _previous(previous),_next(next){}
-    //IndexNode(IndexNode&& node) noexcept = default;
+    IndexNode(index_t previous, index_t next, Args&&... args) : _previous(previous),_next(next),_data(args...) {}
+    IndexNode(index_t previous, index_t next, const T& data)  : _previous(previous),_next(next), _data(data){}
+    IndexNode(index_t previous = 0, index_t next = 0)         : _previous(previous),_next(next){}
+    IndexNode(const IndexNode&) = default;
+    IndexNode(IndexNode&& other) noexcept = default;
+    IndexNode& operator = (const IndexNode&) = default;
+    IndexNode& operator = (IndexNode&&) noexcept = default;
 
-    //IndexNode& operator = (IndexNode&& node) noexcept = default;
     bool operator == (const IndexNode& other){
         return (_previous == other.getPrevious() && _next == other.getNext()); 
     }
 
     private:
-    size_t _previous;
-    size_t _next;
+    index_t _previous;
+    index_t _next;
     T _data;
 
     friend class IndexList<T>;
@@ -95,7 +100,7 @@ class IndexIterator{
         return it;
     }
 
-    IndexIterator operator+(size_t advance) const{
+    IndexIterator operator+(index_t advance) const{
         auto it = *this;
         for(; advance > 0; --advance){
             ++it;
@@ -103,7 +108,7 @@ class IndexIterator{
         return it;
     }
 
-    IndexIterator operator-(size_t advance) const{
+    IndexIterator operator-(index_t advance) const{
         auto it = *this;
         for(; advance > 0; --advance){
             --it;
@@ -115,18 +120,18 @@ class IndexIterator{
         return _iList->_pool[_current].getData();
     }
 
-    size_t getPreviousIndex() const{return _iList->_pool[_current].getPrevious();}
+    index_t getPreviousIndex() const{return _iList->_pool[_current].getPrevious();}
     
-    size_t getCurrentIndex() const {return _current;}
+    index_t getCurrentIndex() const {return _current;}
     
-    size_t getNextIndex() const {return _iList->_pool[_current].getNext();}
+    index_t getNextIndex() const {return _iList->_pool[_current].getNext();}
     
     
     private:
     IndexList<T>* _iList;
-    size_t _current;
+    index_t _current;
 
-    constexpr IndexIterator(IndexList<T>* iList, size_t index) : _iList(iList), _current(index) {}
+    constexpr IndexIterator(IndexList<T>* iList, index_t index) : _iList(iList), _current(index) {}
     friend class IndexList<T>;
 };
 template <class T>
@@ -159,14 +164,14 @@ class IndexList{
         return _pool[_pool[endIndex].getPrevious()].getData();
     } 
 
-    void reserve(size_t nSize){
+    void reserve(index_t nSize){
         _pool.reserve(nSize+1);
     }
 
     IndexIterator<T> insert(IndexIterator<T> it, const T& data){
-        const size_t current        = it.getCurrentIndex();
-        const size_t currentNext    = _pool[current].getNext();
-        size_t newIndex             = _pool.size();
+        const index_t current        = it.getCurrentIndex();
+        const index_t currentNext    = _pool[current].getNext();
+        index_t newIndex             = _pool.size();
 
         if(_eraseListBegin == endIndex){
             _pool.push_back(IndexNode<T>(current, currentNext, data));
@@ -201,9 +206,9 @@ class IndexList{
 
     template <class... Args>
     IndexIterator<T> emplace(const IndexIterator<T>& it, Args&&... args){
-        const size_t current        = it.getCurrentIndex();
-        const size_t currentNext    = _pool[current].getNext();
-        size_t newIndex             = _pool.size();
+        const index_t current        = it.getCurrentIndex();
+        const index_t currentNext    = _pool[current].getNext();
+        index_t newIndex             = _pool.size();
         
         
         if(_eraseListBegin == emptyEraseList){
@@ -225,10 +230,10 @@ class IndexList{
     }
 
     template <class... Args>
-    IndexIterator<T> emplace(const size_t current, Args&&... args){
+    IndexIterator<T> emplace( index_t current, Args&&... args){
         
-        const size_t currentNext    = _pool[current].getNext();
-        size_t newIndex             = _pool.size();
+        index_t currentNext    = _pool[current].getNext();
+        index_t newIndex       = _pool.size();
         
         
         if(_eraseListBegin == emptyEraseList){
@@ -238,7 +243,7 @@ class IndexList{
             newIndex        = _eraseListBegin;
             _eraseListBegin = _pool[_eraseListBegin].getNext();
             _pool[newIndex] = IndexNode<T>(current, currentNext, args...);
-             
+            
         }
         
         _pool[currentNext].setPrevious(newIndex);
@@ -263,9 +268,9 @@ class IndexList{
     
     void erase(IndexIterator<T> it){
         if(it != end()){
-            const size_t current    = it.getCurrentIndex();
-            const size_t previous   = _pool[current].getPrevious();
-            const size_t next       = _pool[current].getNext();
+            const index_t current    = it.getCurrentIndex();
+            const index_t previous   = _pool[current].getPrevious();
+            const index_t next       = _pool[current].getNext();
             
             _pool[next].setPrevious(previous);
             _pool[previous].setNext(next);
@@ -293,14 +298,14 @@ class IndexList{
         }
     }
 
-    void resize(size_t newSize){
+    void resize(index_t newSize){
         if(_size < newSize){
-            for(size_t i = 0, sizeDiff = newSize - _size ; i < sizeDiff; i++){
+            for(index_t i = 0, sizeDiff = newSize - _size ; i < sizeDiff; i++){
                 emplace_back();
             }
         }
         else if(_size > newSize){
-            for(size_t i = 0, sizeDiff = _size - newSize ; i < sizeDiff; i++){
+            for(index_t i = 0, sizeDiff = _size - newSize ; i < sizeDiff; i++){
                 pop_back();
             }
         }
@@ -313,7 +318,7 @@ class IndexList{
             return !isNodeErased(node);
         });
 
-        for(size_t index = 1; index <= _size; ++index){
+        for(index_t index = 1; index <= _size; ++index){
             _pool[index]._next      = index + 1;
             _pool[index]._previous  = index - 1;
         }
@@ -333,14 +338,14 @@ class IndexList{
             return !isNodeErased(node);
         });
 
-        for(size_t index = 1; index <= _size; ++index){
+        for(index_t index = 1; index <= _size; ++index){
             _pool[index]._next      = index + 1;
             _pool[index]._previous  = index - 1;
         }
 
         _eraseListBegin = _pool.size() - 1;
 
-        for(size_t end = _pool.size() - 1; end > _size; --end){
+        for(index_t end = _pool.size() - 1; end > _size; --end){
             _pool[end]._next        = end - 1;
             _pool[end]._previous    = end;
         }
@@ -353,10 +358,10 @@ class IndexList{
     }
     
 
-    size_t size() const{
+    index_t size() const{
         return _size;
     }
-    size_t capacity() const{
+    index_t capacity() const{
         return (_pool.capacity() - 1);
     }
 
@@ -365,7 +370,7 @@ class IndexList{
     }
 
     
-    T& operator [] (size_t index){
+    T& operator [] (index_t index){
         
         return _pool[index + (!index)].getData();    
     }
@@ -375,17 +380,17 @@ class IndexList{
     bool isNodeErased(const IndexNode<T>& node) const{
         return (_pool[node.getPrevious()].getNext() == node.getNext());
     }
-    size_t getNodeIndex(const IndexNode<T>& node) const{
+    index_t getNodeIndex(const IndexNode<T>& node) const{
         return _pool[node.getPrevious()].getNext();
     }
 
     std::vector< IndexNode<T>> _pool;
     //private:
 
-    constexpr static size_t endIndex        = 0;
-    constexpr static size_t emptyEraseList  = 0;
-    size_t _eraseListBegin = 0;
-    size_t _size = 0;
+    constexpr static index_t endIndex        = 0;
+    constexpr static index_t emptyEraseList  = 0;
+    index_t _eraseListBegin = 0;
+    index_t _size = 0;
 
     friend class IndexIterator<T>;
 };
