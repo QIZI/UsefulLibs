@@ -66,14 +66,14 @@ constexpr CONSTANT<T> ReadOnly(T value){
 
     return ret;
 }
-
+/*
 template <size_t N>
 constexpr CONSTANT<std::string_view> ReadOnly(const char (&value)[N] ){
     CONSTANT<std::string_view> ret;
     ret.value = value;
 
     return ret;
-}
+}*/
 
 CONSTANT<std::string_view> ReadOnly(const std::string& value){
     CONSTANT<std::string_view> ret;
